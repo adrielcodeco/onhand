@@ -64,8 +64,11 @@ jobs:
       - name: Codecov
         run: yarn codecov -y .codecov.yml
 
+      - name: Npm Config
+        run: npm config set //registry.npmjs.org/:_authToken ${{ secrets.NODE_AUTH_TOKEN }}
+
+      - name: Whoami
+        run: npm whoami
+
       - name: Publish
-        run: |
-          npm config set //registry.npmjs.org/:_authToken $NODE_AUTH_TOKEN
-          npm whoami
-          yarn lerna:publish:canary
+        run: yarn lerna:publish:canary
