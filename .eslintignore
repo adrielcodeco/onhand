@@ -1,0 +1,9 @@
+**/node_modules
+**/tests
+**/#
+**/coverage
+**/.vscode
+**/public
+.github
+CONTRIBUTORS.md
+CHANGELOG.md

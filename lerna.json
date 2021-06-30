@@ -1,0 +1,14 @@
+{
+  "version": "1.0.56",
+  "npmClient": "yarn",
+  "npmClientArgs": ["--pure-lockfile"],
+  "useWorkspaces": true,
+  "stream": true,
+  "rejectCycles": "true",
+  "packages": ["packages/*"],
+  "command": {
+    "version": {
+      "message": "chore(release): publish %s [ci skip]"
+    }
+  }
+}

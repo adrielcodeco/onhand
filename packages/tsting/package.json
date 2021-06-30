@@ -1,0 +1,46 @@
+{
+  "name": "@onhand/tsting",
+  "version": "1.0.56",
+  "description": "tsting is part of the @onhand framework",
+  "author": "Codeco <adrielcodeco@hotmail.com>",
+  "homepage": "https://github.com/adrielcodeco/onhand/tree/main/packages/tsting#readme",
+  "license": "ISC",
+  "bin": {
+    "tsting": "bin/tsting",
+    "tsting-runner": "bin/tsting-runner"
+  },
+  "directories": {
+    "lib": "#"
+  },
+  "files": [
+    "#"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/adrielcodeco/onhand.git"
+  },
+  "scripts": {
+    "build": "yarn clean && ttsc -b tsconfig.build.json",
+    "clean": "rimraf '#' coverage yarn*.log",
+    "test": "jest --coverage --passWithNoTests",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "yarn:pack": "yarn pack && cpy 'onhand-tsting-*.tgz' '../../releases'"
+  },
+  "bugs": {
+    "url": "https://github.com/adrielcodeco/onhand/issues"
+  },
+  "dependencies": {
+    "ajv": "^8.6.0",
+    "ajv-formats": "^2.1.0",
+    "ajv-moment": "^2.0.6",
+    "axios": "^0.21.1",
+    "junit-report-builder": "^3.0.0",
+    "lodash": "^4.17.21",
+    "moment": "^2.29.1",
+    "reflect-metadata": "^0.1.13",
+    "source-map-support": "^0.5.19",
+    "winston": "^3.3.3",
+    "winston-transport": "^4.4.0",
+    "yargs": "^17.0.1"
+  }
+}

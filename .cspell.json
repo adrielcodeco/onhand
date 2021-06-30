@@ -1,0 +1,45 @@
+{
+  "version": "0.1",
+  "language": "en",
+  "allowCompoundWords": true,
+  "ignorePaths": [
+    ".cspell.json",
+    "**/node_modules/**",
+    "*.d.ts",
+    "**/#/**",
+    "**/coverage/**",
+    "**/tests/**"
+  ],
+  "dictionaries": [
+    "typescript",
+    "softwareTerms",
+    "node",
+    "en_US",
+    "npm",
+    "misc",
+    "filetypes",
+    "bash"
+  ],
+  "words": [
+    "APIV",
+    "consts",
+    "cxapp",
+    "dynamoose",
+    "emerg",
+    "execa",
+    "Fargate",
+    "flagr",
+    "IDTYPE",
+    "inversify",
+    "jsend",
+    "nodir",
+    "onhand",
+    "pems",
+    "pify",
+    "printf",
+    "tsting",
+    "typedi",
+    "Unprocessable",
+    "YYYYMMDDhhmm"
+  ]
+}

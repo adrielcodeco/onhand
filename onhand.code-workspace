@@ -1,0 +1,89 @@
+{
+  "folders": [
+    {
+      "name": "✨ onhand",
+      "path": "."
+    },
+    {
+      "name": "🌀 domain-aws",
+      "path": "packages/domain-aws"
+    },
+    {
+      "name": "🖸🖸🌀 🖸🖸🖸🖸🖸🖸🖸🖸business",
+      "path": "packages/business"
+    },
+    {
+      "name": "🌀 business-aws",
+      "path": "packages/business-aws"
+    },
+    {
+      "name": "🌀 controller",
+      "path": "packages/controller"
+    },
+    {
+      "name": "🌀 framework",
+      "path": "packages/framework"
+    },
+    {
+      "name": "🌀 framework-aws",
+      "path": "packages/framework-aws"
+    },
+    {
+      "name": "📦 accesscontrol",
+      "path": "packages/accesscontrol"
+    },
+    {
+      "name": "📦 cli",
+      "path": "packages/cli"
+    },
+    {
+      "name": "📦 iac-aws",
+      "path": "packages/iac-aws"
+    },
+    {
+      "name": "📦 jsend",
+      "path": "packages/jsend"
+    },
+    {
+      "name": "📦 openapi",
+      "path": "packages/openapi"
+    },
+    {
+      "name": "📦 robot",
+      "path": "packages/robot"
+    },
+    {
+      "name": "📦 tsting",
+      "path": "packages/tsting"
+    },
+    {
+      "name": "📦 utils",
+      "path": "packages/utils"
+    }
+  ],
+  "settings": {
+    "editor.suggestSelection": "first",
+    "workbench.iconTheme": "vscode-icons",
+    "editor.fontFamily": "Fira Code",
+    "editor.fontLigatures": true,
+    "editor.renderWhitespace": "all",
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "prettier.configPath": ".prettierrc",
+    "editor.formatOnSave": false,
+    "editor.codeActionsOnSave": [
+      "source.fixAll.format",
+      "source.fixAll.eslint"
+    ],
+    "editor.rulers": [100],
+    "markdown.extension.toc.githubCompatibility": true,
+    "eslint.format.enable": true,
+    "eslint.packageManager": "yarn",
+    "eslint.nodePath": "./node_modules",
+    "debug.node.autoAttach": "off",
+    "files.associations": {
+      "*.ejs": "text"
+    },
+    "customizeUI.font.regular": "Fira Code",
+    "customizeUI.font.monospace": "Fira Code"
+  }
+}

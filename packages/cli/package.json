@@ -1,0 +1,34 @@
+{
+  "name": "onhand",
+  "version": "1.0.56",
+  "description": "cli package of @onhand framework",
+  "author": "Codeco <adrielcodeco@hotmail.com>",
+  "homepage": "https://github.com/adrielcodeco/onhand/tree/main/packages/cli#readme",
+  "license": "ISC",
+  "bin": {
+    "onhand": "bin/onhand"
+  },
+  "directories": {
+    "lib": "#"
+  },
+  "files": [
+    "#"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/adrielcodeco/onhand.git"
+  },
+  "scripts": {
+    "build": "yarn clean && ttsc -b tsconfig.build.json",
+    "clean": "rimraf '#' coverage yarn*.log",
+    "test": "jest --coverage --passWithNoTests",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "yarn:pack": "yarn pack && cpy 'onhand-*.tgz' '../../releases'"
+  },
+  "bugs": {
+    "url": "https://github.com/adrielcodeco/onhand/issues"
+  },
+  "dependencies": {
+    "@onhand/robot": "^1.0.56"
+  }
+}

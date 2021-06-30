@@ -1,0 +1,61 @@
+{
+  "name": "@onhand/controller",
+  "version": "1.0.56",
+  "description": "controller is part of the @onhand framework",
+  "author": "Codeco <adrielcodeco@hotmail.com>",
+  "homepage": "https://github.com/adrielcodeco/onhand/tree/main/packages/controller#readme",
+  "license": "ISC",
+  "directories": {
+    "lib": "#"
+  },
+  "files": [
+    "#"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/adrielcodeco/onhand.git"
+  },
+  "scripts": {
+    "build": "yarn clean && ttsc -b tsconfig.build.json",
+    "clean": "rimraf '#' coverage yarn*.log",
+    "test": "jest --coverage --passWithNoTests",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "yarn:pack": "yarn pack && cpy 'onhand-controller-*.tgz' '../../releases'"
+  },
+  "bugs": {
+    "url": "https://github.com/adrielcodeco/onhand/issues"
+  },
+  "dependencies": {
+    "@onhand/jsend": "^1.0.56",
+    "inversify": "^5.0.5"
+  },
+  "jest": {
+    "globals": {
+      "ts-jest": {
+        "isolatedModules": true
+      }
+    },
+    "moduleNameMapper": {
+      "^#/(.*)$": "<rootDir>/src/$1",
+      "^$/(.*)$": "<rootDir>/tests/$1"
+    },
+    "testEnvironment": "node",
+    "transform": {
+      "^.+\\.tsx?$": "ts-jest"
+    },
+    "testRegex": "./tests/.+.ts$",
+    "collectCoverage": false,
+    "collectCoverageFrom": [
+      "src/**/*.{js,ts}"
+    ],
+    "moduleFileExtensions": [
+      "ts",
+      "js",
+      "json",
+      "node"
+    ],
+    "coverageReporters": [
+      "lcov"
+    ]
+  }
+}

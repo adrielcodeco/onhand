@@ -1,0 +1,64 @@
+name: validations
+on:
+  pull_request:
+    types: [opened, reopened, edited]
+
+jobs:
+  validations:
+    name: deploy
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@master
+        with:
+          persist-credentials: false
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14.x'
+          check-latest: trues
+          always-auth: true
+
+      - name: Get yarn cache directory path
+        id: yarn-cache-dir-path
+        run: echo "::set-output name=dir::$(yarn cache dir)"
+
+      - name: Cache
+        uses: actions/cache@v2
+        id: yarn-cache # use this to check for `cache-hit` (`steps.yarn-cache.outputs.cache-hit != 'true'`)
+        with:
+          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
+      
+      - name: Install global lerna
+        run: yarn global add lerna
+
+      - name: Install dependencies
+        run: yarn install --ignore-scripts --ignore-engines
+
+      - name: Lerna Init
+        run: yarn lerna:init
+
+      - name: Build
+        run: yarn build
+
+      - name: Code Lint
+        run: yarn lint
+
+      - name: Markdown Lint
+        run: yarn lint:markdown
+
+      - name: Spelling Check
+        run: yarn check:spelling
+
+      - name: Type Check
+        run: yarn typecheck
+
+      - name: Tests
+        run: yarn test
+
+      - name: Codecov
+        run: yarn codecov -y .codecov.yml

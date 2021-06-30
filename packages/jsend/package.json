@@ -1,0 +1,58 @@
+{
+  "name": "@onhand/jsend",
+  "version": "1.0.56",
+  "description": "jsend is part of the @onhand framework",
+  "author": "Codeco <adrielcodeco@hotmail.com>",
+  "homepage": "https://github.com/adrielcodeco/onhand/tree/main/packages/jsend#readme",
+  "license": "ISC",
+  "main": "#/index.js",
+  "directories": {
+    "lib": "#"
+  },
+  "files": [
+    "#"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/adrielcodeco/onhand.git"
+  },
+  "scripts": {
+    "build": "yarn clean && ttsc -b tsconfig.build.json",
+    "clean": "rimraf '#' coverage yarn*.log",
+    "test": "jest --coverage --passWithNoTests",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "yarn:pack": "yarn pack && cpy 'onhand-jsend-*.tgz' '../../releases'"
+  },
+  "bugs": {
+    "url": "https://github.com/adrielcodeco/onhand/issues"
+  },
+  "jest": {
+    "globals": {
+      "ts-jest": {
+        "isolatedModules": true
+      }
+    },
+    "moduleNameMapper": {
+      "^#/(.*)$": "<rootDir>/src/$1",
+      "^$/(.*)$": "<rootDir>/tests/$1"
+    },
+    "testEnvironment": "node",
+    "transform": {
+      "^.+\\.tsx?$": "ts-jest"
+    },
+    "testRegex": "./tests/.+.ts$",
+    "collectCoverage": false,
+    "collectCoverageFrom": [
+      "src/**/*.{js,ts}"
+    ],
+    "moduleFileExtensions": [
+      "ts",
+      "js",
+      "json",
+      "node"
+    ],
+    "coverageReporters": [
+      "lcov"
+    ]
+  }
+}
