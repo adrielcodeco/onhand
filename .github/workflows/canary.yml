@@ -63,6 +63,9 @@ jobs:
 
       - name: Codecov
         run: yarn codecov -y .codecov.yml
+        env:
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+
 
       - name: Npm Config
         run: npm config set //registry.npmjs.org/:_authToken ${{ secrets.NODE_AUTH_TOKEN }}
