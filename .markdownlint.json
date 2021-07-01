@@ -9,7 +9,8 @@
       "h1",
       "p",
       "details",
-      "summary"
+      "summary",
+      "small"
     ]
   },
   "MD041": false
