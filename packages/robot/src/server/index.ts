@@ -4,7 +4,12 @@ import helmet from 'helmet'
 import express, { Request, Response, NextFunction } from 'express'
 import { routes } from '#/server/routes'
 
-export const app = async (initialPage: 'get-started' | 'manager') => {
+const defaultPort = Number(process.env.PORT ?? 3000)
+
+export const app = async (
+  initialPage: 'get-started' | 'manager',
+  port = defaultPort,
+) => {
   const expressApp = express()
   expressApp.use(helmet())
   expressApp.use(express.static('public'))
@@ -43,7 +48,6 @@ export const app = async (initialPage: 'get-started' | 'manager') => {
     }
   })
   expressApp.use(routes)
-  const port = process.env.PORT ?? 3000
   await new Promise((resolve, reject) => {
     try {
       expressApp.listen(port, () => {

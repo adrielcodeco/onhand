@@ -17,12 +17,16 @@ function main () {
       'get-started',
       'This command starts a wizard to help you set up your project',
       yargs => {
-        // empty
+        yargs.option('port', {
+          describe: 'port to listen',
+          default: '3000',
+        })
       },
       argv => {
         (async () => {
           await getStartedCommand({
             verbose: !!argv.verbose,
+            port: argv.port as string,
           })
         })().catch(console.error)
       },
