@@ -30,6 +30,8 @@
   },
   "dependencies": {
     "@onhand/robot": "^1.0.56",
-    "open": "^8.2.1"
+    "open": "^8.2.1",
+    "source-map-support": "^0.5.19",
+    "ts-node": "^10.0.0"
   }
 }

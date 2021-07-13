@@ -4,8 +4,10 @@
     "baseUrl": ".",
     "paths": {
       "#/*": ["src/*"],
-      "$/*": ["tests/*"]
+      "$/*": ["tests/*"],
+      "~/*": ["src/client/*"]
     }
   },
-  "include": ["src", "tests"]
+  "include": ["src", "tests"],
+  "exclude": []
 }

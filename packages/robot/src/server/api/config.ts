@@ -3,8 +3,16 @@ import { API } from '#/server/iApi'
 
 export const api: API = {
   method: 'get',
-  path: '',
+  path: '/config',
   controller: async (req: Request, res: Response, next: NextFunction) => {
-    // TODO:
+    const {
+      context: {
+        cwdData: { cwd, isOnhandProject },
+      },
+    } = req as any
+    res.json({
+      cwd,
+      initialPage: isOnhandProject ? `/project/${1}` : '/projects',
+    })
   },
 }

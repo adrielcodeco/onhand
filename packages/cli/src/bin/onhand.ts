@@ -2,39 +2,46 @@
 import 'reflect-metadata'
 import 'source-map-support/register'
 import yargs from 'yargs'
-import { getStartedCommand } from '#/commands/getStartedCommand'
+import { startDashboardCommand } from '#/commands/startDashboardCommand'
 const { hideBin } = require('yargs/helpers')
 const packageJson = require('../../package.json')
 
 function main () {
-  return yargs(hideBin(process.argv))
+  const argv = yargs(hideBin(process.argv))
     .option('verbose', {
       alias: 'v',
       type: 'boolean',
       description: 'Show all log lines or only fails',
     })
-    .command(
-      'get-started',
-      'This command starts a wizard to help you set up your project',
-      yargs => {
-        yargs.option('port', {
-          describe: 'port to listen',
-          default: '3000',
-        })
-      },
-      argv => {
-        (async () => {
-          await getStartedCommand({
-            verbose: !!argv.verbose,
-            port: argv.port as string,
-          })
-        })().catch(console.error)
-      },
-    )
+    .option('port', {
+      alias: 'p',
+      describe: 'port to listen',
+      default: '3000',
+    })
+    .option('noOpen', {
+      alias: 'noo',
+      describe: 'not open in browser',
+      type: 'boolean',
+      default: false,
+    })
     .version(packageJson.version)
-    .showHelpOnFail(false)
+    .showHelpOnFail(true)
     .help()
     .alias('h', 'help').argv
+
+  if (argv.h) {
+    return undefined
+  }
+
+  (async () => {
+    await startDashboardCommand({
+      verbose: !!argv.verbose,
+      port: argv.port,
+      noOpen: !!argv.noOpen,
+    })
+  })().catch(console.error)
+
+  return undefined
 }
 
 main()

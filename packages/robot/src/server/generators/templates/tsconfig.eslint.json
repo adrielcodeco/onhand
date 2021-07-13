@@ -1,0 +1,4 @@
+{
+  "extends": "./tsconfig.json",
+  "include": ["db", "deps", "src", "tests", ".eslintrc.js", "onhand.ts", "devops"]
+}

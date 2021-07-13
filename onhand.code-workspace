@@ -1,7 +1,7 @@
 {
   "folders": [
     {
-      "name": "✨ onhand",
+      "name": "✍️ onhand",
       "path": "."
     },
     {
@@ -33,7 +33,7 @@
       "path": "packages/accesscontrol"
     },
     {
-      "name": "📦 cli",
+      "name": "🖥️ cli",
       "path": "packages/cli"
     },
     {
@@ -49,7 +49,7 @@
       "path": "packages/openapi"
     },
     {
-      "name": "📦 robot",
+      "name": "🤖 robot",
       "path": "packages/robot"
     },
     {

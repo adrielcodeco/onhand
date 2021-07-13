@@ -1,0 +1,11 @@
+**/node_modules
+**/#
+**/deploy
+**/cdk.out
+**/coverage
+**/.logs
+cdk.context.json
+tsconfig.tsbuildinfo
+.github
+CONTRIBUTORS.md
+CHANGELOG.md

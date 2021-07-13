@@ -1,0 +1,7 @@
+**/.vscode
+**/#
+**/build
+**/cdk.out
+**/coverage
+**/devops
+**/node_modules
