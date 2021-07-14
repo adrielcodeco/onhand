@@ -26,7 +26,7 @@
     "promote": "cross-env NO_INIT=true onhand-iac-aws promote",
     "test": "cross-env USE_LOCAL_DDB=http://localhost:4566 PARAMETER_STORE_ENDPOINT=http://localhost:4566 OFFLINE_PARAMETERS=.env.test node node_modules/@onhand/tsting/bin/tsting",
     "typecheck": "tsc -p tsconfig.json --noEmit",
-    "docker:build": "docker build -t mif/api ."
+    "docker:build": "docker build -t api ."
   },
   "dependencies": {
     "@onhand/accesscontrol": "^1.0.56",

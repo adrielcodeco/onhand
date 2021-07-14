@@ -1,18 +1,21 @@
 /* eslint-disable @typescript-eslint/no-unsafe-return */
-import path from 'path'
 import { Config } from '@onhand/iac-aws/#/app/config'
 
 export default function ({ stage }: { stage: string }) {
   const defaultEnv: any = {
-    zoneName: 'meuindicador.com',
-    'dev-domainName': 'api-dev.meuindicador.com',
-    'prd-domainName': 'api.meuindicador.com',
-    certificateId: 'ce78b90b-2bf1-4ce3-aa8b-021a3409e531',
+<% if (zoneName) { %>
+    zoneName: '<%= zoneName %>',
+    'dev-domainName': 'api-dev.<%= zoneName %>',
+    'prd-domainName': 'api.<%= zoneName %>',
+<% } %>
+<% if (certificateId) { %>
+    certificateId: '<%= certificateId %>',
+<% } %>
   }
   const getFromEnv = (key: string) => process.env[key] ?? defaultEnv[key]
   const config: Config = {
     app: {
-      name: 'mif',
+      name: '<%= projectName %>',
       type: 'api',
       src: 'src',
       openApi: 'src/4-framework/openApi',
@@ -29,40 +32,13 @@ export default function ({ stage }: { stage: string }) {
       teardown: 'tests/config/teardown.ts',
       testSetup: 'tests/config/testSetup.ts',
       testRegex: ['tests/**/*.test.[tj]s'],
-      ignore: ['bin', 'libs', 'config'],
+      ignore: ['bin', 'config'],
     },
     build: {
       outputFolder: '#',
-      webpack: {
-        module: {
-          rules: [
-            {
-              test: /\/emails\/.*\.(pug|scss)$/i,
-              type: 'asset/resource',
-              generator: {
-                filename: (pathData: any) =>
-                  `emails${(pathData.filename as string).split('emails')[1]}`,
-              },
-            },
-          ],
-        },
-        resolve: {
-          alias: {
-            consolidate: path.resolve(__dirname, 'deps/consolidate.js'),
-            'make-plural/umd/plurals': path.resolve(
-              __dirname,
-              'node_modules/messageformat/node_modules/make-plural/umd/plurals',
-            ),
-            'make-plural/umd/pluralCategories': path.resolve(
-              __dirname,
-              'node_modules/messageformat/node_modules/make-plural/umd/pluralCategories',
-            ),
-          },
-        },
-      },
     },
     package: {
-      name: 'mif-api',
+      name: '<%= projectName %>-api',
       files: [{ root: '#/', pattern: '#/**/*' }],
       outputFolder: 'deploy',
     },
@@ -80,7 +56,7 @@ export default function ({ stage }: { stage: string }) {
         origins: {
           apiGateway: [
             {
-              cloudFormationExportName: `mif-${stage}-api-Id`,
+              cloudFormationExportName: `<%= projectName %>-${stage}-api-Id`,
               path: '/',
             },
           ],

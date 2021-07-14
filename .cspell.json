@@ -8,7 +8,8 @@
     "*.d.ts",
     "**/#/**",
     "**/coverage/**",
-    "**/tests/**"
+    "**/tests/**",
+    "**/public/**"
   ],
   "dictionaries": [
     "typescript",

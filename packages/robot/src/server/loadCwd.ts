@@ -4,6 +4,7 @@ import { promisify } from 'util'
 import getPath from 'platform-folders'
 import nconf from 'nconf'
 import { models } from '#/server/models'
+import { loadProjectData } from '#/server/loadProjectData'
 
 export const loadCwd = async () => {
   const cwd = process.cwd()
@@ -18,9 +19,11 @@ export const loadCwd = async () => {
   await nconfSave()
   const projects: any[] = nconf.get('projects') ?? []
   const isOnhandProject = !!projects.find(p => p.path === cwd)
+  const projectData = await loadProjectData()
   return {
     cwd,
     isOnhandProject,
     userData,
+    projectData,
   }
 }

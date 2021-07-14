@@ -9,5 +9,5 @@
     }
   },
   "include": ["src", "tests"],
-  "exclude": []
+  "exclude": ["public", "src/client/pace-min.js", "templates"]
 }

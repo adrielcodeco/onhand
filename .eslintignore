@@ -3,7 +3,10 @@
 **/#
 **/coverage
 **/.vscode
-**/public
 .github
 CONTRIBUTORS.md
 CHANGELOG.md
+
+packages/robot/public
+packages/robot/templates
+packages/robot/src/client/pace.min.js

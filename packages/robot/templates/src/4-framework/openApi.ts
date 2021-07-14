@@ -6,14 +6,14 @@ const packageJson = require('../../package.json')
 @OpenAPI('./functions')
 export class OpenAPIDocument implements OpenAPIClass {
   info: OpenAPIV3.InfoObject = {
-    title: 'MIF API',
+    title: '<%= projectName %>',
     version: packageJson.version,
-    description: 'Meu Indicador Financeiro - API',
+    description: '<%= projectDescription %>',
   }
 
   servers?: OpenAPIV3.ServerObject[] = [
     {
-      url: 'https://meuindicador.com',
+      url: '<%= projectUrl %>',
     },
   ]
 

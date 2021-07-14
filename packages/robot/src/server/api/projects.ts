@@ -1,9 +1,11 @@
 import _ from 'lodash'
+import nconf from 'nconf'
 import short from 'short-uuid'
 import { promisify } from 'util'
 import { Request, Response, NextFunction } from 'express'
 import { API } from '#/server/iApi'
-import nconf from 'nconf'
+import { generate } from '#/server/generators'
+import { loadProjectData } from '#/server/loadProjectData'
 
 export const listProjects: API = {
   method: 'get',
@@ -51,6 +53,11 @@ export const createProjects: API = {
     nconf.set('projects', projects)
     const nconfSave = promisify(nconf.save).bind(nconf)
     await nconfSave()
+    const projectData = await loadProjectData()
+    const {
+      cwdData: { cwd },
+    } = (req as any).context
+    await generate('project', { cwd, projectData })
     res.json(projects)
   },
 }
