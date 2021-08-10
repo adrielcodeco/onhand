@@ -3,7 +3,7 @@ import { ExactlySameKeys } from '@onhand/utils'
 import { OpaqueToken } from '@onhand/domain-aws'
 import { DyModel } from './dyModel'
 
-const schema: ExactlySameKeys<OpaqueToken> = {
+const schema: () => ExactlySameKeys<OpaqueToken> = () => ({
   opaqueToken: {
     type: String,
     hashKey: true,
@@ -18,7 +18,7 @@ const schema: ExactlySameKeys<OpaqueToken> = {
   },
   role: String,
   scope: String,
-}
+})
 
 type OpaqueTokenDocument = Document & OpaqueToken
 

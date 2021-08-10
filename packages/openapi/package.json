@@ -21,14 +21,14 @@
     "clean": "rimraf '#' coverage yarn*.log",
     "test": "jest --coverage --passWithNoTests",
     "typecheck": "tsc -p tsconfig.json --noEmit",
-    "yarn:pack": "yarn pack && cpy 'onhand-openapi-*.tgz' '../../releases'"
+    "yarn:pack": "yarn pack && cpy 'onhand-*.tgz' '../../releases'"
   },
   "bugs": {
     "url": "https://github.com/adrielcodeco/onhand/issues"
   },
   "dependencies": {
     "lodash": "^4.17.21",
-    "openapi-types": "^9.0.3",
+    "openapi-types": "^9.1.0",
     "reflect-metadata": "^0.1.13"
   },
   "jest": {

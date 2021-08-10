@@ -12,7 +12,7 @@ export const api: API = {
     } = req as any
     res.json({
       cwd,
-      initialPage: isOnhandProject ? `/project/${1}` : '/projects',
+      initialPage: isOnhandProject ? '/projects/cwd' : '/projects',
     })
   },
 }

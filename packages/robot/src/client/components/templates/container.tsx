@@ -3,6 +3,6 @@ import { In } from '~/components/templates/in'
 import { Out } from '~/components/templates/out'
 
 export function Container ({ children }: any) {
-  const session = { user: undefined }
-  return session.user ? <In>{children}</In> : <Out>{children}</Out>
+  const projectId = localStorage.getItem('current-project')
+  return projectId ? <In>{children}</In> : <Out>{children}</Out>
 }

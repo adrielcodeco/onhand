@@ -20,7 +20,7 @@
     "clean": "rimraf '#' coverage yarn*.log",
     "test": "jest --coverage --passWithNoTests",
     "typecheck": "tsc -p tsconfig.json --noEmit",
-    "yarn:pack": "yarn pack && cpy 'onhand-framework-aws-*.tgz' '../../releases'"
+    "yarn:pack": "yarn pack && cpy 'onhand-*.tgz' '../../releases'"
   },
   "bugs": {
     "url": "https://github.com/adrielcodeco/onhand/issues"
@@ -33,9 +33,9 @@
     "@onhand/openapi": "^1.0.56",
     "@onhand/utils": "^1.0.56",
     "accesscontrol": "^2.2.1",
-    "amazon-cognito-identity-js": "^5.0.3",
+    "amazon-cognito-identity-js": "^5.0.6",
     "aws-lambda": "^1.0.6",
-    "aws-sdk": "^2.858.0",
+    "aws-sdk": "^2.953.0",
     "class-validator": "^0.13.1",
     "cross-fetch": "^3.0.6",
     "dynamoose": "^2.7.0",

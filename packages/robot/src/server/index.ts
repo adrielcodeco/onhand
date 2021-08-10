@@ -7,7 +7,7 @@ import express from 'express'
 import { routes } from '#/server/routes'
 import { middlewares } from '#/server/middlewares'
 
-const defaultPort = Number(process.env.PORT ?? 3000)
+const defaultPort = Number(process.env.PORT ?? 4100)
 
 const resolveFromSrc = (...filePath: string[]) =>
   path.resolve(__dirname, '../', ...filePath)
@@ -50,5 +50,5 @@ export const app = async (
       reject(err)
     }
   })
-  console.log('serving on port 3000')
+  console.log(`serving on port ${options.port}`)
 }

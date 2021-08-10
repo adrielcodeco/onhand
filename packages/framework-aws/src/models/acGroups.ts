@@ -3,7 +3,7 @@ import { ExactlySameKeys } from '@onhand/utils'
 
 type Model = { name: string, roles: string[] }
 
-const schema: ExactlySameKeys<Model> = {
+const schema: () => ExactlySameKeys<Model> = () => ({
   name: {
     type: String,
     hashKey: true,
@@ -12,7 +12,7 @@ const schema: ExactlySameKeys<Model> = {
     type: Array,
     schema: [String],
   },
-}
+})
 
 export const ACGroupModelProvider = DyModel<Model>(
   `onhand${process.env.STAGE ? '_' : ''}${process.env.STAGE ?? ''}_ACGroup`,

@@ -1,5 +1,6 @@
-import { inject, injectable } from 'inversify'
+import { inject } from 'inversify'
 import { UseCase } from '@onhand/business/#/useCase'
+import { usecase } from '@onhand/business/#/ioc/decorators'
 import { AccessControl, ACRule } from '@onhand/accesscontrol'
 import {
   IAccessControlRepository,
@@ -13,7 +14,7 @@ import {
 type I = { role: string, rules: ACRule[], ownership?: () => Promise<boolean> }
 type O = boolean
 
-@injectable()
+@usecase()
 export class CheckGrantUseCase extends UseCase<I, O> {
   @inject(IAccessControlRepositoryToken)
   private readonly accessControlRepository!: IAccessControlRepository

@@ -24,13 +24,13 @@
     "clean": "rimraf '#' coverage yarn*.log",
     "test": "jest --coverage --passWithNoTests",
     "typecheck": "tsc -p tsconfig.json --noEmit",
-    "yarn:pack": "yarn pack && cpy 'onhand-tsting-*.tgz' '../../releases'"
+    "yarn:pack": "yarn pack && cpy 'onhand-*.tgz' '../../releases'"
   },
   "bugs": {
     "url": "https://github.com/adrielcodeco/onhand/issues"
   },
   "dependencies": {
-    "ajv": "^8.6.0",
+    "ajv": "^8.6.2",
     "ajv-formats": "^2.1.0",
     "ajv-moment": "^2.0.6",
     "axios": "^0.21.1",

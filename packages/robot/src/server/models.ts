@@ -8,5 +8,6 @@ export const models = (userDataPath: string) => {
       file: path.resolve(userDataPath, `onhand/${model}.json`),
     })
   }
+  addModel('config')
   addModel('projects')
 }

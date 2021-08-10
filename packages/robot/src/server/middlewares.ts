@@ -15,13 +15,6 @@ const cwd = async (expressApp: Express) => {
   })
 }
 
-const initialPage = async (expressApp: Express) => {
-  expressApp.get('/', (req: any, res: Response) => {
-    res.redirect(req.initialPage)
-  })
-}
-
 export const middlewares = async (expressApp: Express) => {
   await cwd(expressApp)
-  await initialPage(expressApp)
 }

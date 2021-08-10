@@ -12,7 +12,7 @@ const useStyles = makeStyles({
 
 export interface TitleProps {
   title: string
-  button: { href: string, text: string }
+  button?: { href: string, text: string }
 }
 
 export const Title = ({ title, button }: TitleProps) => {

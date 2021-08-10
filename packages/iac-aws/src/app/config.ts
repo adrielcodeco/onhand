@@ -9,6 +9,7 @@ export type Config = {
     type: 'api' | 'site'
     src?: string
     openApi?: string
+    ioc?: string
   }
   db?: {
     config?: string

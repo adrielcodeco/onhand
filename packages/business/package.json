@@ -20,13 +20,14 @@
     "clean": "rimraf '#' coverage yarn*.log",
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "test": "jest --coverage --passWithNoTests",
-    "yarn:pack": "yarn pack && cpy 'onhand-business-*.tgz' '../../releases'"
+    "yarn:pack": "yarn pack && cpy 'onhand-*.tgz' '../../releases'"
   },
   "bugs": {
     "url": "https://github.com/adrielcodeco/onhand/issues"
   },
   "dependencies": {
-    "inversify": "^5.0.5"
+    "inversify": "^5.0.5",
+    "reflect-metadata": "^0.1.13"
   },
   "jest": {
     "globals": {

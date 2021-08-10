@@ -3,6 +3,7 @@
 **/#
 **/coverage
 **/.vscode
+**/templates
 .github
 CONTRIBUTORS.md
 CHANGELOG.md

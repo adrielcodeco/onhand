@@ -2,7 +2,7 @@ import { DyModel } from '#/models/dyModel'
 import { ExactlySameKeys } from '@onhand/utils'
 import { ACRole } from '@onhand/accesscontrol'
 
-const schema: ExactlySameKeys<ACRole> = {
+const schema: () => ExactlySameKeys<ACRole> = () => ({
   name: {
     type: String,
     hashKey: true,
@@ -25,7 +25,7 @@ const schema: ExactlySameKeys<ACRole> = {
       },
     ],
   },
-}
+})
 
 export const ACRoleModelProvider = DyModel<ACRole>(
   `onhand${process.env.STAGE ? '_' : ''}${process.env.STAGE ?? ''}_ACRole`,

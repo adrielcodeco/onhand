@@ -1,5 +1,5 @@
 import 'cross-fetch/polyfill'
-import { injectable, inject } from 'inversify'
+import { inject } from 'inversify'
 import axios from 'axios'
 import jwkToPem from 'jwk-to-pem'
 import jwt from 'jsonwebtoken'
@@ -13,6 +13,7 @@ import {
   ISignUpResult,
 } from 'amazon-cognito-identity-js'
 import short from 'short-uuid'
+import { service } from '@onhand/framework/#/ioc/decorators'
 import { ICognitoService } from '@onhand/business-aws/#/services/iCognitoService'
 import { Profile } from '@onhand/business-aws/#/dto/profile'
 import {
@@ -24,7 +25,7 @@ export const userPoolIdSymbol = Symbol.for('userPoolId')
 export const userPoolClientIdSymbol = Symbol.for('userPoolClientId')
 export const userPoolRegionSymbol = Symbol.for('userPoolRegion')
 
-@injectable()
+@service()
 export class CognitoService implements ICognitoService {
   private readonly userPool: CognitoUserPool
 

@@ -1,0 +1,23 @@
+{
+  "name": "<%= projectName %>",
+  "version": "1.0.0",
+  "description": "<TODO: <%= projectName %> descrition>",
+  "author": "<%= author %>",
+  "homepage": "<%= homepage %>",
+  "license": "<%= license %>",
+  "directories": {
+    "lib": "#"
+  },
+  "files": [
+    "#"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "<%= repoUrl %>"
+  },
+  "scripts": {},
+  "dependencies": {},
+  "devDependencies": {
+    "eslint-config-onhand": "^1.0.56"
+  }
+}

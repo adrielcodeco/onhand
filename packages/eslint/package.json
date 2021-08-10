@@ -1,0 +1,32 @@
+{
+  "name": "eslint-config-onhand",
+  "version": "1.0.56",
+  "description": "An eslint opinionated config by @onhand",
+  "author": "Codeco <adrielcodeco@hotmail.com>",
+  "homepage": "https://github.com/adrielcodeco/onhand/tree/main/packages/eslint#readme",
+  "license": "ISC",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/adrielcodeco/onhand.git"
+  },
+  "scripts": {
+    "build": "echo \"nothing to build\"",
+    "clean": "rimraf coverage yarn*.log",
+    "test": "jest --coverage --passWithNoTests",
+    "typecheck": "echo \"nothing to check\"",
+    "yarn:pack": "yarn pack && cpy 'eslint-config-onhand-*.tgz' '../../releases'"
+  },
+  "bugs": {
+    "url": "https://github.com/adrielcodeco/onhand/issues"
+  },
+  "dependencies": {
+    "@typescript-eslint/eslint-plugin": "^4.29.0",
+    "eslint": "^7.32.0",
+    "eslint-config-standard": "^16.0.3",
+    "eslint-config-standard-with-typescript": "^20.0.0",
+    "eslint-plugin-import": "^2.23.4",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^5.1.0"
+  }
+}

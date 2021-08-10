@@ -9,7 +9,7 @@ import TableHead from '@material-ui/core/TableHead'
 import TableRow from '@material-ui/core/TableRow'
 import Paper from '@material-ui/core/Paper'
 import Link from '@material-ui/core/Link'
-import { Project } from '~/models/project'
+import { Project } from '~/dto/project'
 import { projectService } from '~/services/projects'
 
 const useStyles = makeStyles({
@@ -27,6 +27,11 @@ export function ProjectList () {
   const classes = useStyles()
   const [projects, setProjects] = React.useState<Project[]>([])
   React.useEffect(() => {
+    if (localStorage.getItem('current-project')) {
+      localStorage.removeItem('current-project')
+      window.location.reload()
+      return
+    }
     projectService.list().then(setProjects).catch(console.error)
   }, [])
   return (

@@ -16,7 +16,7 @@ function main () {
     .option('port', {
       alias: 'p',
       describe: 'port to listen',
-      default: '3000',
+      default: '4100',
     })
     .option('noOpen', {
       alias: 'noo',

@@ -10,6 +10,7 @@ async function functions (
   roleArn: string,
   updating: boolean,
   project: string,
+  operationId: string,
 ) {
   const lambdaFunction = updating ? updateLambda : createLambda
   const { Version } = await lambdaFunction(
@@ -20,6 +21,7 @@ async function functions (
     roleArn,
     func.description,
     project,
+    operationId,
   )
   return Version
 }
@@ -47,6 +49,7 @@ async function createLambda (
   roleArn: string,
   description: string,
   project: string,
+  operationId: string,
 ) {
   const params: AWS.Lambda.CreateFunctionRequest = {
     Code: {
@@ -62,6 +65,7 @@ async function createLambda (
     Timeout: 15,
     Tags: {
       onhandProject: project,
+      onhandOperationId: operationId,
       onhandResource: 'function',
       onhandResourceGroup: 'operation',
     },
@@ -83,6 +87,7 @@ async function updateLambda (
   roleArn: string,
   description: string,
   project: string,
+  operationId: string,
 ) {
   const params1: AWS.Lambda.UpdateFunctionConfigurationRequest = {
     FunctionName: functionName /* required */,
@@ -103,6 +108,7 @@ async function updateLambda (
         Resource: '',
         Tags: {
           onhandProject: project,
+          onhandOperationId: operationId,
           onhandResource: 'function',
           onhandResourceGroup: 'operation',
         },
@@ -130,6 +136,7 @@ export async function handler (event: any) {
     const functionsString = event.ResourceProperties.functions
     const rolesString = event.ResourceProperties.roles
     const project = event.ResourceProperties.project
+    const operationId = event.ResourceProperties.project
 
     assert(functionsString, '"functions" is required')
     const funcs = JSON.parse(functionsString)
@@ -148,7 +155,13 @@ export async function handler (event: any) {
           const roleArn = roles.find(
             (r: any) => r.functionName === func.functionName,
           ).roleArn
-          const version = await functions(func, roleArn, updating, project)
+          const version = await functions(
+            func,
+            roleArn,
+            updating,
+            project,
+            operationId,
+          )
           result.push({ functionName: func.functionName, version })
         }
         return { Data: { result: JSON.stringify(result) } }

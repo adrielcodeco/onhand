@@ -2,13 +2,13 @@ import React from 'react'
 import { useParams } from 'react-router-dom'
 import { makeStyles } from '@material-ui/core/styles'
 import Typography from '@material-ui/core/Typography'
-import Badge from '@material-ui/core/Badge'
+import Chip from '@material-ui/core/Chip'
 import Button from '@material-ui/core/Button'
 import SvgIcon from '@material-ui/core/SvgIcon'
 import { mdiMicrosoftVisualStudioCode } from '@mdi/js'
-import { Project } from '~/models/project'
+import { Project } from '#/client/dto/project'
 import { projectService } from '~/services/projects'
-import { ApiDetails } from '~/components/api-details'
+import { ApiDetails } from '~/components/organisms/project/api/api-details'
 
 const useStyles = makeStyles(theme => ({
   header: {
@@ -38,6 +38,17 @@ const useStyles = makeStyles(theme => ({
     display: 'flex',
     flexDirection: 'column',
   },
+  hAlignment: {
+    display: 'flex',
+    flexDirection: 'row',
+  },
+  projectName: {
+    alignItems: 'flex-end',
+  },
+  badges: {
+    height: '16px',
+    fontSize: '0.8rem',
+  },
 }))
 
 export function ProjectDetails () {
@@ -45,6 +56,11 @@ export function ProjectDetails () {
   const { projectId } = useParams<{ projectId: string }>()
   const [project, setProject] = React.useState<Project | undefined>()
   React.useEffect(() => {
+    if (!localStorage.getItem('current-project')) {
+      localStorage.setItem('current-project', projectId)
+      window.location.reload()
+      return
+    }
     projectService.find(projectId).then(setProject).catch(console.error)
   }, [])
   const openInVSCode = (projectPath?: string) => {
@@ -55,19 +71,22 @@ export function ProjectDetails () {
   return (
     <div>
       <div className={classes.header}>
-        <div>
-          <Badge
+        <div className={[classes.projectName, classes.hAlignment].join(' ')}>
+          <Typography gutterBottom variant='h5' component='h1'>
+            {(project?.name ?? '').toUpperCase()}
+          </Typography>
+          <Chip
+            size='small'
             color='primary'
-            badgeContent={project?.type}
-            anchorOrigin={{
-              vertical: 'bottom',
-              horizontal: 'right',
-            }}
-          >
-            <Typography gutterBottom variant='h5' component='h1'>
-              {(project?.name ?? '').toUpperCase()}
-            </Typography>
-          </Badge>
+            label={project?.type?.toUpperCase() ?? ''}
+            className={classes.badges}
+          />
+          <Chip
+            size='small'
+            color='primary'
+            label={project?.projectData?.openapi?.openapi ?? ''}
+            className={classes.badges}
+          />
         </div>
         <Button
           variant='contained'

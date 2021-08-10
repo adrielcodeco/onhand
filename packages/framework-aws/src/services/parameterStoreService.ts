@@ -1,16 +1,17 @@
 import fs from 'fs'
 import path from 'path'
 import os from 'os'
-import { injectable, inject } from 'inversify'
+import { inject } from 'inversify'
 import {
   IInMemoryCacheServiceToken,
   IInMemoryCacheService,
 } from '@onhand/business/#/services/iInMemoryCacheService'
+import { service } from '@onhand/framework/#/ioc/decorators'
 import { IParameterStoreService } from '@onhand/business-aws/#/services'
 import { ILogger, LogToken } from '@onhand/business/#/modules/logger'
 import { SSM } from 'aws-sdk'
 
-@injectable()
+@service()
 export class ParameterStoreService implements IParameterStoreService {
   @inject(IInMemoryCacheServiceToken)
   private readonly cache!: IInMemoryCacheService
@@ -71,6 +72,9 @@ export class ParameterStoreService implements IParameterStoreService {
   async get (
     ...keys: string[]
   ): Promise<Array<string | string[]> | string | string[]> {
+    if (process.env.NO_PARAMETERS === 'true') {
+      return ''
+    }
     const params = await this.getAll(keys)
     if (keys.length === 1) {
       return params.map(p => p.value).find(_ => true)!
@@ -79,6 +83,9 @@ export class ParameterStoreService implements IParameterStoreService {
   }
 
   async getOne (key: string, propagateError = true): Promise<string | string[]> {
+    if (process.env.NO_PARAMETERS === 'true') {
+      return ''
+    }
     if (this.cache.has(key)) {
       return this.cache.get<string>(key)!
     }
@@ -119,6 +126,9 @@ export class ParameterStoreService implements IParameterStoreService {
     keys: string[],
     propagateError = true,
   ): Promise<Array<{ name: string, value: string | string[] }>> {
+    if (process.env.NO_PARAMETERS === 'true') {
+      return []
+    }
     if (this.offline) {
       const parameters: Array<{ name: string, value: string | string[] }> = []
       for (const key of keys) {

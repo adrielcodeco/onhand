@@ -1,17 +1,16 @@
 import _ from 'lodash'
-import nconf from 'nconf'
 import short from 'short-uuid'
-import { promisify } from 'util'
 import { Request, Response, NextFunction } from 'express'
 import { API } from '#/server/iApi'
 import { generate } from '#/server/generators'
+import { projectRepo } from '#/server/repositories/project'
 import { loadProjectData } from '#/server/loadProjectData'
 
 export const listProjects: API = {
   method: 'get',
   path: '/projects',
   controller: async (req: Request, res: Response, next: NextFunction) => {
-    const projects = nconf.get('projects') ?? []
+    const projects = projectRepo.list()
     if (req.query && Object.keys(req.query).length) {
       const project = projects.find((p: any) => _.isMatch(p, req.query))
       if (!project) {
@@ -30,13 +29,31 @@ export const findProjects: API = {
   path: '/projects/:id',
   controller: async (req: Request, res: Response, next: NextFunction) => {
     const id = req.params.id
-    const projects = nconf.get('projects') ?? []
+    if (id === 'cwd') {
+      const {
+        cwdData: { cwd, isOnhandProject, projectData },
+      } = (req as any).context
+      if (!isOnhandProject) {
+        res.status(404).end()
+        return
+      }
+      res.json({
+        id: 'cwd',
+        name: projectData.config.app.name,
+        path: cwd,
+        type: projectData.config.app.type,
+        projectData,
+      })
+      return
+    }
+    const projects = projectRepo.list()
     const project = projects.find((p: any) => p.id === id)
     if (!project) {
       res.status(404).end()
       return
     }
-    res.json(project)
+    const projectData = await loadProjectData(project.path)
+    res.json({ ...project, projectData })
   },
 }
 
@@ -48,16 +65,13 @@ export const createProjects: API = {
       res.status(422).end()
       return
     }
-    const projects = nconf.get('projects') ?? []
-    projects.push({ id: short.generate(), ...req.body })
-    nconf.set('projects', projects)
-    const nconfSave = promisify(nconf.save).bind(nconf)
-    await nconfSave()
-    const projectData = await loadProjectData()
+    const project = { id: short.generate(), ...req.body }
+    await projectRepo.add(project)
     const {
       cwdData: { cwd },
     } = (req as any).context
+    const projectData = await loadProjectData(cwd)
     await generate('project', { cwd, projectData })
-    res.json(projects)
+    res.json(project)
   },
 }

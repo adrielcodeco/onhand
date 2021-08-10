@@ -115,7 +115,7 @@ function main () {
       yargs => {
         yargs.option('port', {
           describe: 'port to listen',
-          default: '3000',
+          default: '4100',
         })
         yargs.option('watch', {
           describe: 'watch src files',

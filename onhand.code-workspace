@@ -5,11 +5,7 @@
       "path": "."
     },
     {
-      "name": "🌀 domain-aws",
-      "path": "packages/domain-aws"
-    },
-    {
-      "name": "🖸🖸🌀 🖸🖸🖸🖸🖸🖸🖸🖸business",
+      "name": "🌀 business",
       "path": "packages/business"
     },
     {
@@ -21,6 +17,10 @@
       "path": "packages/controller"
     },
     {
+      "name": "🌀 domain-aws",
+      "path": "packages/domain-aws"
+    },
+    {
       "name": "🌀 framework",
       "path": "packages/framework"
     },
@@ -29,32 +29,40 @@
       "path": "packages/framework-aws"
     },
     {
-      "name": "📦 accesscontrol",
-      "path": "packages/accesscontrol"
-    },
-    {
-      "name": "🖥️ cli",
+      "name": "🖥️ onhand",
       "path": "packages/cli"
     },
     {
-      "name": "📦 iac-aws",
+      "name": "🖥️ workspace",
+      "path": "packages/workspace"
+    },
+    {
+      "name": "🖥️ tsting",
+      "path": "packages/tsting"
+    },
+    {
+      "name": "🚀 iac-aws",
       "path": "packages/iac-aws"
-    },
-    {
-      "name": "📦 jsend",
-      "path": "packages/jsend"
-    },
-    {
-      "name": "📦 openapi",
-      "path": "packages/openapi"
     },
     {
       "name": "🤖 robot",
       "path": "packages/robot"
     },
     {
-      "name": "📦 tsting",
-      "path": "packages/tsting"
+      "name": "📦 jsend",
+      "path": "packages/jsend"
+    },
+    {
+      "name": "📦 accesscontrol",
+      "path": "packages/accesscontrol"
+    },
+    {
+      "name": "📦 openapi",
+      "path": "packages/openapi"
+    },
+    {
+      "name": "📦 eslint-config-onhand",
+      "path": "packages/eslint"
     },
     {
       "name": "📦 utils",

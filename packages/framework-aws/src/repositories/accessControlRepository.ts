@@ -1,10 +1,10 @@
-import { injectable } from 'inversify'
+import { repository } from '@onhand/framework/#/ioc/decorators'
 import { ACGroup, ACRole, rule } from '@onhand/accesscontrol'
 import { IAccessControlRepository } from '@onhand/business-aws/#/repositories'
 import { ACGroupModelProvider } from '#/models/acGroups'
 import { ACRoleModelProvider } from '#/models/acRoles'
 
-@injectable()
+@repository()
 export class AccessControlRepository implements IAccessControlRepository {
   private readonly ACGroupModel = ACGroupModelProvider()
   private readonly ACRoleModel = ACRoleModelProvider()

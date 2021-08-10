@@ -1,9 +1,9 @@
-import { injectable } from 'inversify'
+import { repository } from '@onhand/framework/#/ioc/decorators'
 import { IOpaqueTokenRepository } from '@onhand/business-aws/#/repositories'
 import { OpaqueToken } from '@onhand/domain-aws'
 import { OpaqueTokenModelProvider } from '#/models/opaqueTokenModel'
 
-@injectable()
+@repository()
 export class OpaqueTokenRepository implements IOpaqueTokenRepository {
   private readonly OpaqueTokenModel = OpaqueTokenModelProvider()
 

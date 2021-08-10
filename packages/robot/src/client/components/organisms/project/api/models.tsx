@@ -8,7 +8,11 @@ import TableContainer from '@material-ui/core/TableContainer'
 import TableHead from '@material-ui/core/TableHead'
 import TableRow from '@material-ui/core/TableRow'
 import Paper from '@material-ui/core/Paper'
-import Link from '@material-ui/core/Link'
+import Tooltip from '@material-ui/core/Tooltip'
+import IconButton from '@material-ui/core/IconButton'
+import SvgIcon from '@material-ui/core/SvgIcon'
+import Typography from '@material-ui/core/Typography'
+import { mdiMicrosoftVisualStudioCode } from '@mdi/js'
 import { Title } from '~/components/molecules/title'
 
 const useStyles = makeStyles({
@@ -20,36 +24,59 @@ const useStyles = makeStyles({
   table: {
     minWidth: 650,
   },
+  path: {
+    color: 'gray',
+  },
 })
 
 export const Models = ({ models }: { models: any[] }) => {
   const classes = useStyles()
   const { projectId } = useParams<{ projectId: string }>()
+  const openInVSCode = (path: string) => () => {
+    if (path) {
+      // https://code.visualstudio.com/docs/editor/command-line#_opening-vs-code-with-urls
+      window.location.href = `vscode://file/${path}/`
+    }
+  }
   return (
     <div>
       <Title
         title='Models'
-        button={{ text: 'ADD MODEL', href: `/projects/${projectId}/models` }}
+        button={{ text: 'ADD MODEL', href: `/projects/${projectId}/model` }}
       />
       <TableContainer component={Paper}>
         <Table className={classes.table}>
           <TableHead>
             <TableRow>
-              <TableCell>Method</TableCell>
-              <TableCell>Route</TableCell>
-              <TableCell>Authenticated</TableCell>
+              <TableCell>Name</TableCell>
+              <TableCell align='right'>Actions</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {models.map(row => (
-              <TableRow key={row.id}>
-                <TableCell component='th' scope='row'>
-                  <Link href={`/projects/${row.id}`}>{row.name}</Link>
-                </TableCell>
-                <TableCell>{row.type.toUpperCase()}</TableCell>
-                <TableCell>{row.path}</TableCell>
-              </TableRow>
-            ))}
+            {models
+              .filter(i => !i.isExternal)
+              .map(row => (
+                <TableRow key={row.name}>
+                  <TableCell>
+                    <Typography variant='h6'>{row.name}</Typography>
+                    <Typography variant='body2' className={classes.path}>
+                      {row.relativePath}
+                    </Typography>
+                  </TableCell>
+                  <TableCell align='right'>
+                    <Tooltip
+                      title='Open in VS Code'
+                      aria-label='Open in VS Code'
+                    >
+                      <IconButton onClick={openInVSCode(row.filePath)}>
+                        <SvgIcon>
+                          <path d={mdiMicrosoftVisualStudioCode} />
+                        </SvgIcon>
+                      </IconButton>
+                    </Tooltip>
+                  </TableCell>
+                </TableRow>
+              ))}
           </TableBody>
         </Table>
       </TableContainer>

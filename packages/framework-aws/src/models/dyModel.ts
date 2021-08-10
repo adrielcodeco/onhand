@@ -15,12 +15,16 @@ export type DyDocument<M> = Document & M
 
 export function DyModel<M> (
   tableName: string,
-  schema: any,
+  schema: () => any,
   options?: Partial<ModelOptions>,
   ohInternalVersion?: string,
 ): () => DyModelType<M> {
+  container
+    .bind(Symbol.for('models'))
+    .toConstantValue({ tableName, schema, options, ohInternalVersion })
   return () => {
-    Object.assign(schema, {
+    const _schema = schema()
+    Object.assign(_schema, {
       ohInternalVersion: {
         type: String,
         default: async () => {
@@ -45,7 +49,7 @@ export function DyModel<M> (
     }
     const Model = model<DyDocument<M>>(
       tableName,
-      new Schema(schema, {
+      new Schema(_schema, {
         saveUnknown: true,
         timestamps: {
           createdAt: ['createdAt'],
