@@ -4051,6 +4051,70 @@
     node-gyp "^7.1.0"
     read-package-json-fast "^2.0.1"
 
+"@octokit/app@^12.0.0":
+  version "12.0.3"
+  resolved "https://registry.npmjs.org/@octokit/app/-/app-12.0.3.tgz#f14619c69c431609cda9bd6c7a00b246b4db32bb"
+  integrity sha512-ag/g5ufxZl+t93b19WBdrg+7GLq3IgPsGb5z/xqjyCsV2tr7i2Dqjrah/IbTJ4ncNE7iIvMQI5/vKjiSSUxqCg==
+  dependencies:
+    "@octokit/auth-app" "^3.3.0"
+    "@octokit/auth-unauthenticated" "^2.0.4"
+    "@octokit/core" "^3.4.0"
+    "@octokit/oauth-app" "^3.3.2"
+    "@octokit/plugin-paginate-rest" "^2.13.3"
+    "@octokit/types" "^6.13.0"
+    "@octokit/webhooks" "^9.0.1"
+
+"@octokit/auth-app@^3.3.0":
+  version "3.6.0"
+  resolved "https://registry.npmjs.org/@octokit/auth-app/-/auth-app-3.6.0.tgz#79fc6f652d2362ce0bd3122f6f764a87cc813dea"
+  integrity sha512-A+tLuHEMXw+Xz9dmKO7Ho9i4EmMr4tThrwYTlmMNu8y93JxvvRjKFFElpCTS+Z0NlbfuyNdaTlJnAinFbVKm7g==
+  dependencies:
+    "@octokit/auth-oauth-app" "^4.3.0"
+    "@octokit/auth-oauth-user" "^1.2.3"
+    "@octokit/request" "^5.6.0"
+    "@octokit/request-error" "^2.1.0"
+    "@octokit/types" "^6.0.3"
+    "@types/lru-cache" "^5.1.0"
+    deprecation "^2.3.1"
+    lru-cache "^6.0.0"
+    universal-github-app-jwt "^1.0.1"
+    universal-user-agent "^6.0.0"
+
+"@octokit/auth-oauth-app@^4.0.0", "@octokit/auth-oauth-app@^4.3.0":
+  version "4.3.0"
+  resolved "https://registry.npmjs.org/@octokit/auth-oauth-app/-/auth-oauth-app-4.3.0.tgz#de02f184360ffd7cfccef861053784fc4410e7ea"
+  integrity sha512-cETmhmOQRHCz6cLP7StThlJROff3A/ln67Q961GuIr9zvyFXZ4lIJy9RE6Uw5O7D8IXWPU3jhDnG47FTSGQr8Q==
+  dependencies:
+    "@octokit/auth-oauth-device" "^3.1.1"
+    "@octokit/auth-oauth-user" "^1.2.1"
+    "@octokit/request" "^5.3.0"
+    "@octokit/types" "^6.0.3"
+    "@types/btoa-lite" "^1.0.0"
+    btoa-lite "^1.0.0"
+    universal-user-agent "^6.0.0"
+
+"@octokit/auth-oauth-device@^3.1.1":
+  version "3.1.2"
+  resolved "https://registry.npmjs.org/@octokit/auth-oauth-device/-/auth-oauth-device-3.1.2.tgz#d299f51f491669f37fe7af8738f5ac921e63973c"
+  integrity sha512-w7Po4Ck6N2aAn2VQyKLuojruiyKROTBv4qs6IwE5rbwF7HhBXXp4A/NKmkpoFIZkiXQtM+N8QtkSck4ApYWdGg==
+  dependencies:
+    "@octokit/oauth-methods" "^1.1.0"
+    "@octokit/request" "^5.4.14"
+    "@octokit/types" "^6.10.0"
+    universal-user-agent "^6.0.0"
+
+"@octokit/auth-oauth-user@^1.2.1", "@octokit/auth-oauth-user@^1.2.3", "@octokit/auth-oauth-user@^1.3.0":
+  version "1.3.0"
+  resolved "https://registry.npmjs.org/@octokit/auth-oauth-user/-/auth-oauth-user-1.3.0.tgz#da4e4529145181a6aa717ae858afb76ebd6e3360"
+  integrity sha512-3QC/TAdk7onnxfyZ24BnJRfZv8TRzQK7SEFUS9vLng4Vv6Hv6I64ujdk/CUkREec8lhrwU764SZ/d+yrjjqhaQ==
+  dependencies:
+    "@octokit/auth-oauth-device" "^3.1.1"
+    "@octokit/oauth-methods" "^1.1.0"
+    "@octokit/request" "^5.4.14"
+    "@octokit/types" "^6.12.2"
+    btoa-lite "^1.0.0"
+    universal-user-agent "^6.0.0"
+
 "@octokit/auth-token@^2.4.4":
   version "2.4.5"
   resolved "https://registry.npmjs.org/@octokit/auth-token/-/auth-token-2.4.5.tgz#568ccfb8cb46f36441fac094ce34f7a875b197f3"
@@ -4058,7 +4122,15 @@
   dependencies:
     "@octokit/types" "^6.0.3"
 
-"@octokit/core@^3.5.0":
+"@octokit/auth-unauthenticated@^2.0.0", "@octokit/auth-unauthenticated@^2.0.4":
+  version "2.1.0"
+  resolved "https://registry.npmjs.org/@octokit/auth-unauthenticated/-/auth-unauthenticated-2.1.0.tgz#ef97de366836e09f130de4e2205be955f9cf131c"
+  integrity sha512-+baofLfSL0CAv3CfGQ9rxiZZQEX8VNJMGuuS4PgrMRBUL52Ho5+hQYb63UJQshw7EXYMPDZxbXznc0y33cbPqw==
+  dependencies:
+    "@octokit/request-error" "^2.1.0"
+    "@octokit/types" "^6.0.3"
+
+"@octokit/core@^3.3.1", "@octokit/core@^3.3.2", "@octokit/core@^3.4.0", "@octokit/core@^3.5.0":
   version "3.5.1"
   resolved "https://registry.npmjs.org/@octokit/core/-/core-3.5.1.tgz#8601ceeb1ec0e1b1b8217b960a413ed8e947809b"
   integrity sha512-omncwpLVxMP+GLpLPgeGJBF6IWJFjXDS5flY5VbppePYX9XehevbDykRH9PdCdvqt9TS5AOTiDide7h0qrkHjw==
@@ -4089,15 +4161,57 @@
     "@octokit/types" "^6.0.3"
     universal-user-agent "^6.0.0"
 
+"@octokit/oauth-app@^3.3.0", "@octokit/oauth-app@^3.3.2":
+  version "3.5.1"
+  resolved "https://registry.npmjs.org/@octokit/oauth-app/-/oauth-app-3.5.1.tgz#b880d0a480a3d2043b6e71b1fb0360d90db2f0f0"
+  integrity sha512-heRM/m5nZfN6b9lsNwfOQ+HnpqLu3ske1CBmKaQ8URuB3HEEkZjKJUaZmnXK2c2Q70sDtPSiiFEDuq4McP40mQ==
+  dependencies:
+    "@octokit/auth-oauth-app" "^4.0.0"
+    "@octokit/auth-oauth-user" "^1.3.0"
+    "@octokit/auth-unauthenticated" "^2.0.0"
+    "@octokit/core" "^3.3.2"
+    "@octokit/oauth-authorization-url" "^4.2.1"
+    "@octokit/oauth-methods" "^1.2.2"
+    fromentries "^1.3.1"
+    universal-user-agent "^6.0.0"
+
+"@octokit/oauth-authorization-url@^4.2.1", "@octokit/oauth-authorization-url@^4.3.1":
+  version "4.3.3"
+  resolved "https://registry.npmjs.org/@octokit/oauth-authorization-url/-/oauth-authorization-url-4.3.3.tgz#6a6ef38f243086fec882b62744f39b517528dfb9"
+  integrity sha512-lhP/t0i8EwTmayHG4dqLXgU+uPVys4WD/qUNvC+HfB1S1dyqULm5Yx9uKc1x79aP66U1Cb4OZeW8QU/RA9A4XA==
+
+"@octokit/oauth-methods@^1.1.0", "@octokit/oauth-methods@^1.2.2":
+  version "1.2.4"
+  resolved "https://registry.npmjs.org/@octokit/oauth-methods/-/oauth-methods-1.2.4.tgz#5f2706b29f09d309233aee61c99b66aedec0511a"
+  integrity sha512-85hen2Dkpnmy2PGfVFe7Ke9rUo//nlqUcHE4GiQBHJ7D95rAm19GcRO49LlH6NOXOMdEFj7i/Ay5GVDRrAk38w==
+  dependencies:
+    "@octokit/oauth-authorization-url" "^4.3.1"
+    "@octokit/request" "^5.4.14"
+    "@octokit/request-error" "^2.0.5"
+    "@octokit/types" "^6.12.2"
+    btoa-lite "^1.0.0"
+
 "@octokit/openapi-types@^9.4.0":
   version "9.4.0"
   resolved "https://registry.npmjs.org/@octokit/openapi-types/-/openapi-types-9.4.0.tgz#31a76fb4c0f2e15af300edd880cedf4f75be212b"
   integrity sha512-rKRkXikOJgDNImPl49IJuECLVXjj+t4qOXHhl8SBjMQCGGp1w4m5Ud/0kfdUx+zCpTvBN8vaOUDF4nnboZoOtQ==
 
+"@octokit/openapi-types@^9.5.0":
+  version "9.6.0"
+  resolved "https://registry.npmjs.org/@octokit/openapi-types/-/openapi-types-9.6.0.tgz#0260a84f5c61c01755402ab5ac5b1ab46e7c0730"
+  integrity sha512-L+8x7DpcNtHkMbTxxCxg3cozvHUNP46rOIzFwoMs0piWwQzAGNXqlIQO2GLvnKTWLUh99DkY+UyHVrP4jXlowg==
+
 "@octokit/plugin-enterprise-rest@^6.0.1":
   version "6.0.1"
   resolved "https://registry.npmjs.org/@octokit/plugin-enterprise-rest/-/plugin-enterprise-rest-6.0.1.tgz#e07896739618dab8da7d4077c658003775f95437"
   integrity sha512-93uGjlhUD+iNg1iWhUENAtJata6w5nE+V4urXOAlIXdco6xNZtUSfYY8dzp3Udy74aqO/B5UZL80x/YMa5PKRw==
+
+"@octokit/plugin-paginate-rest@^2.13.3":
+  version "2.15.1"
+  resolved "https://registry.npmjs.org/@octokit/plugin-paginate-rest/-/plugin-paginate-rest-2.15.1.tgz#264189dd3ce881c6c33758824aac05a4002e056a"
+  integrity sha512-47r52KkhQDkmvUKZqXzA1lKvcyJEfYh3TKAIe5+EzMeyDM3d+/s5v11i2gTk8/n6No6DPi3k5Ind6wtDbo/AEg==
+  dependencies:
+    "@octokit/types" "^6.24.0"
 
 "@octokit/plugin-paginate-rest@^2.6.2":
   version "2.15.0"
@@ -4119,7 +4233,31 @@
     "@octokit/types" "^6.24.0"
     deprecation "^2.3.1"
 
-"@octokit/request-error@^2.0.5", "@octokit/request-error@^2.1.0":
+"@octokit/plugin-rest-endpoint-methods@5.8.0":
+  version "5.8.0"
+  resolved "https://registry.npmjs.org/@octokit/plugin-rest-endpoint-methods/-/plugin-rest-endpoint-methods-5.8.0.tgz#33b342fe41f2603fdf8b958e6652103bb3ea3f3b"
+  integrity sha512-qeLZZLotNkoq+it6F+xahydkkbnvSK0iDjlXFo3jNTB+Ss0qIbYQb9V/soKLMkgGw8Q2sHjY5YEXiA47IVPp4A==
+  dependencies:
+    "@octokit/types" "^6.25.0"
+    deprecation "^2.3.1"
+
+"@octokit/plugin-retry@^3.0.8":
+  version "3.0.9"
+  resolved "https://registry.npmjs.org/@octokit/plugin-retry/-/plugin-retry-3.0.9.tgz#ae625cca1e42b0253049102acd71c1d5134788fe"
+  integrity sha512-r+fArdP5+TG6l1Rv/C9hVoty6tldw6cE2pRHNGmFPdyfrc696R6JjrQ3d7HdVqGwuzfyrcaLAKD7K8TX8aehUQ==
+  dependencies:
+    "@octokit/types" "^6.0.3"
+    bottleneck "^2.15.3"
+
+"@octokit/plugin-throttling@^3.4.3":
+  version "3.5.1"
+  resolved "https://registry.npmjs.org/@octokit/plugin-throttling/-/plugin-throttling-3.5.1.tgz#889e80e7f3464a18c768337369498d2d47c0b643"
+  integrity sha512-d2jh3/RZo98DRw2J0jFxhKz7nrTGalGdkfRtxM+pI5k1wRb4BKBjiuE9cuZnhZyj+zLC1EcIptj7K+28LJZ3eA==
+  dependencies:
+    "@octokit/types" "^6.0.1"
+    bottleneck "^2.15.3"
+
+"@octokit/request-error@^2.0.2", "@octokit/request-error@^2.0.5", "@octokit/request-error@^2.1.0":
   version "2.1.0"
   resolved "https://registry.npmjs.org/@octokit/request-error/-/request-error-2.1.0.tgz#9e150357831bfc788d13a4fd4b1913d60c74d677"
   integrity sha512-1VIvgXxs9WHSjicsRwq8PlR2LR2x6DwsJAaFgzdi0JfJoGSO8mYI/cHJQ+9FbN21aa+DrgNLnwObmyeSC8Rmpg==
@@ -4128,7 +4266,7 @@
     deprecation "^2.0.0"
     once "^1.4.0"
 
-"@octokit/request@^5.6.0":
+"@octokit/request@^5.3.0", "@octokit/request@^5.4.14", "@octokit/request@^5.6.0":
   version "5.6.0"
   resolved "https://registry.npmjs.org/@octokit/request/-/request-5.6.0.tgz#6084861b6e4fa21dc40c8e2a739ec5eff597e672"
   integrity sha512-4cPp/N+NqmaGQwbh3vUsYqokQIzt7VjsgTYVXiwpUP2pxd5YiZB2XuTedbb0SPtv9XS7nzAKjAuQxmY8/aZkiA==
@@ -4140,7 +4278,7 @@
     node-fetch "^2.6.1"
     universal-user-agent "^6.0.0"
 
-"@octokit/rest@^18.0.0", "@octokit/rest@^18.1.0":
+"@octokit/rest@^18.0.0", "@octokit/rest@^18.0.6", "@octokit/rest@^18.1.0":
   version "18.9.0"
   resolved "https://registry.npmjs.org/@octokit/rest/-/rest-18.9.0.tgz#e5cc23fa199a2bdeea9efbe6096f81d7d6156fe9"
   integrity sha512-VrmrE8gjpuOoDAGjrQq2j9ZhOE6LxaqxaQg0yMrrEnnQZy2ZcAnr5qbVfKsMF0up/48PRV/VFS/2GSMhA7nTdA==
@@ -4150,12 +4288,39 @@
     "@octokit/plugin-request-log" "^1.0.2"
     "@octokit/plugin-rest-endpoint-methods" "5.7.0"
 
+"@octokit/types@^6.0.1", "@octokit/types@^6.10.0", "@octokit/types@^6.12.2", "@octokit/types@^6.13.0", "@octokit/types@^6.25.0":
+  version "6.25.0"
+  resolved "https://registry.npmjs.org/@octokit/types/-/types-6.25.0.tgz#c8e37e69dbe7ce55ed98ee63f75054e7e808bf1a"
+  integrity sha512-bNvyQKfngvAd/08COlYIN54nRgxskmejgywodizQNyiKoXmWRAjKup2/LYwm+T9V0gsKH6tuld1gM0PzmOiB4Q==
+  dependencies:
+    "@octokit/openapi-types" "^9.5.0"
+
 "@octokit/types@^6.0.3", "@octokit/types@^6.16.1", "@octokit/types@^6.23.0", "@octokit/types@^6.24.0":
   version "6.24.0"
   resolved "https://registry.npmjs.org/@octokit/types/-/types-6.24.0.tgz#d7858ceae8ac29256da85dcfcb9acbae28e6ba22"
   integrity sha512-MfEimJeQ8AV1T2nI5kOfHqsqPHaAnG0Dw3MVoHSEsEq6iLKx2N91o+k2uAgXhPYeSE76LVBqjgTShnFFgNwe0A==
   dependencies:
     "@octokit/openapi-types" "^9.4.0"
+
+"@octokit/webhooks-methods@^2.0.0":
+  version "2.0.0"
+  resolved "https://registry.npmjs.org/@octokit/webhooks-methods/-/webhooks-methods-2.0.0.tgz#1108b9ea661ca6c81e4a8bfa63a09eb27d5bc2db"
+  integrity sha512-35cfQ4YWlnZnmZKmIxlGPUPLtbkF8lr/A/1Sk1eC0ddLMwQN06dOuLc+dI3YLQS+T+MoNt3DIQ0NynwgKPilig==
+
+"@octokit/webhooks-types@4.3.0":
+  version "4.3.0"
+  resolved "https://registry.npmjs.org/@octokit/webhooks-types/-/webhooks-types-4.3.0.tgz#a3810cedeeb48305fed4273e88387d0572c64fdc"
+  integrity sha512-Hp2o49WSiLHLwp8a9aQD9qK+uoa45Q/gnJG7a+EEZ4rLk5oDVCzlMbtsezxUPXG7/eLj05GciCzdzgJWANugEA==
+
+"@octokit/webhooks@^9.0.1":
+  version "9.12.0"
+  resolved "https://registry.npmjs.org/@octokit/webhooks/-/webhooks-9.12.0.tgz#9d831e4ff5d69efabca09a1044bd832e907a0252"
+  integrity sha512-B/KK96mmmRju3lK8jRe78z2h4rSAAysT+rcT5Aw5aIXueOOHsFFgRNQF6GB+/0xwm9KkpMY96Z9vj2gwyOiatA==
+  dependencies:
+    "@octokit/request-error" "^2.0.2"
+    "@octokit/webhooks-methods" "^2.0.0"
+    "@octokit/webhooks-types" "4.3.0"
+    aggregate-error "^3.1.0"
 
 "@parcel/fs@^1.11.0":
   version "1.11.0"
@@ -4198,7 +4363,17 @@
     "@parcel/utils" "^1.11.0"
     physical-cpu-count "^2.0.0"
 
-"@semantic-release/commit-analyzer@^8.0.0":
+"@semantic-release/changelog@^5.0.1":
+  version "5.0.1"
+  resolved "https://registry.npmjs.org/@semantic-release/changelog/-/changelog-5.0.1.tgz#50a84b63e5d391b7debfe021421589fa2bcdafe4"
+  integrity sha512-unvqHo5jk4dvAf2nZ3aw4imrlwQ2I50eVVvq9D47Qc3R+keNqepx1vDYwkjF8guFXnOYaYcR28yrZWno1hFbiw==
+  dependencies:
+    "@semantic-release/error" "^2.1.0"
+    aggregate-error "^3.0.0"
+    fs-extra "^9.0.0"
+    lodash "^4.17.4"
+
+"@semantic-release/commit-analyzer@^8.0.0", "@semantic-release/commit-analyzer@^8.0.1":
   version "8.0.1"
   resolved "https://registry.npmjs.org/@semantic-release/commit-analyzer/-/commit-analyzer-8.0.1.tgz#5d2a37cd5a3312da0e3ac05b1ca348bf60b90bca"
   integrity sha512-5bJma/oB7B4MtwUkZC2Bf7O1MHfi4gWe4mA+MIQ3lsEV0b422Bvl1z5HRpplDnMLHH3EXMoRdEng6Ds5wUqA3A==
@@ -4211,10 +4386,22 @@
     lodash "^4.17.4"
     micromatch "^4.0.2"
 
-"@semantic-release/error@^2.2.0":
+"@semantic-release/error@^2.1.0", "@semantic-release/error@^2.2.0":
   version "2.2.0"
   resolved "https://registry.npmjs.org/@semantic-release/error/-/error-2.2.0.tgz#ee9d5a09c9969eade1ec864776aeda5c5cddbbf0"
   integrity sha512-9Tj/qn+y2j+sjCI3Jd+qseGtHjOAeg7dU2/lVcqIQ9TV3QDaDXDYXcoOHU+7o2Hwh8L8ymL4gfuO7KxDs3q2zg==
+
+"@semantic-release/exec@^5.0.0":
+  version "5.0.0"
+  resolved "https://registry.npmjs.org/@semantic-release/exec/-/exec-5.0.0.tgz#69c253107a755dabf7c262d417269d099f714356"
+  integrity sha512-t7LWXIvDJQbuGCy2WmMG51WyaGSLTvZBv9INvcI4S0kn+QjnnVVUMhcioIqhb0r3yqqarMzHVcABFug0q0OXjw==
+  dependencies:
+    "@semantic-release/error" "^2.1.0"
+    aggregate-error "^3.0.0"
+    debug "^4.0.0"
+    execa "^4.0.0"
+    lodash "^4.17.4"
+    parse-json "^5.0.0"
 
 "@semantic-release/github@^7.0.0":
   version "7.2.3"
@@ -4257,7 +4444,7 @@
     semver "^7.1.2"
     tempy "^1.0.0"
 
-"@semantic-release/release-notes-generator@^9.0.0":
+"@semantic-release/release-notes-generator@^9.0.0", "@semantic-release/release-notes-generator@^9.0.3":
   version "9.0.3"
   resolved "https://registry.npmjs.org/@semantic-release/release-notes-generator/-/release-notes-generator-9.0.3.tgz#d541221c6512e9619f25ba8079527e34288e6904"
   integrity sha512-hMZyddr0u99OvM2SxVOIelHzly+PP3sYtJ8XOLHdMp8mrluN5/lpeTnIO27oeCYdupY/ndoGfvrqDjHqkSyhVg==
@@ -4364,6 +4551,11 @@
   dependencies:
     "@types/connect" "*"
     "@types/node" "*"
+
+"@types/btoa-lite@^1.0.0":
+  version "1.0.0"
+  resolved "https://registry.npmjs.org/@types/btoa-lite/-/btoa-lite-1.0.0.tgz#e190a5a548e0b348adb0df9ac7fa5f1151c7cca4"
+  integrity sha512-wJsiX1tosQ+J5+bY5LrSahHxr2wT+uME5UDwdN1kg4frt40euqA+wzECkmq4t5QbveHiJepfdThgQrPw6KiSlg==
 
 "@types/cli-progress@^3.9.2":
   version "3.9.2"
@@ -4539,7 +4731,7 @@
   resolved "https://registry.npmjs.org/@types/json-schema/-/json-schema-7.0.9.tgz#97edc9037ea0c38585320b28964dde3b39e4660d"
   integrity sha512-qcUXuemtEu+E5wZSJHNxUXeCZhAfXKQ41D+duX+VYPde7xyEVZci+/oXKJL13tnRs9lR2pr4fod59GT6/X1/yQ==
 
-"@types/jsonwebtoken@^8.5.4":
+"@types/jsonwebtoken@^8.3.3", "@types/jsonwebtoken@^8.5.4":
   version "8.5.4"
   resolved "https://registry.npmjs.org/@types/jsonwebtoken/-/jsonwebtoken-8.5.4.tgz#50ccaf0aa6f5d7b9956e70fe323b76e582991913"
   integrity sha512-4L8msWK31oXwdtC81RmRBAULd0ShnAHjBuKT9MRQpjP0piNrZdXyTRcKY9/UIfhGeKIT4PvF5amOOUbbT/9Wpg==
@@ -4555,6 +4747,11 @@
   version "4.14.172"
   resolved "https://registry.npmjs.org/@types/lodash/-/lodash-4.14.172.tgz#aad774c28e7bfd7a67de25408e03ee5a8c3d028a"
   integrity sha512-/BHF5HAx3em7/KkzVKm3LrsD6HZAXuXO1AJZQ3cRRBZj4oHZDviWPYu0aEplAqDFNHZPW6d3G7KN+ONcCCC7pw==
+
+"@types/lru-cache@^5.1.0":
+  version "5.1.1"
+  resolved "https://registry.npmjs.org/@types/lru-cache/-/lru-cache-5.1.1.tgz#c48c2e27b65d2a153b19bfc1a317e30872e01eef"
+  integrity sha512-ssE3Vlrys7sdIzs5LOxCzTVMsU7i9oa/IaW92wF32JFb3CVczqOkru2xspuKczHEbG3nvmPY7IFqVmGGHdNbYw==
 
 "@types/mem-fs-editor@*":
   version "7.0.1"
@@ -5143,7 +5340,7 @@ agentkeepalive@^4.1.3:
     depd "^1.1.2"
     humanize-ms "^1.2.1"
 
-aggregate-error@^3.0.0:
+aggregate-error@^3.0.0, aggregate-error@^3.1.0:
   version "3.1.0"
   resolved "https://registry.npmjs.org/aggregate-error/-/aggregate-error-3.1.0.tgz#92670ff50f5359bdb7a3e0d40d0ec30c5737687a"
   integrity sha512-4I7Td01quW/RpocfNayFdFVk1qSuoh0E7JrbRJ16nH01HhKFQ88INq9Sd+nd72zqRySlr9BmDA8xlEJ6vJMrYA==
@@ -5910,7 +6107,7 @@ boolbase@^1.0.0, boolbase@~1.0.0:
   resolved "https://registry.npmjs.org/boolbase/-/boolbase-1.0.0.tgz#68dff5fbe60c51eb37725ea9e3ed310dcc1e776e"
   integrity sha1-aN/1++YMUes3cl6p4+0xDcwed24=
 
-bottleneck@^2.18.1:
+bottleneck@^2.15.3, bottleneck@^2.18.1:
   version "2.19.5"
   resolved "https://registry.npmjs.org/bottleneck/-/bottleneck-2.19.5.tgz#5df0b90f59fd47656ebe63c78a98419205cadd91"
   integrity sha512-VHiNCbI1lKdl44tGrhNfU3lup0Tj/ZBMJB5/2ZbNXRCPuRCO7ed2mgcK4r17y+KB2EfuYuRaVlwNbAeaWGSpbw==
@@ -6056,6 +6253,11 @@ bser@2.1.1:
   integrity sha512-gQxTNE/GAfIIrmHLUE3oJyp5FO6HRBfhjnw4/wMmA63ZGDJnWBmgY/lyQBpnDUkGmAhbSe39tx2d/iTOAfglwQ==
   dependencies:
     node-int64 "^0.4.0"
+
+btoa-lite@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.npmjs.org/btoa-lite/-/btoa-lite-1.0.0.tgz#337766da15801210fdd956c22e9c6891ab9d0337"
+  integrity sha1-M3dm2hWAEhD92VbCLpxokaudAzc=
 
 buffer-crc32@^0.2.1, buffer-crc32@^0.2.13:
   version "0.2.13"
@@ -8541,7 +8743,7 @@ execa@*, execa@^5.0.0, execa@^5.1.1:
     signal-exit "^3.0.3"
     strip-final-newline "^2.0.0"
 
-execa@^4.0.0:
+execa@^4.0.0, execa@^4.1.0:
   version "4.1.0"
   resolved "https://registry.npmjs.org/execa/-/execa-4.1.0.tgz#4e5491ad1572f2f17a77d388c6c857135b22847a"
   integrity sha512-j5W0//W7f8UxAn8hXVnwG8tLwdiUy4FJLcSupCg6maBYZDpyBvTApK7KyuI4bKj8KOh1r2YH+6ucuYtJv1bTZA==
@@ -9043,6 +9245,11 @@ from2@^2.3.0:
     inherits "^2.0.1"
     readable-stream "^2.0.0"
 
+fromentries@^1.3.1:
+  version "1.3.2"
+  resolved "https://registry.npmjs.org/fromentries/-/fromentries-1.3.2.tgz#e4bca6808816bf8f93b52750f1127f5a6fd86e3a"
+  integrity sha512-cHEpEQHUg0f8XdtZCc2ZAhrHzKzT0MrFUTcvx+hfxYu7rGMDc5SKoXFh+n4YigxsHXRzc6OrCshdR1bWH6HHyg==
+
 fs-constants@^1.0.0:
   version "1.0.0"
   resolved "https://registry.npmjs.org/fs-constants/-/fs-constants-1.0.0.tgz#6be0de9be998ce16af8afc24497b9ee9b7ccd9ad"
@@ -9314,6 +9521,13 @@ gitconfiglocal@^1.0.0:
   integrity sha1-QdBF84UaXqiPA/JMocYXgRRGS5s=
   dependencies:
     ini "^1.3.2"
+
+github-username@^6.0.0:
+  version "6.0.0"
+  resolved "https://registry.npmjs.org/github-username/-/github-username-6.0.0.tgz#d543eced7295102996cd8e4e19050ebdcbe60658"
+  integrity sha512-7TTrRjxblSI5l6adk9zd+cV5d6i1OrJSo3Vr9xdGqFLBQo0mz5P9eIfKCDJ7eekVGGFLbce0qbPSnktXV2BjDQ==
+  dependencies:
+    "@octokit/rest" "^18.0.6"
 
 glob-parent@^3.1.0:
   version "3.1.0"
@@ -10021,6 +10235,11 @@ internal-slot@^1.0.3:
     get-intrinsic "^1.1.0"
     has "^1.0.3"
     side-channel "^1.0.4"
+
+interpret@^1.0.0:
+  version "1.4.0"
+  resolved "https://registry.npmjs.org/interpret/-/interpret-1.4.0.tgz#665ab8bc4da27a774a40584e812e3e0fa45b1a1e"
+  integrity sha512-agE4QfB2Lkp9uICn7BAqoscw4SZP9kTE2hxiFI3jBPmXJfdqiahTbUuKGsMoN2GtqL9AxhYioAcVvgsb1HvRbA==
 
 into-stream@^6.0.0:
   version "6.0.0"
@@ -11805,7 +12024,7 @@ lodash.uniqby@^4.7.0:
   resolved "https://registry.npmjs.org/lodash.uniqby/-/lodash.uniqby-4.7.0.tgz#d99c07a669e9e6d24e1362dfe266c67616af1302"
   integrity sha1-2ZwHpmnp5tJOE2Lf4mbGdhavEwI=
 
-lodash@4.x, lodash@^4.11.2, lodash@^4.17.10, lodash@^4.17.12, lodash@^4.17.15, lodash@^4.17.19, lodash@^4.17.20, lodash@^4.17.21, lodash@^4.17.4, lodash@^4.7.0:
+lodash@4.x, lodash@^4.11.2, lodash@^4.17.10, lodash@^4.17.11, lodash@^4.17.12, lodash@^4.17.15, lodash@^4.17.19, lodash@^4.17.20, lodash@^4.17.21, lodash@^4.17.4, lodash@^4.7.0:
   version "4.17.21"
   resolved "https://registry.npmjs.org/lodash/-/lodash-4.17.21.tgz#679591c564c3bffaae8454cf0b3df370c3d6911c"
   integrity sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg==
@@ -13038,6 +13257,20 @@ object.values@^1.1.0, object.values@^1.1.3, object.values@^1.1.4:
     call-bind "^1.0.2"
     define-properties "^1.1.3"
     es-abstract "^1.18.2"
+
+octokit@^1.3.0:
+  version "1.4.0"
+  resolved "https://registry.npmjs.org/octokit/-/octokit-1.4.0.tgz#3f1b6a690078e8a5caba296429e285bfe9c16b78"
+  integrity sha512-/ZV/6pZeZ0ahPwCnydVbXQnPCLSbLmHN8oZzcWoa2zDyON8066GZ1Goe29/HEBZzfM9TUhxI8qS2nS6VenWovg==
+  dependencies:
+    "@octokit/app" "^12.0.0"
+    "@octokit/core" "^3.3.1"
+    "@octokit/oauth-app" "^3.3.0"
+    "@octokit/plugin-paginate-rest" "^2.13.3"
+    "@octokit/plugin-rest-endpoint-methods" "5.8.0"
+    "@octokit/plugin-retry" "^3.0.8"
+    "@octokit/plugin-throttling" "^3.4.3"
+    "@octokit/types" "^6.16.1"
 
 on-finished@~2.3.0:
   version "2.3.0"
@@ -14674,6 +14907,13 @@ readdirp@^2.2.1:
     micromatch "^3.1.10"
     readable-stream "^2.0.2"
 
+rechoir@^0.6.2:
+  version "0.6.2"
+  resolved "https://registry.npmjs.org/rechoir/-/rechoir-0.6.2.tgz#85204b54dba82d5742e28c96756ef43af50e3384"
+  integrity sha1-hSBLVNuoLVdC4oyWdW70OvUOM4Q=
+  dependencies:
+    resolve "^1.1.6"
+
 redent@^3.0.0:
   version "3.0.0"
   resolved "https://registry.npmjs.org/redent/-/redent-3.0.0.tgz#e557b7998316bb53c9f1f56fa626352c6963059f"
@@ -14918,7 +15158,7 @@ resolve-url@^0.2.1:
   resolved "https://registry.npmjs.org/resolve-url/-/resolve-url-0.2.1.tgz#2c637fe77c893afd2a663fe21aa9080068e2052a"
   integrity sha1-LGN/53yJOv0qZj/iGqkIAGjiBSo=
 
-resolve@>=1.9.0, resolve@^1.1.5, resolve@^1.10.0, resolve@^1.10.1, resolve@^1.12.0, resolve@^1.13.1, resolve@^1.14.2, resolve@^1.20.0, resolve@^1.4.0:
+resolve@>=1.9.0, resolve@^1.1.5, resolve@^1.1.6, resolve@^1.10.0, resolve@^1.10.1, resolve@^1.12.0, resolve@^1.13.1, resolve@^1.14.2, resolve@^1.20.0, resolve@^1.4.0:
   version "1.20.0"
   resolved "https://registry.npmjs.org/resolve/-/resolve-1.20.0.tgz#629a013fb3f70755d6f0b7935cc1c2c5378b1975"
   integrity sha512-wENBPt4ySzg4ybFQW2TT1zMQucPK95HSh/nq2CFTZVOGut2+pQvSsgtda4d26YrYcr067wjbmzOG8byDPBX63A==
@@ -15002,7 +15242,7 @@ ripemd160@^2.0.0, ripemd160@^2.0.1:
     hash-base "^3.0.0"
     inherits "^2.0.1"
 
-run-async@^2.2.0, run-async@^2.4.0:
+run-async@^2.0.0, run-async@^2.2.0, run-async@^2.4.0:
   version "2.4.1"
   resolved "https://registry.npmjs.org/run-async/-/run-async-2.4.1.tgz#8440eccf99ea3e70bd409d49aab88e10c189a455"
   integrity sha512-tvVnVv01b8c1RrA6Ep7JkStj85Guv/YrMcwqYQnwjsAS2cTmmPGBBjAjpCW7RrSodNSoE2/qg9O4bceNvUuDgQ==
@@ -15288,6 +15528,15 @@ shebang-regex@^3.0.0:
   version "3.0.0"
   resolved "https://registry.npmjs.org/shebang-regex/-/shebang-regex-3.0.0.tgz#ae16f1644d873ecad843b0307b143362d4c42172"
   integrity sha512-7++dFhtcx3353uBaq8DDR4NuxBetBzC7ZQOhmTQInHEd6bSrXdiEyzCvG07Z44UYdLShWUyXt5M/yhz8ekcb1A==
+
+shelljs@^0.8.4:
+  version "0.8.4"
+  resolved "https://registry.npmjs.org/shelljs/-/shelljs-0.8.4.tgz#de7684feeb767f8716b326078a8a00875890e3c2"
+  integrity sha512-7gk3UZ9kOfPLIAbslLzyWeGiEqx9e3rxwZM0KE6EL8GlGwjym9Mrlx5/p33bWTu9YG6vcS4MBxYZDHYr5lr8BQ==
+  dependencies:
+    glob "^7.0.0"
+    interpret "^1.0.0"
+    rechoir "^0.6.2"
 
 shimmer@^1.2.0:
   version "1.2.1"
@@ -16602,6 +16851,14 @@ unique-string@^2.0.0:
   dependencies:
     crypto-random-string "^2.0.0"
 
+universal-github-app-jwt@^1.0.1:
+  version "1.1.0"
+  resolved "https://registry.npmjs.org/universal-github-app-jwt/-/universal-github-app-jwt-1.1.0.tgz#0abaa876101cdf1d3e4c546be2768841c0c1b514"
+  integrity sha512-3b+ocAjjz4JTyqaOT+NNBd5BtTuvJTxWElIoeHSVelUV9J3Jp7avmQTdLKCaoqi/5Ox2o/q+VK19TJ233rVXVQ==
+  dependencies:
+    "@types/jsonwebtoken" "^8.3.3"
+    jsonwebtoken "^8.5.1"
+
 universal-user-agent@^6.0.0:
   version "6.0.0"
   resolved "https://registry.npmjs.org/universal-user-agent/-/universal-user-agent-6.0.0.tgz#3381f8503b251c0d9cd21bc1de939ec9df5480ee"
@@ -17322,6 +17579,24 @@ yeoman-environment@^3.5.1:
     text-table "^0.2.0"
     textextensions "^5.12.0"
     untildify "^4.0.0"
+
+yeoman-generator@^5.1.0:
+  version "5.4.0"
+  resolved "https://registry.npmjs.org/yeoman-generator/-/yeoman-generator-5.4.0.tgz#2121966fcd9a9ae8ee50f158df27846308fc3ad9"
+  integrity sha512-ZOzoe8pAenTw8q7X3TdG3u5S7EM/ErCNue7Jvcb/ZDfank6Nnu3J249PtgTbyAuN+VYVZ/VVFIAJxjlrqJpldQ==
+  dependencies:
+    chalk "^4.1.0"
+    dargs "^7.0.0"
+    debug "^4.1.1"
+    execa "^4.1.0"
+    github-username "^6.0.0"
+    lodash "^4.17.11"
+    minimist "^1.2.5"
+    read-pkg-up "^7.0.1"
+    run-async "^2.0.0"
+    semver "^7.2.1"
+    shelljs "^0.8.4"
+    text-table "^0.2.0"
 
 yn@3.1.1:
   version "3.1.1"
