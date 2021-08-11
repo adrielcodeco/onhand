@@ -1,9 +1,9 @@
 import React from 'react'
 import { makeStyles } from '@material-ui/core/styles'
 import TextField from '@material-ui/core/TextField'
-import { profilesService } from '#/client/services/envs'
+import { profilesService } from '#/client/services/profiles'
 
-const useStyles = makeStyles({})
+const useStyles = makeStyles({ root: {} })
 
 export const ProfileForm = () => {
   const classes = useStyles()
@@ -12,7 +12,7 @@ export const ProfileForm = () => {
     profilesService.list().then(setProfiles).catch(console.error)
   }, [])
   return (
-    <div>
+    <div className={classes.root}>
       <div>
         <h4>Chose a existing profile</h4>
         {profiles.map(profile => (

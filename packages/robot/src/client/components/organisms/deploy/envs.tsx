@@ -1,4 +1,5 @@
 import React from 'react'
+import { useParams } from 'react-router-dom'
 import { makeStyles } from '@material-ui/core/styles'
 import TextField from '@material-ui/core/TextField'
 import Input from '@material-ui/core/Input'
@@ -57,10 +58,11 @@ const MenuProps = {
 
 export const Envs = () => {
   const classes = useStyles()
+  const { projectId } = useParams<{ projectId: string }>()
   const [envs, setEnvs] = React.useState<any[]>([])
   const [profiles, setProfiles] = React.useState<any[]>([])
   React.useEffect(() => {
-    envsService.list().then(setEnvs).catch(console.error)
+    envsService.list(projectId).then(setEnvs).catch(console.error)
     profilesService.list().then(setProfiles).catch(console.error)
   }, [])
   return (

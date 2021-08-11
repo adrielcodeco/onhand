@@ -17,8 +17,8 @@ export const loadProjectData = async (cwd: string) => {
   process.env.NO_PARAMETERS = 'true'
   const configPath = path.resolve(cwd, results[0])
   const options = loadConfig({ stage: process.env.STAGE }, configPath)
-  const config = options.config as Config
-  const openApiFilePath = path.resolve(cwd, config.app.openApi!)
+  const config: Partial<Config> = options.config!
+  const openApiFilePath = path.resolve(cwd, config?.app?.openApi!)
   const openapi = extractOpenAPISpecification(openApiFilePath)
   const models = await extractModels(cwd, config)
   const repositories = await extractRepositories(cwd, config)

@@ -4,5 +4,6 @@
     "baseUrl": ".",
     "paths": {}
   },
-  "include": []
+  "include": ["."],
+  "exclude": ["node_modules"]
 }

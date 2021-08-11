@@ -214,7 +214,7 @@ export const ApiRouteDetails = ({
                 </TableRow>
               </TableHead>
               <TableBody>
-                {parameters?.map(row => (
+                {parameters?.map((row: any) => (
                   <TableRow key={row.name}>
                     <TableCell className={classes.td}>{row.name}</TableCell>
                     <TableCell className={classes.td}>
@@ -247,7 +247,7 @@ export const ApiRouteDetails = ({
                 </TableRow>
               </TableHead>
               <TableBody>
-                {responses?.map(row => (
+                {responses?.map((row: any) => (
                   <TableRow key={row.name}>
                     <TableCell className={classes.td}>{row.name}</TableCell>
                     <TableCell className={classes.td}>

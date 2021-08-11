@@ -21,7 +21,9 @@ async function isOperation (
   )
 }
 
-export const promoteFunction = async (operationId: string) => {}
+export const promoteFunction = async (operationId: string) => {
+  // TODO:
+}
 
 export const promoteAllFunctions = async ({
   originEnv,

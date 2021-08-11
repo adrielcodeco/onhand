@@ -5,8 +5,11 @@ import { Config } from '@onhand/iac-aws/#/app/config'
 import { container } from '@onhand/business/#/ioc/container'
 import { isRepository } from '@onhand/framework/#/ioc/decorators'
 
-export const extractRepositories = async (cwd: string, config: Config) => {
-  const iocPath = path.resolve(cwd, config.app.ioc!)
+export const extractRepositories = async (
+  cwd: string,
+  config: Partial<Config>,
+) => {
+  const iocPath = path.resolve(cwd, config.app?.ioc!)
   await import(iocPath)
   const repositories: any[] = []
   const bindingMap = getBindingDictionary(container).getMap()
@@ -17,7 +20,7 @@ export const extractRepositories = async (cwd: string, config: Config) => {
         const { source: classPath } = await locate(implementationType as any)
         const filePath = classPath.replace('file://', '')
         const relativePath = path.relative(cwd, filePath)
-        const isExternal = !relativePath.startsWith(`${config.app.src}/`)
+        const isExternal = !relativePath.startsWith(`${config.app?.src}/`)
         repositories.push({
           name: implementationType.name,
           filePath,

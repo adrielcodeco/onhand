@@ -9,7 +9,7 @@ export type Timeline = {
   type: string
 }
 
-const schema = {
+const schema = () => ({
   id: {
     type: String,
     hashKey: true,
@@ -23,7 +23,7 @@ const schema = {
     type: String,
     required: true,
   },
-}
+})
 
 export const TimelineModelProvider = DyModel<Timeline>(
   `onhand${process.env.STAGE ? '_' : ''}${process.env.STAGE ?? ''}_Timeline`,
