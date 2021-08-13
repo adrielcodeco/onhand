@@ -1,6 +1,6 @@
 {
   "name": "@onhand/openapi",
-  "version": "1.0.56",
+  "version": "1.1.0",
   "description": "openapi is part of the @onhand framework",
   "author": "codeco <adrielcodeco@hotmail.com>",
   "homepage": "https://github.com/adrielcodeco/onhand/tree/main/packages/openapi#readme",
