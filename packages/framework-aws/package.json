@@ -35,7 +35,7 @@
     "accesscontrol": "^2.2.1",
     "amazon-cognito-identity-js": "^5.0.6",
     "aws-lambda": "^1.0.6",
-    "aws-sdk": "^2.953.0",
+    "aws-sdk": "^2.967.0",
     "class-validator": "^0.13.1",
     "cross-fetch": "^3.0.6",
     "dynamoose": "^2.7.0",
