@@ -1,6 +1,6 @@
 {
   "name": "@onhand/controller",
-  "version": "1.1.2",
+  "version": "1.1.3",
   "description": "controller is part of the @onhand framework",
   "author": "Codeco <adrielcodeco@hotmail.com>",
   "homepage": "https://github.com/adrielcodeco/onhand/tree/main/packages/controller#readme",
@@ -26,7 +26,7 @@
     "url": "https://github.com/adrielcodeco/onhand/issues"
   },
   "dependencies": {
-    "@onhand/jsend": "^1.1.2",
+    "@onhand/jsend": "^1.1.3",
     "inversify": "^5.0.5"
   },
   "jest": {
