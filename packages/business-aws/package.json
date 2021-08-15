@@ -1,6 +1,6 @@
 {
   "name": "@onhand/business-aws",
-  "version": "1.1.7",
+  "version": "1.1.8",
   "description": "business-aws is part of the @onhand framework",
   "author": "Codeco <adrielcodeco@hotmail.com>",
   "homepage": "https://github.com/adrielcodeco/onhand/tree/main/packages/business-aws#readme",
@@ -26,8 +26,8 @@
     "url": "https://github.com/adrielcodeco/onhand/issues"
   },
   "dependencies": {
-    "@onhand/business": "^1.1.7",
-    "@onhand/domain-aws": "^1.1.7",
+    "@onhand/business": "^1.1.8",
+    "@onhand/domain-aws": "^1.1.8",
     "inversify": "^5.0.5"
   },
   "jest": {
