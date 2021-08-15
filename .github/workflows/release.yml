@@ -2,7 +2,7 @@ name: release
 on:
   push:
     tags:
-      - v[0-9]+.[0-9]+.[0-9]
+      - 'v[0-9]+\.[0-9]+\.[0-9]+'
 
 jobs:
   release:
@@ -33,7 +33,7 @@ jobs:
           key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
           restore-keys: |
             ${{ runner.os }}-yarn-
-      
+
       - name: Install global lerna
         run: yarn global add lerna
 
