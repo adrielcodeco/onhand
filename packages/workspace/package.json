@@ -13,7 +13,8 @@
   },
   "files": [
     "#",
-    "templates"
+    "templates",
+    "templates/.gitignore"
   ],
   "repository": {
     "type": "git",
