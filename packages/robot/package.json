@@ -9,7 +9,9 @@
     "lib": "#"
   },
   "files": [
-    "#"
+    "#",
+    "public",
+    "templates"
   ],
   "repository": {
     "type": "git",
