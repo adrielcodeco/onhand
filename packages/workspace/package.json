@@ -6,7 +6,7 @@
   "homepage": "https://github.com/adrielcodeco/onhand/tree/main/packages/workspace#readme",
   "license": "ISC",
   "bin": {
-    "onhand": "bin/onhand-workspace"
+    "onhand-workspace": "bin/onhand-workspace"
   },
   "directories": {
     "lib": "#"
@@ -31,6 +31,7 @@
   "dependencies": {
     "octokit": "^1.3.0",
     "prompts": "^2.4.1",
+    "reflect-metadata": "^0.1.13",
     "simple-git": "^2.43.0",
     "yeoman-environment": "^3.5.1",
     "yeoman-generator": "^5.4.1"

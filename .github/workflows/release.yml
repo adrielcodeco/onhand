@@ -81,20 +81,11 @@ jobs:
       - name: Pack
         run: yarn lerna run yarn:pack
 
-      # - name: Publish github release
-      #   uses: marvinpinto/action-automatic-releases@latest
-      #   with:
-      #     automatic_release_tag: ${{ github.ref }}
-      #     title: "@onHand - ${{ github.event.release.tag_name }}"
-      #     repo_token: "${{ secrets.GITHUB_TOKEN }}"
-      #     prerelease: false
-      #     files: 'releases/*'
-
       - name: Publish github release
         uses: softprops/action-gh-release@v1
         if: startsWith(github.ref, 'refs/tags/')
         with:
-          name: "@onHand - ${{ github.event.release.tag_name }}"
+          name: "@onHand - ${GITHUB_REF#refs/tags/}"
           token: "${{ secrets.GITHUB_TOKEN }}"
           prerelease: false
           files: releases/*
