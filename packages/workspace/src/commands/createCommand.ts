@@ -8,6 +8,7 @@ export async function createCommand (options: { verbose: boolean }) {
     workspaceName: 'workspace',
     repositoriesFolder: 'repositories',
     githubLogin: '',
+    githubDefaultBranchName: 'main',
   }
   const answers = await prompts(
     [
@@ -49,6 +50,12 @@ export async function createCommand (options: { verbose: boolean }) {
           return values.workspaceName
         },
       },
+      // {
+      //   type: prev => (prev ? 'text' : null),
+      //   name: 'githubDefaultBranchName',
+      //   message: 'What will be the default branch name ?',
+      //   initial: defaults.githubDefaultBranchName,
+      // },
       {
         type: prev => (prev ? 'confirm' : null),
         name: 'githubPrivateRepo',

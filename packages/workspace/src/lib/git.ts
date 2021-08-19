@@ -58,9 +58,9 @@ export const commitChanges = async (cwd: string, commitMessage: string) => {
   return git.add('./*').commit(commitMessage)
 }
 
-export const pushToRemote = async (cwd: string) => {
+export const pushToRemote = async (cwd: string, branch: string) => {
   const git: SimpleGit = simpleGit(cwd)
-  return git.push(['-u', 'origin', 'HEAD:main'])
+  return git.push(['-u', 'origin', `HEAD:${branch}`])
 }
 
 export const status = (cwd: string) => {

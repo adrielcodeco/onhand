@@ -1,7 +1,7 @@
 import path from 'path'
 import { logIfPermitted } from '#/lib/log'
 import { generate } from '#/lib/generators'
-import { createRepo, initRepo, commitChanges, pushToRemote } from '#/lib/git'
+import * as git from '#/lib/git'
 import { setWorkspaceConfig } from '#/lib/workspaceConfig'
 
 type createWorkspaceOptions = {
@@ -10,6 +10,7 @@ type createWorkspaceOptions = {
   pushToGit: boolean
   githubAccessToken: string
   githubProjectName: string
+  githubDefaultBranchName: string
   githubPrivateRepo: boolean
   githubLogin: string
   verbose: boolean
@@ -22,17 +23,19 @@ export const createWorkspace = async (options: createWorkspaceOptions) => {
     pushToGit,
     githubAccessToken,
     githubProjectName,
+    githubDefaultBranchName,
     githubPrivateRepo,
     githubLogin,
     verbose,
   } = options
-  let cwd = process.cwd()
+  const cwd = process.cwd()
+  const projCwd = path.resolve(cwd, workspaceName)
   const log = logIfPermitted(verbose)
   log('Starting workspace creation...')
-  let repoUrl: string
+  let repoUrl = ''
   if (pushToGit) {
     log('Creating github repo...')
-    const { clone_url: cloneUrl } = await createRepo(
+    const { clone_url: cloneUrl } = await git.createRepo(
       githubAccessToken,
       githubProjectName,
       githubPrivateRepo,
@@ -45,18 +48,18 @@ export const createWorkspace = async (options: createWorkspaceOptions) => {
     cwd,
     workspaceConfig: { workspaceName, repositoriesFolder },
   })
-  cwd = path.resolve(cwd, workspaceName)
   await setWorkspaceConfig(
     {
       workspaceName,
       repositoriesFolder,
       repositories: [],
     },
-    cwd,
+    projCwd,
   )
   if (pushToGit) {
-    await initRepo(cwd, repoUrl!)
-    await commitChanges(cwd, 'chore: Initializing the workspace')
-    await pushToRemote(cwd)
+    await git.initRepo(projCwd, repoUrl)
+    await git.pull(projCwd, githubDefaultBranchName)
+    await git.commitChanges(projCwd, 'chore: Initializing the workspace')
+    await git.pushToRemote(projCwd, githubDefaultBranchName)
   }
 }

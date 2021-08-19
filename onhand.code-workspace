@@ -45,6 +45,10 @@
       "path": "packages/iac-aws"
     },
     {
+      "name": "🚀 iac-docker",
+      "path": "packages/iac-docker"
+    },
+    {
       "name": "🤖 robot",
       "path": "packages/robot"
     },

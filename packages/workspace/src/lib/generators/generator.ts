@@ -8,6 +8,6 @@ export class BaseGenerator extends Generator {
   }
 
   install () {
-    this.installDependencies({ yarn: true })
+    this.installDependencies({ bower: false, npm: false, yarn: true })
   }
 }
