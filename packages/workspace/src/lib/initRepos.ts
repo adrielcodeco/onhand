@@ -1,6 +1,6 @@
 import fs from 'fs'
 import path from 'path'
-import { clone, checkoutBranch, checkoutTag, pull } from '#/lib/git'
+import * as git from '#/lib/git'
 import { loadWorkspaceConfig } from '#/lib/workspaceConfig'
 
 type initReposOptions = {
@@ -11,21 +11,18 @@ export const initRepos = async (options: initReposOptions) => {
   const cwd = process.cwd()
   const config = loadWorkspaceConfig()
   for (const repository of config.repositories ?? []) {
-    const repoPath = path.resolve(
-      cwd,
-      config.repositoriesFolder,
-      repository.folder,
-    )
+    const repositoriesFolderPath = path.resolve(cwd, config.repositoriesFolder)
+    const repoPath = path.resolve(repositoriesFolderPath, repository.folder)
     if (!fs.existsSync(repoPath)) {
-      await clone(repoPath, repository.repo)
+      await git.clone(repositoriesFolderPath, repository.repo)
     }
     if (repository.branch) {
-      await checkoutBranch(repoPath, repository.branch)
-      await pull(repoPath, repository.branch)
+      await git.switchAndCreateBranchIfNotExists(repoPath, repository.branch)
+      await git.pull(repoPath, repository.branch)
     }
     if (repository.tag) {
-      await checkoutTag(repoPath, repository.tag)
-      await pull(repoPath, repository.tag)
+      await git.checkoutTag(repoPath, repository.tag)
+      await git.pull(repoPath, repository.tag)
     }
   }
 }

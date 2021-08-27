@@ -73,12 +73,22 @@ export const clone = (cwd: string, gitUrl: string) => {
   return git.clone(gitUrl)
 }
 
+export const switchAndCreateBranchIfNotExists = async (
+  cwd: string,
+  branch: string,
+) => {
+  const git: SimpleGit = simpleGit(cwd)
+  return git
+    .raw(['switch', branch])
+    .catch(() => git.raw(['switch', '-c', branch]))
+}
+
 export const checkoutBranch = (cwd: string, branch: string) => {
   const git: SimpleGit = simpleGit(cwd)
-  return git.init().checkout(['-t', `origin/${branch}`])
+  return git.checkout(['-t', `origin/${branch}`])
 }
 
 export const checkoutTag = (cwd: string, tag: string) => {
   const git: SimpleGit = simpleGit(cwd)
-  return git.init().checkout([`tags/${tag}`, '-b', tag])
+  return git.checkout([`tags/${tag}`, '-b', tag])
 }
