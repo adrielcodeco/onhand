@@ -5,6 +5,7 @@
   "author": "Codeco <adrielcodeco@hotmail.com>",
   "homepage": "https://github.com/adrielcodeco/onhand/tree/main/packages/tsting#readme",
   "license": "ISC",
+  "main": "./#/lib/index.js",
   "bin": {
     "tsting": "bin/tsting",
     "tsting-runner": "bin/tsting-runner"

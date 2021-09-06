@@ -9,12 +9,21 @@ export function interceptors (): void {
     function (config) {
       const requestId = short.generate()
       Reflect.set(config, 'requestId', requestId)
+      const headers = {}
+      for (const header in config.headers) {
+        if (typeof config.headers[header] === 'object') {
+          Object.assign(headers, config.headers[header])
+        } else {
+          Object.assign(headers, { [header]: config.headers[header] })
+        }
+      }
+      Object.assign(headers, config.headers[config.method])
       const req = {
         requestId: requestId,
         url: `${config.baseURL ?? ''}${config.url ?? ''}`,
         method: config.method,
         data: config.data,
-        headers: config.headers[config.method!],
+        headers,
       }
       logger.info(req)
       return config
