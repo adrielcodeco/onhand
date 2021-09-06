@@ -17,7 +17,7 @@ export function interceptors (): void {
           Object.assign(headers, { [header]: config.headers[header] })
         }
       }
-      Object.assign(headers, config.headers[config.method])
+      Object.assign(headers, config.headers[config.method ?? ''])
       const req = {
         requestId: requestId,
         url: `${config.baseURL ?? ''}${config.url ?? ''}`,
