@@ -1,47 +1,17 @@
 module.exports = {
-  parser: '@typescript-eslint/parser',
-  parserOptions: {
-    ecmaVersion: 2020,
-    sourceType: 'module',
-  },
   plugins: ['standard'],
-  extends: [
-    'eslint:recommended',
-    'plugin:@typescript-eslint/recommended',
-    'standard',
-    'standard-with-typescript',
-  ],
   env: {
     es6: true,
     node: true,
   },
-  rules: {
-    'max-len': [
-      'error',
-      {
-        code: 100,
-        tabWidth: 2,
-        ignoreComments: true,
-        ignoreUrls: true,
-        ignoreRegExpLiterals: true,
-      },
-    ],
-    'comma-dangle': ['error', 'always-multiline'],
-    'space-before-function-paren': 'off',
-    '@typescript-eslint/space-before-function-paren': ['error', 'always'],
-    '@typescript-eslint/no-explicit-any': 'off',
-    '@typescript-eslint/explicit-module-boundary-types': 'off',
-    '@typescript-eslint/consistent-type-definitions': 'off',
-    '@typescript-eslint/prefer-function-type': 'off',
-    '@typescript-eslint/return-await': 'off',
-    '@typescript-eslint/strict-boolean-expressions': 'off',
-    '@typescript-eslint/no-non-null-assertion': 'off',
-    '@typescript-eslint/ban-ts-comment': 'off',
-    '@typescript-eslint/no-throw-literal': 'off',
-    '@typescript-eslint/explicit-function-return-type': 'off',
-    '@typescript-eslint/no-unsafe-assignment': 'off',
-    '@typescript-eslint/no-unsafe-member-access': 'off',
-    '@typescript-eslint/no-non-null-asserted-optional-chain': 'off',
-    '@typescript-eslint/restrict-template-expressions': 'off',
-  },
+  overrides: [
+    {
+      files: ['*.ts', '*.tsx'],
+      extends: ['./src/ts.js'],
+    },
+    {
+      files: ['*.js', '*.jsx'],
+      extends: ['./src/js.js'],
+    },
+  ],
 }
