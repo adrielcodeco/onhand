@@ -10,11 +10,11 @@ import {
 } from '@onhand/framework-aws/#/infrastructure/apigateway/metadata/policiesMetadata'
 import { as } from '@onhand/utils'
 import { Options, resourceName } from './options'
-import { getReleasesBucketName } from '#/cdk/resources'
+// import { getReleasesBucketName } from '#/cdk/resources'
 
 export type FunctionOptions = {
   policies: Policy[]
-  bucketName: string
+  // bucketName: string
   fileKey: string
   operationName: string
   functionName: string
@@ -60,7 +60,7 @@ export function createFunctionsOptions (options: Options) {
 
       functions.push({
         policies: policies,
-        bucketName: getReleasesBucketName(options),
+        // bucketName: getReleasesBucketName(options),
         fileKey: `${options.packageName ?? ''}-${
           options.packageVersion ?? ''
         }/${operationName}.zip`,
@@ -93,7 +93,7 @@ export function createFunctionsOptions (options: Options) {
     const operationName = className
     functions.push({
       policies: policies ?? [],
-      bucketName: getReleasesBucketName(options),
+      // bucketName: getReleasesBucketName(options),
       fileKey: `${options.packageName ?? ''}-${
         options.packageVersion ?? ''
       }/${operationName}.zip`,

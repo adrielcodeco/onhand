@@ -1,13 +1,12 @@
 /* eslint-disable no-new */
+import _ from 'lodash'
 import * as cdk from '@aws-cdk/core'
 import * as lambda from '@aws-cdk/aws-lambda'
 import * as s3 from '@aws-cdk/aws-s3'
 import * as iam from '@aws-cdk/aws-iam'
 import * as logs from '@aws-cdk/aws-logs'
-import moment from 'moment'
-import { Container } from 'typedi'
+import Container, { Service } from 'typedi'
 import { Options, resourceName } from '#/app/options'
-import { customResource } from '#/cdk/api/customResource'
 // eslint-disable-next-line max-len
 import { Policy } from '@onhand/framework-aws/#/infrastructure/apigateway/metadata/policiesMetadata'
 import { FunctionOptions } from '#/app/functions'
@@ -18,6 +17,7 @@ import {
   s3Arn,
 } from '#/cdk/resources'
 
+@Service()
 export class FunctionsStack extends cdk.NestedStack {
   private readonly bucket?: s3.IBucket
   private readonly project: string
@@ -36,148 +36,75 @@ export class FunctionsStack extends cdk.NestedStack {
 
   private createLambdasAndAliases () {
     const functions = Container.get<FunctionOptions[]>('functions')
-    const timekey = moment().format('YYYYMMDDhhmm')
 
-    const { resource: rolesFunction, roles } = this.createRolesFunction(
-      functions,
-      timekey,
-    )
-    const { resource: functionsFunction, versions } =
-      this.createFunctionsFunction(functions, roles)
-    const { resource: aliasesFunction } = this.createAliasesFunction(
-      functions,
-      versions,
-    )
-
-    aliasesFunction.node.addDependency(functionsFunction)
-    functionsFunction.node.addDependency(rolesFunction)
-  }
-
-  private createRolesFunction (functions: FunctionOptions[], timekey: string) {
-    const functionName = 'onhand-roles-function'
-    const functionPolicy: Policy = {
-      inlinePolicy: {
-        actions: [
-          'iam:CreateRole',
-          'iam:AttachRolePolicy',
-          'iam:PutRolePolicy',
-          'iam:PassRole',
-          'iam:TagRole',
-        ],
-        effect: 'Allow',
-        resources: ['*'],
-      },
-    }
-    const policies: Policy[] = [functionPolicy]
-    const func = this.createFunction(functionName, '', policies)
-
-    const resource = customResource(this, functionName, func, this.options, {
-      functions: JSON.stringify(functions),
-      region: this.region,
-      account: this.account,
-      timekey,
-      project: this.project,
-    })
-
-    const roles = resource.getAtt('result')
-    return {
-      resource,
-      roles,
-    }
-  }
-
-  private createFunctionsFunction (functions: FunctionOptions[], roles: any) {
-    const functionName = 'onhand-functions-function'
-    const functionPolicy: Policy = {
-      inlinePolicy: {
-        actions: [
-          'lambda:GetFunction',
-          'lambda:CreateFunction',
-          'lambda:UpdateFunctionConfiguration',
-          'lambda:UpdateFunctionCode',
-          'iam:PassRole',
-          'iam:TagRole',
-          's3:GetObject*',
-          's3:GetBucket*',
-          's3:List*',
-          's3:DeleteObject*',
-          's3:PutObject*',
-          's3:Abort*',
-        ],
-        effect: 'Allow',
-        resources: ['*'],
-      },
-    }
-    const policies: Policy[] = [functionPolicy]
-    const func = this.createFunction(functionName, '', policies)
-
-    const resource = customResource(this, functionName, func, this.options, {
-      functions: JSON.stringify(functions),
-      roles,
-      project: this.project,
-    })
-
-    const versions = resource.getAtt('result')
-    return {
-      resource,
-      versions,
-    }
-  }
-
-  private createAliasesFunction (functions: FunctionOptions[], versions: any) {
-    const functionName = 'onhand-aliases-function'
-    const functionPolicy: Policy = {
-      inlinePolicy: {
-        actions: [
-          'lambda:GetAlias',
-          'lambda:CreateAlias',
-          'lambda:DeleteAlias',
-        ],
-        effect: 'Allow',
-        resources: ['*'],
-      },
-    }
-    const policies: Policy[] = [functionPolicy]
-    const func = this.createFunction(functionName, '', policies)
-
-    const resource = customResource(this, functionName, func, this.options, {
-      functions: JSON.stringify(functions),
-      versions,
-      stage: this.options.stage,
-    })
-
-    return {
-      resource,
+    for (const func of functions) {
+      this.createFunction(func, [
+        { key: 'onhandProject', value: this.project },
+        { key: 'onhandOperationId', value: func.operationName },
+        { key: 'onhandResource', value: 'function' },
+        { key: 'onhandResourceGroup', value: 'operation' },
+      ])
     }
   }
 
   private createSeedFunction () {
-    const functionName = 'onhand-seed-function'
+    const operationName = 'onhandSeedFunction'
     const dynamoDBPolicy: Policy = { managedPolicy: 'AmazonDynamoDBFullAccess' }
     const s3Policy: Policy = { managedPolicy: 'AmazonS3FullAccess' }
     const policies: Policy[] = [dynamoDBPolicy, s3Policy]
-    return this.createFunction(functionName, '', policies)
+    const functionName = resourceName(this.options, operationName, true)
+    return this.createFunction(
+      {
+        operationName,
+        functionName,
+        description: 'function to apply seeds',
+        policies,
+        fileKey: `${this.project}-${
+          this.options.packageVersion ?? ''
+        }/${operationName}.zip`,
+        handler: 'index.handler',
+        version: this.options.packageVersion ?? '',
+        isAuthorizer: false,
+      },
+      [
+        { key: 'onhandProject', value: this.project },
+        { key: 'onhandResource', value: 'function' },
+        { key: 'onhandResourceGroup', value: 'pipeline' },
+      ],
+    )
   }
 
   private createFunction (
-    operationName: string,
-    description: string,
-    policies: Policy[],
+    functionOptions: FunctionOptions,
+    tags: Array<{ key: string, value: string }>,
   ) {
-    const functionName = resourceName(this.options, operationName, true)
-    const lambdaRole = new iam.Role(this, `func-${operationName}-role`, {
-      assumedBy: new iam.ServicePrincipal('lambda.amazonaws.com'),
-    })
+    const lambdaRole = new iam.Role(
+      this,
+      _.camelCase(`func-${functionOptions.operationName}-role`),
+      {
+        assumedBy: new iam.ServicePrincipal('lambda.amazonaws.com'),
+      },
+    )
+    lambdaRole.applyRemovalPolicy(cdk.RemovalPolicy.RETAIN)
     const logPolicy: Policy = {
       inlinePolicy: {
         actions: ['logs:*'],
         effect: 'Allow',
         resources: [
-          `arn:aws:logs:${this.region}:${this.account}:log-group:/aws/lambda/${functionName}:*`,
+          [
+            'arn',
+            'aws',
+            'logs',
+            this.region,
+            this.account,
+            'log-group',
+            `/aws/lambda/${functionOptions.functionName}`,
+            '*',
+          ].join(':'),
         ],
       },
     }
-    for (const policy of policies.concat([logPolicy])) {
+    for (const policy of functionOptions.policies.concat([logPolicy])) {
       if ('managedPolicy' in policy) {
         lambdaRole.addManagedPolicy(
           iam.ManagedPolicy.fromAwsManagedPolicyName(policy.managedPolicy),
@@ -187,7 +114,11 @@ export class FunctionsStack extends cdk.NestedStack {
         lambdaRole.attachInlinePolicy(
           new iam.Policy(
             this,
-            `policy-${operationName}-${policies.indexOf(policy)}`,
+            _.camelCase(
+              `policy-${
+                functionOptions.operationName
+              }-${functionOptions.policies.indexOf(policy)}`,
+            ),
             {
               document: new iam.PolicyDocument({
                 statements: [
@@ -203,42 +134,47 @@ export class FunctionsStack extends cdk.NestedStack {
         )
       }
     }
-    const func = new lambda.Function(this, `func-${operationName}`, {
-      handler: 'index.handler',
-      runtime: lambda.Runtime.NODEJS_14_X,
-      description: `${
-        description ? description + ' - ' : ''
-      }deployed on: ${new Date().toISOString()}`,
-      functionName,
-      code: lambda.Code.fromBucket(
-        this.bucket!,
-        `${this.project}-${
-          this.options.packageVersion ?? ''
-        }/${operationName}.zip`,
-        undefined,
-      ),
-      currentVersionOptions: {
-        description: this.options.packageVersion,
-        removalPolicy: cdk.RemovalPolicy.RETAIN,
-        retryAttempts: 1,
+    const func = new lambda.Function(
+      this,
+      _.camelCase(`func-${functionOptions.operationName}`),
+      {
+        handler: functionOptions.handler,
+        runtime: lambda.Runtime.NODEJS_14_X,
+        description: `${
+          functionOptions.description ? functionOptions.description + ' - ' : ''
+        }deployed on: ${new Date().toISOString()}`,
+        functionName: functionOptions.functionName,
+        code: lambda.Code.fromBucket(
+          this.bucket!,
+          functionOptions.fileKey,
+          undefined,
+        ),
+        currentVersionOptions: {
+          description: functionOptions.version,
+          removalPolicy: cdk.RemovalPolicy.RETAIN,
+          retryAttempts: 1,
+        },
+        environment: {
+          STAGE: this.options.stage,
+        },
+        logRetention: logs.RetentionDays.ONE_WEEK,
+        role: lambdaRole,
+        memorySize: 256,
+        reservedConcurrentExecutions: undefined,
+        timeout: cdk.Duration.minutes(15),
       },
-      environment: {
-        STAGE: this.options.stage,
-      },
-      logRetention: logs.RetentionDays.ONE_WEEK,
-      role: lambdaRole,
-      memorySize: 256,
-      reservedConcurrentExecutions: undefined,
-      timeout: cdk.Duration.minutes(15),
-    })
-    cdk.Tags.of(func).add('onhandProject', this.project)
-    cdk.Tags.of(func).add('onhandResource', 'function')
-    cdk.Tags.of(func).add('onhandResourceGroup', 'pipeline')
-    func.currentVersion.addAlias(this.options.stage)
+    )
+    func.applyRemovalPolicy(cdk.RemovalPolicy.RETAIN)
+    for (const { key, value } of tags ?? []) {
+      cdk.Tags.of(func).add(key, value)
+    }
+    const stageAlias = func.currentVersion.addAlias(this.options.stage)
+    stageAlias.applyRemovalPolicy(cdk.RemovalPolicy.RETAIN)
     if (this.options.packageVersion) {
-      func.currentVersion.addAlias(
+      const alias = func.currentVersion.addAlias(
         this.options.packageVersion.replace(/\./g, '-'),
       )
+      alias.applyRemovalPolicy(cdk.RemovalPolicy.RETAIN)
     }
 
     return func

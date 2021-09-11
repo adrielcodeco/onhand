@@ -11,7 +11,7 @@ export class DeployStack extends cdk.NestedStack {
   }
 
   private sow () {
-    const operationName = 'onhand-seed-function'
+    const operationName = 'onhandSeedFunction'
     const func = functionFromName(
       this,
       operationName,

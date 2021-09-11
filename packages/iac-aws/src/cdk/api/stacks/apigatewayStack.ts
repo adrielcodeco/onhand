@@ -1,3 +1,4 @@
+import _ from 'lodash'
 import * as cdk from '@aws-cdk/core'
 import * as apigateway from '@aws-cdk/aws-apigateway'
 import * as lambda from '@aws-cdk/aws-lambda'
@@ -38,7 +39,7 @@ export class ApiGatewayStack extends cdk.NestedStack {
   private createRole () {
     this.apiGatewayRole = new iam.Role(
       this,
-      resourceName(this.options, 'api-authorizer-Role'),
+      resourceName(this.options, 'apiAuthorizerRole'),
       {
         assumedBy: new iam.ServicePrincipal('apigateway.amazonaws.com'),
       },
@@ -104,10 +105,10 @@ export class ApiGatewayStack extends cdk.NestedStack {
 
     this.apiResource = this.api.root
 
-    const apiIdExportName = resourceName(this.options, 'api-Id')
+    const apiIdExportName = resourceName(this.options, 'apiId')
     const apiRootResourceIdExportName = resourceName(
       this.options,
-      'api-rootResourceId',
+      'apiRootResourceId',
     )
     // eslint-disable-next-line no-new
     new cdk.CfnOutput(this, apiIdExportName, {
@@ -138,10 +139,10 @@ export class ApiGatewayStack extends cdk.NestedStack {
     authorizer: string,
     authorizerFunction: lambda.IFunction,
   ) {
-    const authorizerName = resourceName(
-      this.options,
-      `authorizer-${authorizer}`,
-    )
+    const authorizerName = resourceName(this.options, [
+      'authorizer',
+      authorizer,
+    ])
     const auth = new apigateway.RequestAuthorizer(this, authorizerName, {
       handler: authorizerFunction,
       identitySources: [
@@ -200,7 +201,7 @@ export class ApiGatewayStack extends cdk.NestedStack {
     const alias = this.options.stage
     const routeLambda = lambda.Function.fromFunctionArn(
       this,
-      `func-${operationName}`,
+      _.camelCase(`func-${operationName}`),
       `arn:aws:lambda:${this.region}:${this.account}:function:${functionName}:${alias}`,
     )
     resource.addMethod(
@@ -220,9 +221,9 @@ export class ApiGatewayStack extends cdk.NestedStack {
   }
 
   private disableApigatewayDefaultEndpoint () {
-    const executeApi = resourceName(this.options, 'api-execute-api-resource')
+    const executeApi = resourceName(this.options, 'apiExecuteApiResource')
     const executeApiResource = new cr.AwsCustomResource(this, executeApi, {
-      functionName: 'disable-execute-api-endpoint',
+      functionName: 'disableExecuteApiEndpoint',
       onCreate: {
         service: 'APIGateway',
         action: 'updateRestApi',
@@ -254,24 +255,20 @@ export class ApiGatewayStack extends cdk.NestedStack {
     if (this.options.config?.cloudFront?.api?.zoneName) {
       const zone = route53.PublicHostedZone.fromLookup(
         this,
-        resourceName(this.options, 'hz-api'),
+        resourceName(this.options, 'hzApi'),
         {
           domainName: this.options.config?.cloudFront?.api?.zoneName,
         },
       )
       // eslint-disable-next-line no-new
-      new route53.ARecord(
-        this,
-        resourceName(this.options, 'domain-record-api'),
-        {
-          zone: zone,
-          recordName: this.options.config?.cloudFront?.api?.domainName,
-          target: route53.RecordTarget.fromAlias(
-            new targets.ApiGateway(this.api),
-          ),
-          ttl: cdk.Duration.seconds(300),
-        },
-      )
+      new route53.ARecord(this, resourceName(this.options, 'domainRecordApi'), {
+        zone: zone,
+        recordName: this.options.config?.cloudFront?.api?.domainName,
+        target: route53.RecordTarget.fromAlias(
+          new targets.ApiGateway(this.api),
+        ),
+        ttl: cdk.Duration.seconds(300),
+      })
     }
   }
 }

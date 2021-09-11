@@ -25,9 +25,8 @@ export class CloudFrontSiteStack extends cdk.NestedStack {
   constructor (scope: cdk.Construct, private readonly options: Options) {
     super(scope, getCloudFormationStackName(options))
 
-    this.domainAliases = this.options.config?.cloudFront?.site?.domainAliases?.filter(
-      a => !!a,
-    )
+    this.domainAliases =
+      this.options.config?.cloudFront?.site?.domainAliases?.filter(a => !!a)
 
     const certificateArn = ` arn:aws:acm:us-east-1:${
       this.account
@@ -55,11 +54,12 @@ export class CloudFrontSiteStack extends cdk.NestedStack {
     const originAccessIdentityName = Container.get<string>(
       cfOriginAccessIdentity,
     )
-    const originAccessIdentity = cloudfront.OriginAccessIdentity.fromOriginAccessIdentityName(
-      this,
-      'cf-OriginAccessIdentity',
-      originAccessIdentityName,
-    )
+    const originAccessIdentity =
+      cloudfront.OriginAccessIdentity.fromOriginAccessIdentityName(
+        this,
+        'cf-OriginAccessIdentity',
+        originAccessIdentityName,
+      )
     const distName = getCFDistributionName(this.options)
     this.distribution = new cloudfront.CloudFrontWebDistribution(
       this,
@@ -96,14 +96,15 @@ export class CloudFrontSiteStack extends cdk.NestedStack {
         httpVersion: cloudfront.HttpVersion.HTTP2,
         ...(this.domainAliases?.length
           ? {
-              viewerCertificate: cloudfront.ViewerCertificate.fromAcmCertificate(
-                this.certificate!,
-                {
-                  securityPolicy:
-                    cloudfront.SecurityPolicyProtocol.TLS_V1_2_2019,
-                  aliases: this.domainAliases,
-                },
-              ),
+              viewerCertificate:
+                cloudfront.ViewerCertificate.fromAcmCertificate(
+                  this.certificate!,
+                  {
+                    securityPolicy:
+                      cloudfront.SecurityPolicyProtocol.TLS_V1_2_2019,
+                    aliases: this.domainAliases,
+                  },
+                ),
             }
           : {}),
       },
@@ -126,7 +127,7 @@ export class CloudFrontSiteStack extends cdk.NestedStack {
     if (this.options.config?.cloudFront?.site?.zoneName) {
       const zone = route53.PublicHostedZone.fromLookup(
         this,
-        resourceName(this.options, 'site-hz'),
+        resourceName(this.options, 'siteHz'),
         {
           domainName: this.options.config?.cloudFront?.site?.zoneName,
         },
@@ -138,7 +139,7 @@ export class CloudFrontSiteStack extends cdk.NestedStack {
         const index = this.domainAliases?.indexOf(alias)
         new route53.ARecord(
           this,
-          resourceName(this.options, `site-domain-record-alias-${index}`),
+          resourceName(this.options, `siteDomainRecordAlias-${index}`),
           {
             zone: zone,
             recordName: alias,
