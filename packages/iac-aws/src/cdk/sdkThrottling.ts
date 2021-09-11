@@ -5,7 +5,7 @@ export async function throttling<T> (
   try {
     const result = await action()
     return result
-  } catch (err) {
+  } catch (err: any) {
     if (retry < 5 && /Rate exceeded/.test(err.toString())) {
       return throttling(action, ++retry)
     }
