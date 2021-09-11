@@ -142,19 +142,6 @@ async function compileApi (options: Options): Promise<Bundles> {
     }
   }
 
-  config.entry['onhand-roles-function'] = path.resolve(
-    __dirname,
-    '../cdk/api/functions/roles.js',
-  )
-  config.entry['onhand-functions-function'] = path.resolve(
-    __dirname,
-    '../cdk/api/functions/functions.js',
-  )
-  config.entry['onhand-aliases-function'] = path.resolve(
-    __dirname,
-    '../cdk/api/functions/aliases.js',
-  )
-
   const openapi = options.openApi!
 
   for (const secKey in openapi.components?.securitySchemes ?? {}) {
@@ -188,10 +175,8 @@ async function compileApi (options: Options): Promise<Bundles> {
       }
       const operation: OpenAPIV3.OperationObject = as(pathItemObject)[method]
       const { operationId } = operation
-      const {
-        functionFileAbsolutePath: absoluteFilePath,
-        className,
-      } = manageFunctionMetadata(operation).get()
+      const { functionFileAbsolutePath: absoluteFilePath, className } =
+        manageFunctionMetadata(operation).get()
       const functionName = operationId ?? className
       config.entry[functionName] = absoluteFilePath
     }
