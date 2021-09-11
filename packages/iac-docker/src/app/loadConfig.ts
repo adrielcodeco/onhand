@@ -30,6 +30,7 @@ export function loadConfig (
       ? configPath
       : path.resolve(process.cwd(), configPath)
     options.cwd = path.dirname(configPathResolved)
+    process.env.NO_PARAMETERS = 'true'
     const getConfig = require(configPathResolved).default
     const configJson: Partial<Config> = getConfig({ stage }) as Partial<Config>
     options.config = configJson

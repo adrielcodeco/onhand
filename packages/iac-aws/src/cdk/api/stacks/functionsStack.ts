@@ -42,10 +42,8 @@ export class FunctionsStack extends cdk.NestedStack {
       functions,
       timekey,
     )
-    const {
-      resource: functionsFunction,
-      versions,
-    } = this.createFunctionsFunction(functions, roles)
+    const { resource: functionsFunction, versions } =
+      this.createFunctionsFunction(functions, roles)
     const { resource: aliasesFunction } = this.createAliasesFunction(
       functions,
       versions,
@@ -175,13 +173,7 @@ export class FunctionsStack extends cdk.NestedStack {
         actions: ['logs:*'],
         effect: 'Allow',
         resources: [
-          `arn:aws:logs:${this.region}:${
-            this.account
-          }:log-group:/aws/lambda/${resourceName(
-            this.options,
-            functionName,
-            true,
-          )}:*`,
+          `arn:aws:logs:${this.region}:${this.account}:log-group:/aws/lambda/${functionName}:*`,
         ],
       },
     }
