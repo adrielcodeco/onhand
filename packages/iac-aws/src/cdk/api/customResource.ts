@@ -43,7 +43,7 @@ export function functionFromName (
   options: Options,
   alias = '',
 ) {
-  const functionName = resourceName(options, operationName, true)
+  const functionName = resourceName(options, operationName, true, 'kebab')
   return lambda.Function.fromFunctionArn(
     scope,
     _.camelCase(`func-${operationName}-fromArn`),
