@@ -99,7 +99,7 @@ export function createFunctionsOptions (options: Options) {
         options.packageVersion ?? ''
       }/${operationName}.zip`,
       operationName,
-      functionName: resourceName(options, operationName, true),
+      functionName: resourceName(options, operationName, true, 'kebab'),
       version: options.packageVersion!,
       handler: handler,
       description: `deployed on: ${new Date().toISOString()}`,
