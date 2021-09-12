@@ -128,7 +128,7 @@ export class ApiGatewayStack extends cdk.NestedStack {
       const alias = this.options.stage
       const authorizerFunc = lambda.Function.fromFunctionArn(
         this,
-        functionName,
+        _.camelCase(functionName),
         `arn:aws:lambda:${this.region}:${this.account}:function:${functionName}:${alias}`,
       )
       this.createAuthAuthorizers(operationName, authorizerFunc)

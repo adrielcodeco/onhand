@@ -27,7 +27,11 @@ export class FunctionsStack extends cdk.NestedStack {
 
     const bucketName = getReleasesBucketName(this.options)
     const s3AssetsArn = s3Arn(bucketName)
-    this.bucket = s3.Bucket.fromBucketArn(this, bucketName, s3AssetsArn)
+    this.bucket = s3.Bucket.fromBucketArn(
+      this,
+      _.camelCase(bucketName),
+      s3AssetsArn,
+    )
 
     this.project = projectName(this.options)
     this.createLambdasAndAliases()
@@ -52,7 +56,12 @@ export class FunctionsStack extends cdk.NestedStack {
     const dynamoDBPolicy: Policy = { managedPolicy: 'AmazonDynamoDBFullAccess' }
     const s3Policy: Policy = { managedPolicy: 'AmazonS3FullAccess' }
     const policies: Policy[] = [dynamoDBPolicy, s3Policy]
-    const functionName = resourceName(this.options, operationName, true)
+    const functionName = resourceName(
+      this.options,
+      operationName,
+      true,
+      'kebab',
+    )
     return this.createFunction(
       {
         operationName,

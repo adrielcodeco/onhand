@@ -10,6 +10,7 @@ import {
 } from '@onhand/framework-aws/#/infrastructure/apigateway/metadata/policiesMetadata'
 import { as } from '@onhand/utils'
 import { Options, resourceName } from './options'
+import { projectName } from '#/cdk/resources'
 // import { getReleasesBucketName } from '#/cdk/resources'
 
 export type FunctionOptions = {
@@ -65,7 +66,7 @@ export function createFunctionsOptions (options: Options) {
           options.packageVersion ?? ''
         }/${operationName}.zip`,
         operationName,
-        functionName: resourceName(options, operationName, true),
+        functionName: resourceName(options, operationName, true, 'kebab'),
         handler: handler,
         description: `${description} - deployed on: ${new Date().toISOString()}`,
         version: options.packageVersion!,
@@ -94,7 +95,7 @@ export function createFunctionsOptions (options: Options) {
     functions.push({
       policies: policies ?? [],
       // bucketName: getReleasesBucketName(options),
-      fileKey: `${options.packageName ?? ''}-${
+      fileKey: `${projectName(options)}-${
         options.packageVersion ?? ''
       }/${operationName}.zip`,
       operationName,

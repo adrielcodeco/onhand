@@ -1,10 +1,11 @@
+import _ from 'lodash'
 import { Options, resourceName } from '#/app/options'
 
 export const projectName = (options: Options) =>
   options.config?.app?.projectName ??
   options.config?.app?.name ??
   options.packageName ??
-  `onhand-${options.config?.app?.type}`
+  _.camelCase(`onhand-${options.config?.app?.type}`)
 
 export const s3Arn = (bucketName: string) => `arn:aws:s3:::${bucketName}`
 
