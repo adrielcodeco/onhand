@@ -62,7 +62,7 @@ export function createFunctionsOptions (options: Options) {
       functions.push({
         policies: policies,
         // bucketName: getReleasesBucketName(options),
-        fileKey: `${options.packageName ?? ''}-${
+        fileKey: `${projectName(options)}-${
           options.packageVersion ?? ''
         }/${operationName}.zip`,
         operationName,

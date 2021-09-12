@@ -18,7 +18,6 @@ export async function deploy (
       options.config?.app?.type === 'api' ? bundles : undefined,
     )
   }
-
   const functions =
     options.config?.app?.type === 'api' ? createFunctionsOptions(options) : {}
 
