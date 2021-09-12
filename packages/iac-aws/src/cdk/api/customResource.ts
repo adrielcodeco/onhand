@@ -1,4 +1,5 @@
 /* eslint-disable no-new */
+import _ from 'lodash'
 import * as cdk from '@aws-cdk/core'
 import * as lambda from '@aws-cdk/aws-lambda'
 import * as logs from '@aws-cdk/aws-logs'
@@ -45,7 +46,7 @@ export function functionFromName (
   const functionName = resourceName(options, operationName, true)
   return lambda.Function.fromFunctionArn(
     scope,
-    `func-${operationName}-fromArn`,
+    _.camelCase(`func-${operationName}-fromArn`),
     `arn:aws:lambda:${scope.region}:${scope.account}:function:${functionName}${
       alias ? ':' : ''
     }${alias}`,

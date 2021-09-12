@@ -52,7 +52,7 @@ export class FunctionsStack extends cdk.NestedStack {
   }
 
   private createSeedFunction () {
-    const operationName = 'onhandSeedFunction'
+    const operationName = 'onhand_seed_function'
     const dynamoDBPolicy: Policy = { managedPolicy: 'AmazonDynamoDBFullAccess' }
     const s3Policy: Policy = { managedPolicy: 'AmazonS3FullAccess' }
     const policies: Policy[] = [dynamoDBPolicy, s3Policy]

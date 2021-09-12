@@ -1,4 +1,5 @@
 /* eslint-disable no-new */
+import _ from 'lodash'
 import * as cdk from '@aws-cdk/core'
 import { Options } from '#/app/options'
 import { customResource, functionFromName } from '../customResource'
@@ -11,13 +12,13 @@ export class DeployStack extends cdk.NestedStack {
   }
 
   private sow () {
-    const operationName = 'onhandSeedFunction'
+    const operationName = 'onhand-seed-function'
     const func = functionFromName(
       this,
       operationName,
       this.options,
       this.options.stage,
     )
-    customResource(this, operationName, func, this.options)
+    customResource(this, _.camelCase(operationName), func, this.options)
   }
 }
