@@ -1,6 +1,6 @@
 {
   "name": "eslint-config-onhand",
-  "version": "1.1.32",
+  "version": "1.1.33",
   "description": "An eslint opinionated config by @onhand",
   "author": "Codeco <adrielcodeco@hotmail.com>",
   "homepage": "https://github.com/adrielcodeco/onhand/tree/main/packages/eslint#readme",
