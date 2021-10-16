@@ -1,6 +1,6 @@
 {
   "name": "@onhand/openapi",
-  "version": "1.1.35",
+  "version": "1.1.36",
   "description": "openapi is part of the @onhand framework",
   "author": "codeco <adrielcodeco@hotmail.com>",
   "homepage": "https://github.com/adrielcodeco/onhand/tree/main/packages/openapi#readme",
@@ -28,7 +28,7 @@
   },
   "dependencies": {
     "lodash": "^4.17.21",
-    "openapi-types": "^9.1.0",
+    "openapi-types": "^9.3.0",
     "reflect-metadata": "^0.1.13"
   },
   "jest": {
