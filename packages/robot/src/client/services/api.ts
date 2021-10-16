@@ -17,7 +17,7 @@ export abstract class Api {
       const regex = new RegExp(`\\/:${key}\\/`, 'g')
       url = url.replace(regex, `/${options[key]}/`)
     }
-    return Axios.get(url, {
+    return Axios.get<any>(url, {
       baseURL,
       params,
       timeout,
@@ -34,7 +34,7 @@ export abstract class Api {
       const regex = new RegExp(`\\/:${key}\\/`, 'g')
       url = url.replace(regex, `/${options[key]}/`)
     }
-    return Axios.post(url, data, {
+    return Axios.post<any>(url, data, {
       baseURL,
       timeout,
       validateStatus: (status: number) => true,
@@ -50,7 +50,7 @@ export abstract class Api {
       const regex = new RegExp(`\\/:${key}\\/`, 'g')
       url = url.replace(regex, `/${options[key]}/`)
     }
-    return Axios.put(url, data, {
+    return Axios.put<any>(url, data, {
       baseURL,
       timeout,
       validateStatus: (status: number) => true,
@@ -66,7 +66,7 @@ export abstract class Api {
       const regex = new RegExp(`\\/:${key}\\/`, 'g')
       url = url.replace(regex, `/${options[key]}/`)
     }
-    return Axios.delete(url, {
+    return Axios.delete<any>(url, {
       baseURL,
       timeout,
       validateStatus: (status: number) => true,

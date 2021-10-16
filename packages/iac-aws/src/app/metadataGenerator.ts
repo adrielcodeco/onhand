@@ -1,1 +1,3 @@
-export async function metadataGenerator () {}
+export async function metadataGenerator () {
+  // TODO:
+}
