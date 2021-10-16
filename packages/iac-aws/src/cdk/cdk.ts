@@ -18,6 +18,7 @@ export async function cdk (options: Options, promote: boolean, functions: any) {
     // eslint-disable-next-line node/no-path-concat
     app: `node ${__dirname}/${options.config?.app?.type}/importer.js`,
     context: [
+      '@aws-cdk/core:newStyleStackSynthesis=true',
       '@aws-cdk/core:enableStackNameDuplicates=true',
       'aws-cdk:enableDiffNoFail=true',
       'options=' + JSON.stringify(options),

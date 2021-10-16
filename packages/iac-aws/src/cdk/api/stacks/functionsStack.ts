@@ -2,7 +2,6 @@
 import _ from 'lodash'
 import * as cdk from '@aws-cdk/core'
 import * as lambda from '@aws-cdk/aws-lambda'
-import * as s3 from '@aws-cdk/aws-s3'
 import * as iam from '@aws-cdk/aws-iam'
 import * as logs from '@aws-cdk/aws-logs'
 import Container, { Service } from 'typedi'
@@ -10,30 +9,16 @@ import { Options, resourceName } from '#/app/options'
 // eslint-disable-next-line max-len
 import { Policy } from '@onhand/framework-aws/#/infrastructure/apigateway/metadata/policiesMetadata'
 import { FunctionOptions } from '#/app/functions'
-import {
-  getFunctionsStackName,
-  getReleasesBucketName,
-  projectName,
-  s3Arn,
-} from '#/cdk/resources'
+import { getFunctionsStackName } from '#/cdk/resources'
+import { InternalNestedStack } from '#/cdk/stack'
 
 @Service()
-export class FunctionsStack extends cdk.NestedStack {
-  private readonly bucket?: s3.IBucket
-  private readonly project: string
+export class FunctionsStack extends InternalNestedStack {
+  constructor (scope: cdk.Construct, options: Options) {
+    super(scope, options, getFunctionsStackName(options))
 
-  constructor (scope: cdk.Construct, private readonly options: Options) {
-    super(scope, getFunctionsStackName(options))
+    this.stackTools.getReleasesBucketfromBucketArn()
 
-    const bucketName = getReleasesBucketName(this.options)
-    const s3AssetsArn = s3Arn(bucketName)
-    this.bucket = s3.Bucket.fromBucketArn(
-      this,
-      _.camelCase(bucketName),
-      s3AssetsArn,
-    )
-
-    this.project = projectName(this.options)
     this.createLambdasAndAliases()
     this.createSeedFunction()
   }
@@ -42,12 +27,13 @@ export class FunctionsStack extends cdk.NestedStack {
     const functions = Container.get<FunctionOptions[]>('functions')
 
     for (const func of functions) {
-      this.createFunction(func, [
-        { key: 'onhandProject', value: this.project },
+      const tags = [
+        { key: 'onhandProject', value: this.stackTools.project },
         { key: 'onhandOperationId', value: func.operationName },
         { key: 'onhandResource', value: 'function' },
         { key: 'onhandResourceGroup', value: 'operation' },
-      ])
+      ]
+      this.createFunction(func, tags)
     }
   }
 
@@ -68,15 +54,13 @@ export class FunctionsStack extends cdk.NestedStack {
         functionName,
         description: 'function to apply seeds',
         policies,
-        fileKey: `${this.project}-${
-          this.options.packageVersion ?? ''
-        }/${operationName}.zip`,
+        fileKey: `${this.stackTools.s3SrcFolder}/${operationName}.zip`,
         handler: 'index.handler',
         version: this.options.packageVersion ?? '',
         isAuthorizer: false,
       },
       [
-        { key: 'onhandProject', value: this.project },
+        { key: 'onhandProject', value: this.stackTools.project },
         { key: 'onhandResource', value: 'function' },
         { key: 'onhandResourceGroup', value: 'pipeline' },
       ],
@@ -154,7 +138,7 @@ export class FunctionsStack extends cdk.NestedStack {
         }deployed on: ${new Date().toISOString()}`,
         functionName: functionOptions.functionName,
         code: lambda.Code.fromBucket(
-          this.bucket!,
+          this.stackTools.bucket,
           functionOptions.fileKey,
           undefined,
         ),

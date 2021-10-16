@@ -4,17 +4,12 @@ import * as cdk from '@aws-cdk/core'
 import * as s3 from '@aws-cdk/aws-s3'
 import { Options } from '#/app/options'
 import { getS3StackName, getReleasesBucketName } from '#/cdk/resources'
+import { InternalStack } from '#/cdk/stack'
 
-export class S3Stack extends cdk.Stack {
-  constructor (scope: cdk.Construct, private readonly options: Options) {
+export class S3Stack extends InternalStack {
+  constructor (scope: cdk.Construct, options: Options) {
     // TODO: add description to cognito stack
-    super(scope, getS3StackName(options), {
-      description: '',
-      env: {
-        account: options.awsAccount,
-        region: options.awsRegion,
-      },
-    })
+    super(scope, options, getS3StackName(options))
 
     this.createBucket()
   }

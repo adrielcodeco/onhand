@@ -133,7 +133,7 @@ export class CognitoService implements ICognitoService {
     }
     const { cognitoToken } = opaqueTokenEntity
     const url = `https://cognito-idp.${this.poolRegion}.amazonaws.com/${this.poolDataUserPoolId}/.well-known/jwks.json`
-    const result = await axios.get(url).catch(err => {
+    const result = await axios.get<any>(url).catch(err => {
       console.error('CognitoService.validateToken:', err)
       return { status: 0, data: null }
     })
@@ -143,7 +143,7 @@ export class CognitoService implements ICognitoService {
     }
 
     const pems = {}
-    const keys = result.data.keys
+    const keys = result.data?.keys ?? []
     for (const key of keys) {
       const keyId = key.kid
       const modulus = key.n

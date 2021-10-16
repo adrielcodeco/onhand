@@ -96,15 +96,8 @@ export abstract class AuthorizerCognitoFunction implements IAuthorizerFunction {
       const { userIdentifier, userRole } = cognitoUser
       let resource
       if (input.methodArn) {
-        const [
-          arn,
-          aws,
-          executeApi,
-          regionId,
-          accountId,
-          apiId,
-          stage,
-        ] = input.methodArn.split(/:|\//)
+        const [arn, aws, executeApi, regionId, accountId, apiId, stage] =
+          input.methodArn.split(/:|\//)
         resource = `${arn}:${aws}:${executeApi}:${regionId}:${accountId}:${apiId}/${stage}/*`
       } else {
         resource = '*'
@@ -116,7 +109,7 @@ export abstract class AuthorizerCognitoFunction implements IAuthorizerFunction {
         userRole,
       )
       handlerCallback(null, policy)
-    } catch (err) {
+    } catch (err: any) {
       err.requestId = context.awsRequestId
       console.error(err)
       handlerCallback('unauthorized')

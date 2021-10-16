@@ -78,15 +78,8 @@ export abstract class AuthorizerCustomFunction implements IAuthorizerFunction {
       const { userIdentifier, userRole } = operationResult.data
       let resource
       if (input.methodArn) {
-        const [
-          arn,
-          aws,
-          executeApi,
-          regionId,
-          accountId,
-          apiId,
-          stage,
-        ] = input.methodArn.split(/:|\//)
+        const [arn, aws, executeApi, regionId, accountId, apiId, stage] =
+          input.methodArn.split(/:|\//)
         resource = `${arn}:${aws}:${executeApi}:${regionId}:${accountId}:${apiId}/${stage}/*`
       } else {
         resource = '*'
@@ -100,7 +93,7 @@ export abstract class AuthorizerCustomFunction implements IAuthorizerFunction {
         input.deviceId,
       )
       handlerCallback(null, policy)
-    } catch (err) {
+    } catch (err: any) {
       err.requestId = context.awsRequestId
       console.error(err)
       handlerCallback('Unauthorized')

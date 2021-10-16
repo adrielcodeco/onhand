@@ -63,7 +63,8 @@ export abstract class ApiGatewayFunction extends AFunction {
       Reflect.has(this.options, 'authenticated') &&
       typeof this.options.authenticated === 'boolean'
     ) {
-      this.handleContextInitialization.options.authenticated = options.authenticated!
+      this.handleContextInitialization.options.authenticated =
+        options.authenticated!
     }
   }
 
@@ -125,7 +126,8 @@ export abstract class ApiGatewayFunction extends AFunction {
           Reflect.has(this.options, 'authenticated') &&
           typeof this.options.authenticated === 'boolean'
         ) {
-          this.handleContextInitialization.options.authenticated = this.options.authenticated
+          this.handleContextInitialization.options.authenticated =
+            this.options.authenticated
         }
       }
     } catch (err) {
@@ -196,7 +198,7 @@ export abstract class ApiGatewayFunction extends AFunction {
       const output = Output(result, headers)
       this.logger.debug('output:', output)
       return output
-    } catch (err) {
+    } catch (err: any) {
       const output = Output(err)
       this.logger.debug('output:', output)
       return output

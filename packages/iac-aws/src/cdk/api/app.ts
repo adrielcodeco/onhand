@@ -59,9 +59,9 @@ function initApp () {
 
 function init () {
   try {
-    const { app, options, promote } = initApp()
+    const { app, options } = initApp()
     new S3Stack(app, options)
-    new ApiStack(app, options, promote)
+    new ApiStack(app, options)
     app.synth()
   } catch (err) {
     console.error(err)

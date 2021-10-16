@@ -10,7 +10,7 @@ export const getDeviceCode: API = {
   method: 'get',
   path: '/github/device-code',
   controller: async (req: Request, res: Response, next: NextFunction) => {
-    const data = await Axios.post(
+    const data = await Axios.post<any>(
       'https://github.com/login/device/code',
       { client_id: clientId, scope: 'repo' },
       {
@@ -41,7 +41,7 @@ export const getAccessCode: API = {
   path: '/github/access-code',
   controller: async (req: Request, res: Response, next: NextFunction) => {
     const { deviceCode } = req.query
-    const data = await Axios.post(
+    const data = await Axios.post<any>(
       'https://github.com/login/oauth/access_token',
       {
         client_id: clientId,

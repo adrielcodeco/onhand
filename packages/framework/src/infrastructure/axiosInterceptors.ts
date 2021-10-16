@@ -10,14 +10,16 @@ export function interceptors (): void {
       const requestId = short.generate()
       Reflect.set(config, 'requestId', requestId)
       const headers = {}
-      for (const header in config.headers) {
-        if (typeof config.headers[header] === 'object') {
-          Object.assign(headers, config.headers[header])
-        } else {
-          Object.assign(headers, { [header]: config.headers[header] })
+      if (config.headers) {
+        for (const header in config.headers) {
+          if (typeof config.headers[header] === 'object') {
+            Object.assign(headers, config.headers[header])
+          } else {
+            Object.assign(headers, { [header]: config.headers[header] })
+          }
         }
+        Object.assign(headers, config.headers[config.method ?? ''])
       }
-      Object.assign(headers, config.headers[config.method ?? ''])
       const req = {
         requestId: requestId,
         url: `${config.baseURL ?? ''}${config.url ?? ''}`,
@@ -25,11 +27,11 @@ export function interceptors (): void {
         data: config.data,
         headers,
       }
-      logger.info(req)
+      logger.info('axios.req:', req)
       return config
     },
     function (error) {
-      logger.error(error)
+      logger.error('axios.error:', error)
       throw error
     },
   )
@@ -43,7 +45,7 @@ export function interceptors (): void {
         headers: response.headers,
         data: response.data,
       }
-      logger.info(res)
+      logger.info('axios.res:', res)
       return response
     },
     function (error) {
@@ -54,7 +56,7 @@ export function interceptors (): void {
         headers: error.response.headers,
         data: error.response.data,
       }
-      logger.error(res)
+      logger.error('axios.error:', { message: error.message, res })
       throw error
     },
   )

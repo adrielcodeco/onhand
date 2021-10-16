@@ -12,6 +12,13 @@ export async function uploadAssets (
   credentials: sdk.Credentials,
 ) {
   console.log('uploading assets...')
+  const s3 = new sdk.S3({ credentials })
+  await uploadBundles(options, s3)
+  await uploadIaC(options, s3)
+}
+
+async function uploadBundles (options: Options, s3: sdk.S3) {
+  console.log('uploading bundles...')
   const progressBar = new cliProgress.SingleBar(
     {
       format: '[{bar}] {percentage}% | {value}/{total}',
@@ -19,7 +26,38 @@ export async function uploadAssets (
     },
     cliProgress.Presets.rect,
   )
-  const s3 = new sdk.S3({ credentials })
+  const output = getConfigOrDefault(
+    options.config,
+    c => c?.package?.outputFolder,
+  )
+  const outputFolder = path.resolve(options.cwd, output!)
+  const bundles = glob.sync('*', { cwd: outputFolder, nodir: true })
+  progressBar.start(bundles.length, 0)
+  for (const bundle of bundles) {
+    const Body = fs.createReadStream(path.resolve(outputFolder, bundle))
+    await s3
+      .upload({
+        Bucket: getReleasesBucketName(options),
+        Key: `${projectName(options)}-${
+          options.packageVersion ?? ''
+        }/${bundle}`,
+        Body,
+      })
+      .promise()
+    progressBar.increment()
+  }
+  progressBar.stop()
+}
+
+async function uploadIaC (options: Options, s3: sdk.S3) {
+  console.log('uploading IaC...')
+  const progressBar = new cliProgress.SingleBar(
+    {
+      format: '[{bar}] {percentage}% | {value}/{total}',
+      hideCursor: true,
+    },
+    cliProgress.Presets.rect,
+  )
   const output = getConfigOrDefault(
     options.config,
     c => c?.package?.outputFolder,
