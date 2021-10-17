@@ -22,7 +22,7 @@ export const getMainStackName = (options: Options) =>
   resourceName(options, options.config?.app?.type!, false, 'kebab')
 
 export const getFunctionsStackName = (options: Options) =>
-  resourceName(options, 'functions', false, 'kebab')
+  resourceName(options, 'functions', false)
 
 export const getApiGatewayStackName = (options: Options) =>
   resourceName(options, 'apigateway', false, 'kebab')

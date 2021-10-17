@@ -68,7 +68,7 @@ export function createFunctionsOptions (options: Options) {
         operationName,
         functionName: resourceName(options, operationName, true, 'kebab'),
         handler: handler,
-        description: `${description} - deployed on: ${new Date().toISOString()}`,
+        description: description ?? operationName,
         version: options.packageVersion!,
         path: routePath,
         method,
