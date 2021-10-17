@@ -15,6 +15,7 @@ export async function cdk (options: Options, promote: boolean, functions: any) {
   const argv: Arguments = {
     _: [Command.DEPLOY],
     region: options.awsRegion,
+    output: options.config?.deploy?.outputFolder ?? '.out/cdk',
     // eslint-disable-next-line node/no-path-concat
     app: `node ${__dirname}/${options.config?.app?.type}/importer.js`,
     context: [

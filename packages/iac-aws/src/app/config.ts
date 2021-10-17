@@ -41,6 +41,7 @@ export type Config = {
     awsProfile?: string
     awsRegion?: string
     files?: Array<string | { root: string, pattern: string }>
+    outputFolder?: string
   }
   cloudFront?: {
     site?: {
