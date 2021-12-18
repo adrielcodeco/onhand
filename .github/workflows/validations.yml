@@ -32,12 +32,15 @@ jobs:
           key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
           restore-keys: |
             ${{ runner.os }}-yarn-
-      
+
       - name: Install global lerna
         run: yarn global add lerna
 
       - name: Install dependencies
         run: yarn install --ignore-scripts --ignore-engines
+
+      - name: Prepare lifecycle script
+        run: yarn prepare
 
       - name: Lerna Init
         run: yarn lerna:init

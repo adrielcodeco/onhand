@@ -40,6 +40,9 @@ jobs:
       - name: Install dependencies
         run: yarn install --ignore-scripts --ignore-engines
 
+      - name: Prepare lifecycle script
+        run: yarn prepare
+
       - name: Lerna Init
         run: yarn lerna:init
 
