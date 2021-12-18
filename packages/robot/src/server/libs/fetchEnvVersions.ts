@@ -60,9 +60,8 @@ export const fetchEnvVersions = async (
           if (type !== 'AWS_PROXY') {
             continue
           }
-          const [, , , , , , , , , , , functionName, aliasName] = uri
-            ?.replace(/\/invocations$/, '')
-            .split(':')!
+          const [, , , , , , , , , , , functionName, aliasName] =
+            uri?.replace(/\/invocations$/, '')?.split(':') ?? []
           const version = await getVersion(lambda, functionName, aliasName)
           results.push({ operationName: operationName!, version })
         }

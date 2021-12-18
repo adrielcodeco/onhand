@@ -3,29 +3,32 @@ import * as cdk from '@aws-cdk/core'
 import { Options } from '#/app/options'
 import { CloudFrontSiteStack } from './cloudfrontStack'
 import { DeployStack } from './deployStack'
-import { getMainStackName, projectName } from '#/cdk/resources'
+import { InternalStack } from '#/cdk/stack'
+import { getMainStackName } from '#/cdk/resources'
+import Container from 'typedi'
 
-export class SiteStack extends cdk.Stack {
-  private readonly project: string
-
-  constructor (scope: cdk.Construct, private readonly options: Options) {
+export class SiteStack extends InternalStack {
+  constructor (scope: cdk.Construct, options: Options) {
     // TODO: add description to SiteStack
-    super(scope, getMainStackName(options), {
-      description: '',
-      env: {
-        account: options.awsAccount,
-        region: options.awsRegion,
-      },
-    })
-    this.project = projectName(this.options)
-    this.tags.setTag('onhand', 'site')
-    this.tags.setTag('onhandProject', this.project)
+    super(scope, options, getMainStackName(options))
+    this.tags.setTag('onhand', 'api')
+    this.tags.setTag('onhandProject', this.stackTools.project)
+  }
 
+  make () {
     // CloudFront
-    const cloudfront = new CloudFrontSiteStack(this, this.options)
+    const cloudfront = CloudFrontSiteStack.init(this)
 
     // Deploy
-    const deploy = new DeployStack(this, this.options)
+    const deploy = DeployStack.init(this)
     deploy.addDependency(cloudfront)
+
+    return this
+  }
+
+  static init (scope: cdk.Construct): SiteStack {
+    const options = Container.get<Options>('options')
+    const instance = new SiteStack(scope, options)
+    return instance.make()
   }
 }

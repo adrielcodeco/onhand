@@ -1,4 +1,8 @@
 {
+  "ts-node": {
+    "transpileOnly": true,
+    "require": ["typescript-transform-paths/register"]
+  },
   "compilerOptions": {
     "allowJs": false,
     "allowSyntheticDefaultImports": true,
@@ -23,7 +27,7 @@
     "noImplicitReturns": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "plugins": [{ "transform": "@zerollup/ts-transform-paths" }],
+    "plugins": [{ "transform": "typescript-transform-paths" }],
     "pretty": false,
     "removeComments": false,
     "resolveJsonModule": true,

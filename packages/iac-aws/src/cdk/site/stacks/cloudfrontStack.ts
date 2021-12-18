@@ -38,9 +38,18 @@ export class CloudFrontSiteStack extends cdk.NestedStack {
         certificateArn,
       )
       : undefined
+  }
 
+  make () {
     this.createSiteDistribution()
     this.updateRoute53Records()
+    return this
+  }
+
+  static init (scope: cdk.Construct): CloudFrontSiteStack {
+    const options = Container.get<Options>('options')
+    const instance = new CloudFrontSiteStack(scope, options)
+    return instance.make()
   }
 
   private createSiteDistribution () {

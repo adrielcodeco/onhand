@@ -53,7 +53,7 @@ const useStyles = makeStyles(theme => ({
 
 export const Iac = ({ routes }: { routes: any }) => {
   const classes = useStyles()
-  const { projectId } = useParams<{ projectId: string }>()
+  const { projectId } = useParams()
   const [blocked, setBlocked] = React.useState(false)
   const [search, setSearch] = React.useState('')
   const [specs, setSpecs] = React.useState<any[]>([])
@@ -68,13 +68,13 @@ export const Iac = ({ routes }: { routes: any }) => {
   React.useEffect(() => {
     setBlocked(true)
     envsService
-      .list(projectId)
+      .list(projectId!)
       .then(async envs => {
         setEnvs(envs)
         return Promise.all(
           envs.map(async env =>
             functionsService
-              .list(projectId, env.name)
+              .list(projectId!, env.name)
               .then(functions => ({ [env.name]: functions })),
           ),
         ).then(results => {

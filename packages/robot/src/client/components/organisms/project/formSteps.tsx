@@ -1,5 +1,5 @@
 import React from 'react'
-import { useHistory } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { makeStyles } from '@material-ui/core/styles'
 import Stepper from '@material-ui/core/Stepper'
 import { stateService } from '~/services/state'
@@ -39,7 +39,7 @@ const useStyles = makeStyles(theme => ({
 
 export const FormSteps = () => {
   const classes = useStyles()
-  const history = useHistory()
+  const navigate = useNavigate()
   const [activeStep, setActiveStep] = React.useState(0)
   React.useEffect(() => {
     const state = stateService.getState()
@@ -59,7 +59,7 @@ export const FormSteps = () => {
   }
   const cancel = () => {
     stateService.replaceState({})
-    history.replace('/projects')
+    navigate('/projects', { replace: true })
   }
   return (
     <Stepper

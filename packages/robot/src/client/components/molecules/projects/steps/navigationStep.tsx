@@ -1,5 +1,5 @@
 import React from 'react'
-import { useHistory } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { makeStyles } from '@material-ui/core/styles'
 import Step from '@material-ui/core/Step'
 import StepLabel from '@material-ui/core/StepLabel'
@@ -21,7 +21,7 @@ interface NavigationStepProps {
 export const NavigationStep = (props: NavigationStepProps) => {
   const { projectId } = props
   const classes = useStyles()
-  const history = useHistory()
+  const navigate = useNavigate()
   return (
     <Step>
       <StepLabel>Navigate</StepLabel>
@@ -33,7 +33,7 @@ export const NavigationStep = (props: NavigationStepProps) => {
             <Button
               variant='contained'
               color='primary'
-              onClick={() => history.replace('/projects')}
+              onClick={() => navigate('/projects', { replace: true })}
               className={classes.button}
             >
               Back to project list
@@ -41,7 +41,8 @@ export const NavigationStep = (props: NavigationStepProps) => {
             <Button
               variant='contained'
               color='primary'
-              onClick={() => history.replace(`/projects/${projectId}`)}
+              onClick={() =>
+                navigate(`/projects/${projectId}`, { replace: true })}
               className={classes.button}
             >
               Go to added project details

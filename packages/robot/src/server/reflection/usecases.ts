@@ -11,10 +11,10 @@ export const extractUseCases = async (cwd: string, config: Partial<Config>) => {
   const usecases: any[] = []
   const bindingMap = getBindingDictionary(container).getMap()
   for (const [, value] of bindingMap) {
-    for (const { implementationType } of value) {
+    for (const { implementationType } of value as any[]) {
       // eslint-disable-next-line no-prototype-builtins
       if (implementationType && UseCase.isPrototypeOf(implementationType)) {
-        const { source: classPath } = await locate(implementationType as any)
+        const { source: classPath } = await locate(implementationType)
         const filePath = classPath.replace('file://', '')
         const relativePath = path.relative(cwd, filePath)
         const isExternal = !relativePath.startsWith(`${config.app?.src}/`)

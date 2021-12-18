@@ -16,17 +16,18 @@
     "url": "<TODO: your repo url here>"
   },
   "scripts": {
-    "build": "yarn clean && ttsc -b tsconfig.build.json",
+    "build": "yarn clean && tsc -b tsconfig.build.json",
     "clean": "rimraf '#'",
     "deploy": "cross-env NO_INIT=true onhand-iac-aws deploy",
+    "docker:build": "docker build -t api .",
     "lint": "eslint . --ext .js,.ts",
     "preCommit": "yarn lint && yarn typecheck",
     "prePush": "yarn test",
-    "serve": "cross-env LOG_LEVEL=debug USE_LOCAL_DDB=http://localhost:4566 PARAMETER_STORE_ENDPOINT=http://localhost:4566 OFFLINE_PARAMETERS=.env.test node node_modules/@onhand/iac-aws/bin/iac serve --port 4000",
+    "prepare": "ts-patch install -s",
     "promote": "cross-env NO_INIT=true onhand-iac-aws promote",
+    "serve": "cross-env LOG_LEVEL=debug USE_LOCAL_DDB=http://localhost:4566 PARAMETER_STORE_ENDPOINT=http://localhost:4566 OFFLINE_PARAMETERS=.env.test node node_modules/@onhand/iac-aws/bin/iac serve --port 4000",
     "test": "cross-env USE_LOCAL_DDB=http://localhost:4566 PARAMETER_STORE_ENDPOINT=http://localhost:4566 OFFLINE_PARAMETERS=.env.test node node_modules/@onhand/tsting/bin/tsting",
-    "typecheck": "tsc -p tsconfig.json --noEmit",
-    "docker:build": "docker build -t api ."
+    "typecheck": "tsc -p tsconfig.json --noEmit"
   },
   "dependencies": {
     "@onhand/accesscontrol": "^1.0.56",
@@ -86,7 +87,6 @@
     "@types/webpack-env": "^1.16.0",
     "@typescript-eslint/eslint-plugin": "^4.17.0",
     "@typescript-eslint/parser": "^4.17.0",
-    "@zerollup/ts-transform-paths": "^1.7.18",
     "ajv": "^7.2.1",
     "archiver": "^5.3.0",
     "cdk-assume-role-credential-plugin": "^1.2.2",
@@ -101,7 +101,7 @@
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^4.3.1",
     "eslint-plugin-standard": "^5.0.0",
-    "execa": "^5.0.0",
+    "execa": "5.0.0",
     "file-loader": "^6.2.0",
     "inspectpack": "^4.2.2",
     "jest": "^26.6.3",
@@ -115,8 +115,9 @@
     "ts-jest": "^26.5.3",
     "ts-loader": "^8.0.18",
     "ts-node": "^9.1.1",
-    "ttypescript": "^1.5.12",
-    "typescript": "^4.2.3",
+    "ts-patch": "^2.0.1",
+    "typescript": "4.3.2",
+    "typescript-transform-paths": "^3.3.1",
     "wait-port": "^0.2.6",
     "webpack": "^5.25.0"
   }

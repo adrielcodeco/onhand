@@ -31,7 +31,7 @@ const useStyles = makeStyles({
 
 export const Usecases = ({ usecases }: { usecases: any[] }) => {
   const classes = useStyles()
-  const { projectId } = useParams<{ projectId: string }>()
+  const { projectId } = useParams()
   const openInVSCode = (path: string) => () => {
     if (path) {
       // https://code.visualstudio.com/docs/editor/command-line#_opening-vs-code-with-urls

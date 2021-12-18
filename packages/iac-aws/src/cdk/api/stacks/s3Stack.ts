@@ -5,13 +5,23 @@ import * as s3 from '@aws-cdk/aws-s3'
 import { Options } from '#/app/options'
 import { getS3StackName, getReleasesBucketName } from '#/cdk/resources'
 import { InternalStack } from '#/cdk/stack'
+import Container from 'typedi'
 
 export class S3Stack extends InternalStack {
   constructor (scope: cdk.Construct, options: Options) {
     // TODO: add description to cognito stack
     super(scope, options, getS3StackName(options))
+  }
 
+  make () {
     this.createBucket()
+    return this
+  }
+
+  static init (scope: cdk.Construct): S3Stack {
+    const options = Container.get<Options>('options')
+    const instance = new S3Stack(scope, options)
+    return instance.make()
   }
 
   private createBucket () {
@@ -21,7 +31,7 @@ export class S3Stack extends InternalStack {
       blockPublicAccess: s3.BlockPublicAccess.BLOCK_ALL,
       bucketName: bucketName,
       publicReadAccess: false,
-      removalPolicy: cdk.RemovalPolicy.DESTROY,
+      removalPolicy: cdk.RemovalPolicy.RETAIN,
       versioned: false,
     })
   }

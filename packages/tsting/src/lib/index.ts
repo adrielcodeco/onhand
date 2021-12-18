@@ -31,9 +31,7 @@ import {
 
 export * from '#/lib/testContext'
 
-export function prepared<T extends any> (
-  step: prepareStep<T>,
-): prepareReturn<T> {
+export function prepared<T = any> (step: prepareStep<T>): prepareReturn<T> {
   const testContext = new TestContext()
   testContext.steps.push(preparedStep(testContext, step))
   return {
@@ -42,7 +40,7 @@ export function prepared<T extends any> (
   }
 }
 
-export function calling<T extends any> (
+export function calling<T = any> (
   api: (context?: T) => APIConfig,
 ): callingReturn<T> {
   const testContext = new TestContext()

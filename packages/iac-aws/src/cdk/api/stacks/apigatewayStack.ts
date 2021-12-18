@@ -1,4 +1,3 @@
-import _ from 'lodash'
 import * as cdk from '@aws-cdk/core'
 import * as apigateway from '@aws-cdk/aws-apigateway'
 import * as lambda from '@aws-cdk/aws-lambda'
@@ -25,7 +24,9 @@ export class ApiGatewayStack extends cdk.NestedStack {
     super(scope, getApiGatewayStackName(options))
 
     this.functions = Container.get<FunctionOptions[]>('functions')
+  }
 
+  make () {
     this.createRole()
     this.createApiGateway()
     this.createAuthorizerFunction()
@@ -34,6 +35,13 @@ export class ApiGatewayStack extends cdk.NestedStack {
     if (this.options.stage === 'prd') {
       this.disableApigatewayDefaultEndpoint()
     }
+    return this
+  }
+
+  static init (scope: cdk.Construct): ApiGatewayStack {
+    const options = Container.get<Options>('options')
+    const instance = new ApiGatewayStack(scope, options)
+    return instance.make()
   }
 
   private createRole () {
@@ -128,7 +136,7 @@ export class ApiGatewayStack extends cdk.NestedStack {
       const alias = this.options.stage
       const authorizerFunc = lambda.Function.fromFunctionArn(
         this,
-        _.camelCase(functionName),
+        resourceName(this.options, functionName),
         `arn:aws:lambda:${this.region}:${this.account}:function:${functionName}:${alias}`,
       )
       this.createAuthAuthorizers(operationName, authorizerFunc)
@@ -201,7 +209,7 @@ export class ApiGatewayStack extends cdk.NestedStack {
     const alias = this.options.stage
     const routeLambda = lambda.Function.fromFunctionArn(
       this,
-      _.camelCase(`func-${operationName}`),
+      resourceName(this.options, `func-${operationName}`),
       `arn:aws:lambda:${this.region}:${this.account}:function:${functionName}:${alias}`,
     )
     resource.addMethod(

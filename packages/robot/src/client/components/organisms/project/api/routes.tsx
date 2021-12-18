@@ -41,7 +41,7 @@ const useStyles = makeStyles(theme => ({
 
 export const Routes = ({ routes }: any) => {
   const classes = useStyles()
-  const { projectId } = useParams<{ projectId: string }>()
+  const { projectId } = useParams()
   const [selected, setSelected] = React.useState<any>(undefined)
   const [search, setSearch] = React.useState('')
   const [expandeds, setExpandeds] = React.useState<any>({})

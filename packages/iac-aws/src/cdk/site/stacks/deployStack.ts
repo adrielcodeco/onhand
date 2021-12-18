@@ -1,4 +1,5 @@
 /* eslint-disable no-new */
+import { Container } from 'typedi'
 import * as cdk from '@aws-cdk/core'
 import * as s3 from '@aws-cdk/aws-s3'
 import * as cloudfront from '@aws-cdk/aws-cloudfront'
@@ -20,8 +21,17 @@ import {
 export class DeployStack extends cdk.NestedStack {
   constructor (scope: cdk.Construct, private readonly options: Options) {
     super(scope, getDeployStackName(options))
+  }
 
+  make () {
     this.deployment()
+    return this
+  }
+
+  static init (scope: cdk.Construct): DeployStack {
+    const options = Container.get<Options>('options')
+    const instance = new DeployStack(scope, options)
+    return instance.make()
   }
 
   private deployment () {
@@ -43,14 +53,15 @@ export class DeployStack extends cdk.NestedStack {
 
     const distributionIdExportName = getCFDistributionId(this.options)
     const distributionDomainNameExportName = getCFDistributionDN(this.options)
-    const distribution = cloudfront.CloudFrontWebDistribution.fromDistributionAttributes(
-      this,
-      getCFDistributionName(this.options),
-      {
-        distributionId: cdk.Fn.importValue(distributionIdExportName),
-        domainName: cdk.Fn.importValue(distributionDomainNameExportName),
-      },
-    )
+    const distribution =
+      cloudfront.CloudFrontWebDistribution.fromDistributionAttributes(
+        this,
+        getCFDistributionName(this.options),
+        {
+          distributionId: cdk.Fn.importValue(distributionIdExportName),
+          domainName: cdk.Fn.importValue(distributionDomainNameExportName),
+        },
+      )
 
     const packageName = getConfigOrDefault(
       this.options.config,

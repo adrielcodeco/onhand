@@ -1,6 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom'
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import { createTheme, ThemeProvider } from '@material-ui/core/styles'
 import CircularProgress from '@material-ui/core/CircularProgress'
 import deepPurple from '@material-ui/core/colors/deepPurple'
@@ -41,18 +41,22 @@ export const App = () => {
             <Container>
               {config
                 ? (
-                  <Switch>
-                    <Route path='/home' component={Index} exact />
-                    <Route path='/deploy/setup' component={DeploySetup} exact />
-                    <Route path='/projects' component={ProjectList} exact />
-                    <Route path='/projects/new' component={ProjectAdd} exact />
+                  <Routes>
+                    <Route path='/home' element={<Index />} />
+                    <Route path='/deploy/setup' element={<DeploySetup />} />
+                    <Route path='/projects' element={<ProjectList />} />
+                    <Route path='/projects/new' element={<ProjectAdd />} />
                     <Route
                       path='/projects/:projectId'
-                      component={ProjectDetails}
-                      exact
+                      element={<ProjectDetails />}
                     />
-                    <Redirect to={config.initialPage} />
-                  </Switch>
+                    <Route
+                      path='*'
+                      element={
+                        <Navigate to={config.initialPage} replace />
+                    }
+                    />
+                  </Routes>
                   )
                 : (
                   <CircularProgress />

@@ -7,6 +7,20 @@ import { getConfigOrDefault } from '#/app/config'
 import { projectName, getReleasesBucketName } from '#/cdk/resources'
 import cliProgress from 'cli-progress'
 
+export async function checkIfBucketExists (
+  options: Options,
+  credentials: sdk.Credentials,
+) {
+  const s3 = new sdk.S3({ credentials })
+  const bucketName = getReleasesBucketName(options)
+  try {
+    await s3.headBucket({ Bucket: bucketName }).promise()
+    return true
+  } catch {
+    return false
+  }
+}
+
 export async function uploadAssets (
   options: Options,
   credentials: sdk.Credentials,

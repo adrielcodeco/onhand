@@ -1,9 +1,8 @@
 /* eslint-disable no-new */
-import _ from 'lodash'
 import * as cdk from '@aws-cdk/core'
 import * as lambda from '@aws-cdk/aws-lambda'
 import * as iam from '@aws-cdk/aws-iam'
-import * as logs from '@aws-cdk/aws-logs'
+// import * as logs from '@aws-cdk/aws-logs'
 import Container, { Service } from 'typedi'
 import { Options, resourceName } from '#/app/options'
 // eslint-disable-next-line max-len
@@ -16,11 +15,19 @@ import { InternalNestedStack } from '#/cdk/stack'
 export class FunctionsStack extends InternalNestedStack {
   constructor (scope: cdk.Construct, options: Options) {
     super(scope, options, getFunctionsStackName(options))
+  }
 
+  make () {
     this.stackTools.getReleasesBucketfromBucketArn()
-
     this.createLambdasAndAliases()
     this.createSeedFunction()
+    return this
+  }
+
+  static init (scope: cdk.Construct): FunctionsStack {
+    const options = Container.get<Options>('options')
+    const instance = new FunctionsStack(scope, options)
+    return instance.make()
   }
 
   private createLambdasAndAliases () {
@@ -45,7 +52,7 @@ export class FunctionsStack extends InternalNestedStack {
     const functionName = resourceName(
       this.options,
       operationName,
-      true,
+      false,
       'kebab',
     )
     return this.createFunction(
@@ -73,12 +80,11 @@ export class FunctionsStack extends InternalNestedStack {
   ) {
     const lambdaRole = new iam.Role(
       this,
-      _.camelCase(`func-${functionOptions.operationName}-role`),
+      resourceName(this.options, `func-${functionOptions.operationName}-role`),
       {
         assumedBy: new iam.ServicePrincipal('lambda.amazonaws.com'),
       },
     )
-    lambdaRole.applyRemovalPolicy(cdk.RemovalPolicy.RETAIN)
     const logPolicy: Policy = {
       inlinePolicy: {
         actions: ['logs:*'],
@@ -107,7 +113,8 @@ export class FunctionsStack extends InternalNestedStack {
         lambdaRole.attachInlinePolicy(
           new iam.Policy(
             this,
-            _.camelCase(
+            resourceName(
+              this.options,
               `policy-${
                 functionOptions.operationName
               }-${functionOptions.policies.indexOf(policy)}`,
@@ -129,7 +136,7 @@ export class FunctionsStack extends InternalNestedStack {
     }
     const func = new lambda.Function(
       this,
-      _.camelCase(`func-${functionOptions.operationName}`),
+      resourceName(this.options, `func-${functionOptions.operationName}`),
       {
         handler: functionOptions.handler,
         runtime: lambda.Runtime.NODEJS_14_X,
@@ -144,30 +151,26 @@ export class FunctionsStack extends InternalNestedStack {
         ),
         currentVersionOptions: {
           description: functionOptions.version,
-          removalPolicy: cdk.RemovalPolicy.RETAIN,
           retryAttempts: 1,
         },
         environment: {
           STAGE: this.options.stage,
         },
-        logRetention: logs.RetentionDays.ONE_WEEK,
+        // logRetention: logs.RetentionDays.ONE_WEEK,
         role: lambdaRole,
         memorySize: 256,
         reservedConcurrentExecutions: undefined,
         timeout: cdk.Duration.minutes(15),
       },
     )
-    func.applyRemovalPolicy(cdk.RemovalPolicy.RETAIN)
     for (const { key, value } of tags ?? []) {
       cdk.Tags.of(func).add(key, value)
     }
-    const stageAlias = func.currentVersion.addAlias(this.options.stage)
-    stageAlias.applyRemovalPolicy(cdk.RemovalPolicy.RETAIN)
+    func.currentVersion.addAlias(this.options.stage)
     if (this.options.packageVersion) {
-      const alias = func.currentVersion.addAlias(
+      func.currentVersion.addAlias(
         this.options.packageVersion.replace(/\./g, '-'),
       )
-      alias.applyRemovalPolicy(cdk.RemovalPolicy.RETAIN)
     }
 
     return func

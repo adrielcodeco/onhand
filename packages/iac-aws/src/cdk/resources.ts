@@ -13,7 +13,7 @@ export const getS3StackName = (options: Options) =>
   resourceName(options, `${options.config?.app?.type} assets`, false, 'kebab')
 
 export const getAssetsBucketName = (options: Options) =>
-  resourceName(options, `${options.config?.app?.type} assets`)
+  resourceName(options, `${options.config?.app?.type} assets`, false, 'kebab')
 
 export const getReleasesBucketName = (options: Options) =>
   resourceName(options, `${options.config?.app?.type} releases`, true, 'kebab')

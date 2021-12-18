@@ -53,15 +53,15 @@ const useStyles = makeStyles(theme => ({
 
 export function ProjectDetails () {
   const classes = useStyles()
-  const { projectId } = useParams<{ projectId: string }>()
+  const { projectId } = useParams()
   const [project, setProject] = React.useState<Project | undefined>()
   React.useEffect(() => {
     if (!localStorage.getItem('current-project')) {
-      localStorage.setItem('current-project', projectId)
+      localStorage.setItem('current-project', projectId!)
       window.location.reload()
       return
     }
-    projectService.find(projectId).then(setProject).catch(console.error)
+    projectService.find(projectId!).then(setProject).catch(console.error)
   }, [])
   const openInVSCode = (projectPath?: string) => {
     if (projectPath) {

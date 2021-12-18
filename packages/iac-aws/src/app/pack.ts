@@ -59,8 +59,8 @@ async function packALl (options: Options) {
         const files = glob.sync(pattern, { cwd: options.cwd, nodir: true })
         for (const file of files) {
           console.log(`adding ${file}`)
-          const buffer = fs.readFileSync(path.resolve(options.cwd, file))
-          archive.append(buffer, {
+          const stream = fs.createReadStream(path.resolve(options.cwd, file))
+          archive.append(stream, {
             name: path.normalize(file),
           })
         }
@@ -73,8 +73,8 @@ async function packALl (options: Options) {
         })
         for (const file of files) {
           console.log(`adding ${file}`)
-          const buffer = fs.readFileSync(path.resolve(cwd, file))
-          archive.append(buffer, { name: path.normalize(file) })
+          const stream = fs.createReadStream(path.resolve(cwd, file))
+          archive.append(stream, { name: path.normalize(file) })
         }
       }
     }

@@ -11,10 +11,9 @@ export const extractServices = async (cwd: string, config: Partial<Config>) => {
   const services: any[] = []
   const bindingMap = getBindingDictionary(container).getMap()
   for (const [, value] of bindingMap) {
-    for (const { implementationType } of value) {
-      // eslint-disable-next-line no-prototype-builtins
+    for (const { implementationType } of value as any[]) {
       if (implementationType && isService(implementationType)) {
-        const { source: classPath } = await locate(implementationType as any)
+        const { source: classPath } = await locate(implementationType)
         const filePath = classPath.replace('file://', '')
         const relativePath = path.relative(cwd, filePath)
         const isExternal = !relativePath.startsWith(`${config.app?.src}/`)

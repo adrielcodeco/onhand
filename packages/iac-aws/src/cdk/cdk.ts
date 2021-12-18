@@ -1,21 +1,24 @@
 import { SdkProvider } from 'aws-cdk/lib/api/aws-auth'
-import { Configuration, Arguments, Command } from 'aws-cdk/lib/settings'
+import * as settings from 'aws-cdk/lib/settings'
+import { Arguments, Configuration, Command } from 'aws-cdk/lib/settings'
 import { CloudFormationDeployments } from 'aws-cdk/lib/api/cloudformation-deployments'
 import { StackActivityProgress } from 'aws-cdk/lib/api/util/cloudformation/stack-activity-monitor'
 import { CloudExecutable } from 'aws-cdk/lib/api/cxapp/cloud-executable'
 import { execProgram } from 'aws-cdk/lib/api/cxapp/exec'
 import { CdkToolkit } from 'aws-cdk/lib/cdk-toolkit'
 import { RequireApproval } from 'aws-cdk/lib/diff'
-import { Bootstrapper, ToolkitInfo } from 'aws-cdk/lib'
+import { Bootstrapper } from 'aws-cdk/lib/api/bootstrap'
+import { ToolkitInfo } from 'aws-cdk/lib/api/toolkit-info'
 import { Options } from '#/app/options'
-import { uploadAssets } from './uploadAssets'
+import { checkIfBucketExists, uploadAssets } from './assets'
 import { getS3StackName, getMainStackName } from '#/cdk/resources'
 
 export async function cdk (options: Options, promote: boolean, functions: any) {
+  const output = options.config?.deploy?.outputFolder ?? '.out/cdk'
   const argv: Arguments = {
     _: [Command.DEPLOY],
     region: options.awsRegion,
-    output: options.config?.deploy?.outputFolder ?? '.out/cdk',
+    output,
     // eslint-disable-next-line node/no-path-concat
     app: `node ${__dirname}/${options.config?.app?.type}/importer.js`,
     context: [
@@ -27,6 +30,8 @@ export async function cdk (options: Options, promote: boolean, functions: any) {
       'functions=' + JSON.stringify(functions),
     ],
   }
+  ;(settings as any).PROJECT_CONFIG = `${output}/cdk.json`
+  ;(settings as any).PROJECT_CONTEXT = `${output}/cdk.context.json`
   const configuration = new Configuration({
     commandLineArguments: argv,
     readUserContext: false,
@@ -92,13 +97,19 @@ export async function deployStacks (args: {
   )
 
   if (!(options.config?.app?.type === 'api' && promote)) {
-    await cli.deploy({
-      toolkitStackName,
-      selector: { patterns: [getS3StackName(options)] },
-      requireApproval: RequireApproval.Never,
-      progress: StackActivityProgress.EVENTS,
-      ci: true,
-    })
+    const exists = await checkIfBucketExists(
+      options,
+      await (sdkProvider as any).defaultCredentials(),
+    )
+    if (!exists) {
+      await cli.deploy({
+        toolkitStackName,
+        selector: { patterns: [getS3StackName(options)] },
+        requireApproval: RequireApproval.Never,
+        progress: StackActivityProgress.EVENTS,
+        ci: true,
+      })
+    }
   }
 
   if (!promote) {

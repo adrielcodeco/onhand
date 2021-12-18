@@ -7,7 +7,7 @@ export type Answer<T> = {
   with?: (context?: T, response?: any) => Promise<boolean>
 }
 
-export type prepareStep<T extends any> = (context?: T) => Promise<T>
+export type prepareStep<T = any> = (context?: T) => Promise<T>
 export type prepareReturn<T> = {
   ensuringThat: EnsuringThat<T>
   calling: Calling<T>

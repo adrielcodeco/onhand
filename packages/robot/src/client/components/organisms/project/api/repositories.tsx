@@ -31,7 +31,7 @@ const useStyles = makeStyles({
 
 export const Repositories = ({ repositories }: { repositories: any[] }) => {
   const classes = useStyles()
-  const { projectId } = useParams<{ projectId: string }>()
+  const { projectId } = useParams()
   const openInVSCode = (path: string) => () => {
     if (path) {
       // https://code.visualstudio.com/docs/editor/command-line#_opening-vs-code-with-urls
@@ -41,7 +41,7 @@ export const Repositories = ({ repositories }: { repositories: any[] }) => {
   return (
     <div>
       <Title
-        title='Repositories'
+        title="Repositories"
         button={{
           text: 'ADD REPOSIROTY',
           href: `/projects/${projectId}/repository`,
@@ -52,7 +52,7 @@ export const Repositories = ({ repositories }: { repositories: any[] }) => {
           <TableHead>
             <TableRow>
               <TableCell>Name</TableCell>
-              <TableCell align='right'>Actions</TableCell>
+              <TableCell align="right">Actions</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -61,15 +61,15 @@ export const Repositories = ({ repositories }: { repositories: any[] }) => {
               .map(row => (
                 <TableRow key={row.name}>
                   <TableCell>
-                    <Typography variant='h6'>{row.name}</Typography>
-                    <Typography variant='body2' className={classes.path}>
+                    <Typography variant="h6">{row.name}</Typography>
+                    <Typography variant="body2" className={classes.path}>
                       {row.relativePath}
                     </Typography>
                   </TableCell>
-                  <TableCell align='right'>
+                  <TableCell align="right">
                     <Tooltip
-                      title='Open in VS Code'
-                      aria-label='Open in VS Code'
+                      title="Open in VS Code"
+                      aria-label="Open in VS Code"
                     >
                       <IconButton onClick={openInVSCode(row.filePath)}>
                         <SvgIcon>

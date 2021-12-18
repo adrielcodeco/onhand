@@ -58,11 +58,11 @@ const MenuProps = {
 
 export const Envs = () => {
   const classes = useStyles()
-  const { projectId } = useParams<{ projectId: string }>()
+  const { projectId } = useParams()
   const [envs, setEnvs] = React.useState<any[]>([])
   const [profiles, setProfiles] = React.useState<any[]>([])
   React.useEffect(() => {
-    envsService.list(projectId).then(setEnvs).catch(console.error)
+    envsService.list(projectId!).then(setEnvs).catch(console.error)
     profilesService.list().then(setProfiles).catch(console.error)
   }, [])
   return (

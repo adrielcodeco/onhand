@@ -8,16 +8,20 @@ export type APIConfig = {
   headers?: any
 }
 
+type CurrentRequest = {
+  params: Map<string | RegExp, string>
+  body?: any
+  response?: AxiosResponse
+  failed?: boolean
+  clear: () => void
+}
+
+type Runner = 'engine' | 'self'
+
 export class TestContext {
   steps: Array<() => Promise<any>> = []
   api: APIConfig = { baseUrl: '', path: '', method: 'get' }
-  currentRequest: {
-    params: Map<string | RegExp, string>
-    body?: any
-    response?: AxiosResponse
-    failed?: boolean
-    clear: () => void
-  } = {
+  currentRequest: CurrentRequest = {
     params: new Map(),
     clear: () => {
       this.currentRequest.body = undefined
@@ -34,6 +38,5 @@ export class TestContext {
 
   context: any = {}
   log = new Logger()
-  runner: 'engine' | 'self' =
-  process.env.TEST_ENGINE === 'true' ? 'engine' : 'self'
+  runner: Runner = process.env.TEST_ENGINE === 'true' ? 'engine' : 'self'
 }
