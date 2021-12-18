@@ -1,6 +1,6 @@
 {
   "name": "@onhand/business",
-  "version": "2.0.0",
+  "version": "2.0.1-alpha.0",
   "description": "business is part of the @onhand framework",
   "author": "Codeco <adrielcodeco@hotmail.com>",
   "homepage": "https://github.com/adrielcodeco/onhand/tree/main/packages/business#readme",
@@ -16,7 +16,7 @@
     "url": "git+https://github.com/adrielcodeco/onhand.git"
   },
   "scripts": {
-    "build": "yarn clean && ttsc -b tsconfig.build.json",
+    "build": "yarn clean && tsc -b tsconfig.build.json",
     "clean": "rimraf '#' coverage yarn*.log",
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "test": "jest --coverage --passWithNoTests",
@@ -26,7 +26,7 @@
     "url": "https://github.com/adrielcodeco/onhand/issues"
   },
   "dependencies": {
-    "inversify": "^5.0.5",
+    "inversify": "^6.0.1",
     "reflect-metadata": "^0.1.13"
   },
   "jest": {
