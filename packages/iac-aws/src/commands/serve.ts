@@ -9,6 +9,7 @@ export async function serveCommand (
     port: string
     watch: boolean
     setupDB: boolean
+    envFile: string
   },
 ) {
   const options = loadConfig({}, configPath)

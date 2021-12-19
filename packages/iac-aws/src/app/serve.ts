@@ -29,6 +29,7 @@ export async function serve (
     port: string
     watch: boolean
     setupDB: boolean
+    envFile: string
   },
 ) {
   console.log('starting server')
@@ -41,7 +42,9 @@ export async function serve (
     options.cwd,
     getConfigOrDefault(options.config, c => c.app?.src)!,
   )
-  const envFilePath = '' // TODO: enable .env file support
+  const envFilePath = serverOptions?.envFile
+    ? path.resolve(options.cwd, serverOptions?.envFile)
+    : ''
   if (!openApiFilePath) {
     throw new Error('OpenApi class file not found')
   }

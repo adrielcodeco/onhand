@@ -37,7 +37,7 @@ jobs:
         run: yarn global add lerna
 
       - name: Install dependencies
-        run: yarn install --ignore-scripts --ignore-engines
+        run: yarn install --ignore-scripts --ignore-engines --frozen-lockfile
 
       - name: Prepare lifecycle script
         run: yarn prepare

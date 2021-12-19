@@ -127,6 +127,10 @@ function main () {
           boolean: true,
           default: true,
         })
+        yargs.option('envFile', {
+          describe: '.env file to pass to lambda',
+          default: '',
+        })
       },
       argv => {
         (async () => {
@@ -134,6 +138,7 @@ function main () {
             port: argv.port as string,
             watch: !!argv.watch,
             setupDB: !!argv.setupDB,
+            envFile: argv.envFile as string,
           })
         })().catch(err => {
           console.error(err)
