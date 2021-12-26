@@ -1,6 +1,6 @@
 {
   "name": "onhand",
-  "version": "2.0.1-alpha.3",
+  "version": "2.0.1",
   "description": "cli package of @onhand framework",
   "author": "Codeco <adrielcodeco@hotmail.com>",
   "homepage": "https://github.com/adrielcodeco/onhand/tree/main/packages/cli#readme",
@@ -29,7 +29,7 @@
     "url": "https://github.com/adrielcodeco/onhand/issues"
   },
   "dependencies": {
-    "@onhand/robot": "^2.0.1-alpha.3",
+    "@onhand/robot": "^2.0.1",
     "open": "^8.4.0",
     "source-map-support": "^0.5.21",
     "ts-node": "^10.4.0"

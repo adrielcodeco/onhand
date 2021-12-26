@@ -1,6 +1,6 @@
 {
   "name": "@onhand/workspace",
-  "version": "2.0.1-alpha.3",
+  "version": "2.0.1",
   "description": "cli package of @onhand framework to manage workspaces",
   "author": "Codeco <adrielcodeco@hotmail.com>",
   "homepage": "https://github.com/adrielcodeco/onhand/tree/main/packages/workspace#readme",
