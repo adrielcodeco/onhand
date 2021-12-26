@@ -4,13 +4,13 @@ require('source-map-support').install()
 require('ts-node').register()
 require('tsconfig-paths').register()
 
-// @ts-expect-error
-// eslint-disable-next-line no-var
-var wrapper = module.constructor.wrapper
-// @ts-expect-error
-module.constructor.wrapper = [
-  `${wrapper[0]}\n require.context = () => {} \n`,
-  wrapper[1],
-]
+// // @ts-expect-error
+// // eslint-disable-next-line no-var
+// var wrapper = module.constructor.wrapper
+// // @ts-expect-error
+// module.constructor.wrapper = [
+//   `${wrapper[0]}\n require.context = () => {} \n`,
+//   wrapper[1],
+// ]
 
 require('../#/bin/iac.js')

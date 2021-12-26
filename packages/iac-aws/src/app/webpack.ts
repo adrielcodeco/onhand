@@ -346,8 +346,6 @@ async function compileSite (options: Options): Promise<Bundles> {
       const compiler = webpack(config)
       log('webpack instantiated')
       compiler.run(function (err, stats) {
-        // eslint-disable-next-line prefer-rest-params
-        console.log(arguments)
         try {
           if (err) {
             console.error(err)
