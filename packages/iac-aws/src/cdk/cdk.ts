@@ -12,6 +12,9 @@ import { ToolkitInfo } from 'aws-cdk/lib/api/toolkit-info'
 import { Options } from '#/app/options'
 import { checkIfBucketExists, uploadAssets } from './assets'
 import { getS3StackName, getMainStackName } from '#/cdk/resources'
+import debug from 'debug'
+
+const log = debug('onhand:iac')
 
 export async function cdk (options: Options, promote: boolean, functions: any) {
   const output = options.config?.deploy?.outputFolder ?? '.out/cdk'
@@ -32,25 +35,28 @@ export async function cdk (options: Options, promote: boolean, functions: any) {
   }
   ;(settings as any).PROJECT_CONFIG = `${output}/cdk.json`
   ;(settings as any).PROJECT_CONTEXT = `${output}/cdk.context.json`
+  log('cdk argv: %O', argv)
   const configuration = new Configuration({
     commandLineArguments: argv,
     readUserContext: false,
   })
   await configuration.load()
 
+  const profile = options.awsProfile ?? configuration.settings.get(['profile'])
+  log('cdk profile: %s', profile)
   const sdkProvider = await SdkProvider.withAwsCliCompatibleDefaults({
-    profile: options.awsProfile ?? configuration.settings.get(['profile']),
+    profile,
     ...{ localstack: false },
   })
 
   const cloudFormation = new CloudFormationDeployments({ sdkProvider })
-
+  log('CloudFormationDeployments created')
   const cloudExecutable = new CloudExecutable({
     configuration,
     sdkProvider,
     synthesizer: execProgram,
   })
-
+  log('CloudExecutable created')
   const cli = new CdkToolkit({
     cloudExecutable,
     cloudFormation,
@@ -60,13 +66,13 @@ export async function cdk (options: Options, promote: boolean, functions: any) {
     configuration,
     sdkProvider,
   })
-
+  log('CdkToolkit created')
   const bootstrapper = new Bootstrapper({ source: 'default' })
-
+  log('Bootstrapper created')
   const toolkitStackName = ToolkitInfo.determineName(
     configuration.settings.get(['toolkitStackName']),
   )
-
+  log('toolkitStackName: %O', toolkitStackName)
   await cli.bootstrap([], bootstrapper, {
     toolkitStackName,
     tags: configuration.settings.get(['tags']),
@@ -75,7 +81,7 @@ export async function cdk (options: Options, promote: boolean, functions: any) {
       kmsKeyId: configuration.settings.get(['toolkitBucket', 'kmsKeyId']),
     },
   })
-
+  log('bootstrap called')
   return {
     configuration,
     sdkProvider,
@@ -95,12 +101,14 @@ export async function deployStacks (args: {
   const toolkitStackName = ToolkitInfo.determineName(
     configuration.settings.get(['toolkitStackName']),
   )
-
+  log('toolkitStackName: %O', toolkitStackName)
   if (!(options.config?.app?.type === 'api' && promote)) {
+    log('s3 deployment')
     const exists = await checkIfBucketExists(
       options,
       await (sdkProvider as any).defaultCredentials(),
     )
+    log('checkIfBucketExists: %s', exists)
     if (!exists) {
       await cli.deploy({
         toolkitStackName,
@@ -109,13 +117,16 @@ export async function deployStacks (args: {
         progress: StackActivityProgress.EVENTS,
         ci: true,
       })
+      log('cli.deploy called')
     }
   }
 
   if (!promote) {
+    log('Assets upload')
     await uploadAssets(options, await (sdkProvider as any).defaultCredentials())
   }
 
+  log('main stack deployment')
   await cli.deploy({
     toolkitStackName,
     selector: { patterns: [getMainStackName(options)] },

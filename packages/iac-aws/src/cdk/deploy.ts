@@ -4,6 +4,9 @@ import { compile } from '#/app/webpack'
 import { createFunctionsOptions } from '#/app/functions'
 import { pack } from '#/app/pack'
 import { cdk, deployStacks } from './cdk'
+import debug from 'debug'
+
+const log = debug('onhand:iac')
 
 export async function deploy (
   options: Options,
@@ -12,7 +15,9 @@ export async function deploy (
   Container.set('options', options)
 
   if (!deployOptions?.noBuild) {
+    log('building')
     const bundles = await compile(options)
+    log('bundles: %O', bundles)
     await pack(
       options,
       options.config?.app?.type === 'api' ? bundles : undefined,
@@ -20,6 +25,8 @@ export async function deploy (
   }
   const functions =
     options.config?.app?.type === 'api' ? createFunctionsOptions(options) : {}
+
+  log('functions: %O', functions)
 
   const { cli, configuration, sdkProvider } = await cdk(
     options,

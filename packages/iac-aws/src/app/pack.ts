@@ -7,13 +7,16 @@ import rimraf from 'rimraf'
 import { Options } from './options'
 import { getConfigOrDefault } from './config'
 import { Bundles } from './bundles'
+import debug from 'debug'
+
+const log = debug('onhand:iac')
 
 export async function pack (options: Options, bundles?: Bundles) {
   const outputFolder = path.resolve(
     options.cwd,
     getConfigOrDefault(options.config, c => c.package?.outputFolder)!,
   )
-  console.log(outputFolder)
+  log('outputFolder: %O', bundles)
   rimraf.sync(outputFolder)
   console.log('starting the packaging')
   if (bundles) {

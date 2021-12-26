@@ -9,6 +9,9 @@ import { Bundles } from './bundles'
 import { Options } from './options'
 import { getSeedFiles, getConfigPath } from './seed'
 import { getConfigOrDefault } from './config'
+import debug from 'debug'
+
+const log = debug('onhand:iac')
 
 export async function compile (options: Options): Promise<Bundles> {
   if (options.config?.app?.type === 'api') {
@@ -99,6 +102,7 @@ function loadBundles (stats: any): Bundles {
 }
 
 async function compileApi (options: Options): Promise<Bundles> {
+  log('compiling API')
   const isProd = options.stage === 'prd'
   const root = options.cwd
   const resolve = (uri: string) => path.resolve(root, uri)
@@ -305,13 +309,16 @@ async function compileApi (options: Options): Promise<Bundles> {
 }
 
 async function compileSite (options: Options): Promise<Bundles> {
+  log('compiling Site')
   if (!options.config?.build?.webpack) {
+    log('webpack not configured')
     return []
   }
   const webpackConfigPath = path.resolve(
     options.cwd,
     options.config.build.webpack,
   )
+  log('webpack config path: %s', webpackConfigPath)
   const webpackConfig = await import(webpackConfigPath)
   const config =
     path.extname(webpackConfigPath) === '.js'
@@ -332,44 +339,65 @@ async function compileSite (options: Options): Promise<Bundles> {
       (p: any) => p.constructor.name !== 'HotModuleReplacementPlugin',
     )
   }
-  const compiler = webpack(config)
+  log('webpack config: %O', config)
+
   return new Promise((resolve, reject) => {
-    compiler.run((err, stats) => {
-      if (err) {
-        console.error(err)
-        reject(err)
-      } else if (stats) {
-        const info = stats.toJson()
-        if (stats.hasErrors()) {
-          console.error(info.errors)
-          reject(info.errors)
-          return
+    try {
+      const compiler = webpack(config)
+      log('webpack instantiated')
+      compiler.run(function (err, stats) {
+        // eslint-disable-next-line prefer-rest-params
+        console.log(arguments)
+        try {
+          if (err) {
+            console.error(err)
+            reject(err)
+            return
+          } else if (stats) {
+            log('webpack stats: %O', stats)
+            const info = stats.toJson()
+            if (stats.hasErrors()) {
+              console.error(info.errors)
+              reject(info.errors)
+              return
+            }
+            console.log(
+              stats.toString({
+                colors: true,
+                hash: false,
+                version: true,
+                timings: true,
+                assets: true,
+                chunks: false,
+                chunkGroups: false,
+                chunkModules: false,
+                chunkOrigins: false,
+                children: false,
+                source: true,
+                errors: true,
+                errorDetails: true,
+                warnings: false,
+                publicPath: false,
+                modules: true,
+                moduleTrace: false,
+                reasons: false,
+                usedExports: true,
+              }),
+            )
+          }
+          resolve(loadBundles(stats))
+        } catch (error) {
+          console.error(error)
+          reject(error)
+        } finally {
+          compiler.close(err => {
+            console.log(err)
+          })
         }
-        console.log(
-          stats.toString({
-            colors: true,
-            hash: false,
-            version: true,
-            timings: true,
-            assets: true,
-            chunks: false,
-            chunkGroups: false,
-            chunkModules: false,
-            chunkOrigins: false,
-            children: false,
-            source: true,
-            errors: true,
-            errorDetails: true,
-            warnings: false,
-            publicPath: false,
-            modules: true,
-            moduleTrace: false,
-            reasons: false,
-            usedExports: true,
-          }),
-        )
-      }
-      resolve(loadBundles(stats))
-    })
+      })
+    } catch (error) {
+      console.error(error)
+      reject(error)
+    }
   })
 }
