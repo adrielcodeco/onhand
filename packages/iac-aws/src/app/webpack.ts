@@ -10,6 +10,7 @@ import { Options } from './options'
 import { getSeedFiles, getConfigPath } from './seed'
 import { getConfigOrDefault } from './config'
 import debug from 'debug'
+import { projectName } from '#/cdk/resources'
 
 const log = debug('onhand:iac')
 
@@ -186,7 +187,7 @@ async function compileApi (options: Options): Promise<Bundles> {
     }
   }
 
-  const appName = getConfigOrDefault(options.config, c => c.app?.name)!
+  const appName = projectName(options)
 
   config.output = {
     path: output,

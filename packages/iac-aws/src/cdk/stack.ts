@@ -23,7 +23,7 @@ class StackTools {
   }
 
   public get s3ProjectMetadata () {
-    return `${this.project}-${this.options.packageVersion ?? ''}/metadata.zip`
+    return `${this.s3SrcFolder}/metadata.zip`
   }
 
   public getReleasesBucketfromBucketArn () {
