@@ -30,6 +30,8 @@ export type FunctionOptions = {
 
 export function createFunctionsOptions (options: Options) {
   const functions: FunctionOptions[] = []
+  const appName = projectName(options)
+  const packageVersion = options.packageVersion ?? ''
   const openapi = options.openApi!
   for (const routePath in openapi.paths) {
     if (!Object.prototype.hasOwnProperty.call(openapi.paths, routePath)) {
@@ -53,7 +55,7 @@ export function createFunctionsOptions (options: Options) {
       } = manageFunctionMetadata<FunctionMetadata & PoliciesMetadata>(
         operation,
       ).get()
-      const handler = `index.${handlerName}`
+      const handler = `${(appName ?? 'func').replace('.', '-')}.${handlerName}`
       const operationName = operationId ?? className
       const authorizer = operation.security
         ? ((Reflect.ownKeys(operation.security) || [''])[0] as string)
@@ -62,9 +64,7 @@ export function createFunctionsOptions (options: Options) {
       functions.push({
         policies: policies,
         // bucketName: getReleasesBucketName(options),
-        fileKey: `${projectName(options)}-${
-          options.packageVersion ?? ''
-        }/${operationName}.zip`,
+        fileKey: `${appName}-${packageVersion}/${operationName}.zip`,
         operationName,
         functionName: resourceName(options, operationName, false, 'kebab'),
         handler: handler,
@@ -90,14 +90,12 @@ export function createFunctionsOptions (options: Options) {
     const { className, handlerName, policies } = manageFunctionMetadata<
     FunctionMetadata & PoliciesMetadata
     >(sec).get()
-    const handler = `index.${handlerName}`
+    const handler = `${(appName ?? 'func').replace('.', '-')}.${handlerName}`
     const operationName = className
     functions.push({
       policies: policies ?? [],
       // bucketName: getReleasesBucketName(options),
-      fileKey: `${projectName(options)}-${
-        options.packageVersion ?? ''
-      }/${operationName}.zip`,
+      fileKey: `${appName}-${packageVersion}/${operationName}.zip`,
       operationName,
       functionName: resourceName(options, operationName, false, 'kebab'),
       version: options.packageVersion!,

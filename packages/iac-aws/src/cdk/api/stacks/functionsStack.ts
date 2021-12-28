@@ -62,9 +62,10 @@ export class FunctionsStack extends InternalNestedStack {
         description: 'function to apply seeds',
         policies,
         fileKey: `${this.stackTools.s3SrcFolder}/${operationName}.zip`,
-        handler: `${
-          this.stackTools.project ?? 'func'
-        }.onhand-seed-function.handler`,
+        handler: `${(this.stackTools.project ?? 'func').replace(
+          '.',
+          '-',
+        )}-onhand-seed-function.handler`,
         version: this.options.packageVersion ?? '',
         isAuthorizer: false,
       },
