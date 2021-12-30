@@ -50,6 +50,11 @@ function main () {
           default: 'dev',
           type: 'string',
         })
+        yargs.option('promotion', {
+          describe: 'flag that indicate whether the deployment is a promotion',
+          default: 'true',
+          type: 'boolean',
+        })
       },
       argv => {
         (async () => {
@@ -62,6 +67,7 @@ function main () {
                   : false,
             ),
             stage: argv.stage as string,
+            promote: argv.promotion as boolean,
           })
         })().catch(err => {
           console.error(err)
