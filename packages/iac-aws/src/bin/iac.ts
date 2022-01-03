@@ -52,8 +52,9 @@ function main () {
         })
         yargs.option('promotion', {
           describe: 'flag that indicate whether the deployment is a promotion',
-          default: 'true',
+          default: false,
           type: 'boolean',
+          boolean: true,
         })
       },
       argv => {
