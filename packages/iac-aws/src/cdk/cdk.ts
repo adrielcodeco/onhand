@@ -16,7 +16,12 @@ import debug from 'debug'
 
 const log = debug('onhand:iac')
 
-export async function cdk (options: Options, promote: boolean, functions: any) {
+export async function cdk (
+  options: Options,
+  promote: boolean,
+  newVersion: boolean,
+  functions: any,
+) {
   const output = options.config?.deploy?.outputFolder ?? '.out/cdk'
   const argv: Arguments = {
     _: [Command.DEPLOY],
@@ -30,6 +35,7 @@ export async function cdk (options: Options, promote: boolean, functions: any) {
       'aws-cdk:enableDiffNoFail=true',
       'options=' + JSON.stringify(options),
       'promote=' + JSON.stringify(!!promote),
+      'newVersion=' + JSON.stringify(!!newVersion),
       'functions=' + JSON.stringify(functions),
     ],
   }
@@ -95,8 +101,9 @@ export async function deployStacks (args: {
   sdkProvider: SdkProvider
   options: Options
   promote: boolean
+  newVersion: boolean
 }) {
-  const { cli, configuration, options, sdkProvider, promote } = args
+  const { cli, configuration, options, sdkProvider, promote, newVersion } = args
 
   const toolkitStackName = ToolkitInfo.determineName(
     configuration.settings.get(['toolkitStackName']),
@@ -121,7 +128,7 @@ export async function deployStacks (args: {
     }
   }
 
-  if (!promote) {
+  if (!promote || newVersion) {
     log('Assets upload')
     await uploadAssets(options, await (sdkProvider as any).defaultCredentials())
   }

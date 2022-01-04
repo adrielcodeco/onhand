@@ -10,7 +10,7 @@ const log = debug('onhand:iac')
 
 export async function deploy (
   options: Options,
-  deployOptions?: { noBuild: boolean, promote: boolean },
+  deployOptions?: { noBuild: boolean, promote: boolean, newVersion: boolean },
 ) {
   Container.set('options', options)
 
@@ -31,6 +31,7 @@ export async function deploy (
   const { cli, configuration, sdkProvider } = await cdk(
     options,
     !!deployOptions?.promote,
+    !!deployOptions?.newVersion,
     functions,
   )
 
@@ -40,5 +41,6 @@ export async function deploy (
     sdkProvider,
     options,
     promote: !!deployOptions?.promote,
+    newVersion: !!deployOptions?.newVersion,
   })
 }

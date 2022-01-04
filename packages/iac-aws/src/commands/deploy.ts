@@ -6,7 +6,12 @@ const log = debug('onhand:iac')
 
 export async function deployCommand (
   configPath?: string,
-  options?: { noBuild: boolean, stage?: string, promote?: boolean },
+  options?: {
+    noBuild: boolean
+    stage?: string
+    promote?: boolean
+    newVersion?: boolean
+  },
 ) {
   console.log('preparing to deploy')
   const config = loadConfig({ stage: options?.stage }, configPath)
@@ -14,6 +19,7 @@ export async function deployCommand (
   const deployOptions = {
     noBuild: !!options?.noBuild,
     promote: !!options?.promote,
+    newVersion: !!options?.newVersion,
   }
   await deploy(config, deployOptions)
 }

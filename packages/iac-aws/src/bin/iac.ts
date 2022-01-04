@@ -56,6 +56,13 @@ function main () {
           type: 'boolean',
           boolean: true,
         })
+        yargs.option('newVersion', {
+          describe:
+            'flag that indicate whether the deployment have a new version number',
+          default: false,
+          type: 'boolean',
+          boolean: true,
+        })
       },
       argv => {
         (async () => {
@@ -69,6 +76,7 @@ function main () {
             ),
             stage: argv.stage as string,
             promote: argv.promotion as boolean,
+            newVersion: argv.newVersion as boolean,
           })
         })().catch(err => {
           console.error(err)
