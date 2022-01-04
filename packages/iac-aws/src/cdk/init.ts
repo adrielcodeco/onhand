@@ -7,9 +7,12 @@ export async function init (options: Options) {
   Container.set('options', options)
   const functions =
     options.config?.app?.type === 'api' ? createFunctionsOptions(options) : {}
+  const promote = false
+  const newVersion = false
   const { cli, configuration, sdkProvider } = await cdk(
     options,
-    false,
+    promote,
+    newVersion,
     functions,
   )
   await deployStacks({
@@ -17,6 +20,7 @@ export async function init (options: Options) {
     configuration,
     sdkProvider,
     options,
-    promote: true,
+    promote,
+    newVersion,
   })
 }

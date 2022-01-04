@@ -6,5 +6,5 @@ export async function promoteCommand (
   options?: { stage?: string },
 ) {
   const config = loadConfig({ stage: options?.stage }, configPath)
-  await deploy(config, { noBuild: true, promote: true })
+  await deploy(config, { noBuild: true, promote: true, newVersion: false })
 }
