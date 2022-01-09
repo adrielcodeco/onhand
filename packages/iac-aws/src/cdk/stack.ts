@@ -9,8 +9,8 @@ class StackTools {
   public readonly scope: cdk.Construct
   public readonly options: Options
   public readonly project: string
-  public bucket!: s3.IBucket
   public readonly promote: boolean = Container.get('promote')
+  private _releaseBucket!: s3.IBucket
 
   constructor (scope: cdk.Construct, options: Options) {
     this.scope = scope
@@ -26,10 +26,13 @@ class StackTools {
     return `${this.s3SrcFolder}/metadata.zip`
   }
 
-  public getReleasesBucketfromBucketArn () {
+  public get releaseBucket () {
+    if (this._releaseBucket) {
+      return this._releaseBucket
+    }
     const bucketName = getReleasesBucketName(this.options)
     const s3AssetsArn = s3Arn(bucketName)
-    return (this.bucket = s3.Bucket.fromBucketArn(
+    return (this._releaseBucket = s3.Bucket.fromBucketArn(
       this.scope,
       _.camelCase(bucketName),
       s3AssetsArn,

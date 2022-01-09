@@ -1,9 +1,10 @@
 /* eslint-disable no-new */
 import * as cdk from '@aws-cdk/core'
 import * as s3 from '@aws-cdk/aws-s3'
+import * as iam from '@aws-cdk/aws-iam'
+import * as route53 from '@aws-cdk/aws-route53'
 import * as cloudfront from '@aws-cdk/aws-cloudfront'
 import * as acm from '@aws-cdk/aws-certificatemanager'
-import * as route53 from '@aws-cdk/aws-route53'
 import * as targets from '@aws-cdk/aws-route53-targets'
 import { Container } from 'typedi'
 import { Options, resourceName } from '#/app/options'
@@ -16,14 +17,17 @@ import {
   getCFDistributionDN,
   getCFOriginAccessIdentity,
 } from '#/cdk/resources'
+import { InternalNestedStack } from '#/cdk/stack'
 
-export class CloudFrontSiteStack extends cdk.NestedStack {
+export class CloudFrontSiteStack extends InternalNestedStack {
   private distribution!: cloudfront.CloudFrontWebDistribution
   private readonly certificate?: acm.ICertificate
   private readonly domainAliases?: string[]
+  private bucket!: s3.IBucket
+  private originAccessIdentity!: cloudfront.OriginAccessIdentity
 
-  constructor (scope: cdk.Construct, private readonly options: Options) {
-    super(scope, getCloudFormationStackName(options))
+  constructor (scope: cdk.Construct, options: Options) {
+    super(scope, options, getCloudFormationStackName(options))
 
     this.domainAliases =
       this.options.config?.cloudFront?.site?.domainAliases?.filter(a => !!a)
@@ -41,7 +45,9 @@ export class CloudFrontSiteStack extends cdk.NestedStack {
   }
 
   make () {
+    this.getBucket()
     this.createSiteDistribution()
+    this.addToBucketResourcePolicy()
     this.updateRoute53Records()
     return this
   }
@@ -52,23 +58,17 @@ export class CloudFrontSiteStack extends cdk.NestedStack {
     return instance.make()
   }
 
+  private getBucket () {
+    const bucketName = getAssetsBucketName(this.options)
+    const s3AssetsArn = s3Arn(bucketName)
+    this.bucket = s3.Bucket.fromBucketArn(this, bucketName, s3AssetsArn)
+  }
+
   private createSiteDistribution () {
     if (!this.options.config?.cloudFront?.site) {
       return
     }
-    const bucketName = getAssetsBucketName(this.options)
-    const s3AssetsArn = s3Arn(bucketName)
-    const bucket = s3.Bucket.fromBucketArn(this, bucketName, s3AssetsArn)
-    const cfOriginAccessIdentity = getCFOriginAccessIdentity(this.options)
-    const originAccessIdentityName = Container.get<string>(
-      cfOriginAccessIdentity,
-    )
-    const originAccessIdentity =
-      cloudfront.OriginAccessIdentity.fromOriginAccessIdentityName(
-        this,
-        'cf-OriginAccessIdentity',
-        originAccessIdentityName,
-      )
+    this.createOriginAccessIdentity()
     const distName = getCFDistributionName(this.options)
     this.distribution = new cloudfront.CloudFrontWebDistribution(
       this,
@@ -77,8 +77,8 @@ export class CloudFrontSiteStack extends cdk.NestedStack {
         originConfigs: [
           {
             s3OriginSource: {
-              s3BucketSource: bucket,
-              originAccessIdentity,
+              s3BucketSource: this.bucket,
+              originAccessIdentity: this.originAccessIdentity,
             },
             behaviors: [
               {
@@ -110,7 +110,7 @@ export class CloudFrontSiteStack extends cdk.NestedStack {
                   this.certificate!,
                   {
                     securityPolicy:
-                      cloudfront.SecurityPolicyProtocol.TLS_V1_2_2019,
+                      cloudfront.SecurityPolicyProtocol.TLS_V1_2_2021,
                     aliases: this.domainAliases,
                   },
                 ),
@@ -130,6 +130,25 @@ export class CloudFrontSiteStack extends cdk.NestedStack {
       value: this.distribution.distributionDomainName,
       exportName: distributionDomainNameExportName,
     })
+  }
+
+  private createOriginAccessIdentity () {
+    const cfOriginAccessIdentity = getCFOriginAccessIdentity(this.options)
+    this.originAccessIdentity = new cloudfront.OriginAccessIdentity(
+      this,
+      cfOriginAccessIdentity,
+      {},
+    )
+  }
+
+  private addToBucketResourcePolicy () {
+    this.bucket.addToResourcePolicy(
+      new iam.PolicyStatement({
+        actions: ['s3:GetObject'],
+        resources: [this.bucket.arnForObjects('*')],
+        principals: [this.originAccessIdentity.grantPrincipal],
+      }),
+    )
   }
 
   private updateRoute53Records () {

@@ -18,7 +18,6 @@ export class FunctionsStack extends InternalNestedStack {
   }
 
   make () {
-    this.stackTools.getReleasesBucketfromBucketArn()
     this.createLambdasAndAliases()
     this.createSeedFunction()
     return this
@@ -148,7 +147,7 @@ export class FunctionsStack extends InternalNestedStack {
         }deployed on: ${new Date().toISOString()}`,
         functionName: functionOptions.functionName,
         code: lambda.Code.fromBucket(
-          this.stackTools.bucket,
+          this.stackTools.releaseBucket,
           functionOptions.fileKey,
           undefined,
         ),
