@@ -137,7 +137,9 @@ export class CloudFrontSiteStack extends InternalNestedStack {
     this.originAccessIdentity = new cloudfront.OriginAccessIdentity(
       this,
       cfOriginAccessIdentity,
-      {},
+      {
+        comment: cfOriginAccessIdentity,
+      },
     )
   }
 

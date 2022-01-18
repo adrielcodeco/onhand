@@ -55,7 +55,7 @@ export function createFunctionsOptions (options: Options) {
       } = manageFunctionMetadata<FunctionMetadata & PoliciesMetadata>(
         operation,
       ).get()
-      const handler = `${(appName ?? 'func').replace('.', '-')}.${handlerName}`
+      const handler = `index.${handlerName}`
       const operationName = operationId ?? className
       const authorizer = operation.security
         ? ((Reflect.ownKeys(operation.security) || [''])[0] as string)
@@ -90,7 +90,7 @@ export function createFunctionsOptions (options: Options) {
     const { className, handlerName, policies } = manageFunctionMetadata<
     FunctionMetadata & PoliciesMetadata
     >(sec).get()
-    const handler = `${(appName ?? 'func').replace('.', '-')}.${handlerName}`
+    const handler = `index.${handlerName}`
     const operationName = className
     functions.push({
       policies: policies ?? [],
