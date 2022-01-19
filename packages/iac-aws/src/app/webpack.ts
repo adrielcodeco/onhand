@@ -191,7 +191,7 @@ async function compileApi (options: Options): Promise<Bundles> {
 
   config.output = {
     path: output,
-    filename: `${(appName ?? 'func').replace('.', '-')}-[name].js`,
+    filename: '[name].js',
     publicPath: '/',
     library: appName,
     libraryTarget: 'umd',

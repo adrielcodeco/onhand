@@ -129,6 +129,7 @@ async function packBundles (options: Options, bundles: Bundles) {
 
       for (const file of bundle.files) {
         let fileName = file
+        console.log(`file: ${file}, entrypointFile: ${bundle.entrypointFile}`)
         if (bundle.entrypointFile === file) {
           fileName = 'index.js'
         }
