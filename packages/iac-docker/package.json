@@ -1,6 +1,6 @@
 {
   "name": "@onhand/iac-docker",
-  "version": "2.0.10",
+  "version": "2.0.11",
   "description": "iac-docker is part of the @onhand framework",
   "author": "Codeco <adrielcodeco@hotmail.com>",
   "homepage": "https://github.com/adrielcodeco/onhand/tree/main/packages/iac-docker#readme",
@@ -29,7 +29,7 @@
     "url": "https://github.com/adrielcodeco/onhand/issues"
   },
   "dependencies": {
-    "@onhand/openapi": "^2.0.10",
+    "@onhand/openapi": "^2.0.11",
     "aws-lambda": "^1.0.7",
     "cors": "^2.8.5",
     "express": "^4.17.1",
