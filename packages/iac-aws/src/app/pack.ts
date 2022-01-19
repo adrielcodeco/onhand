@@ -108,6 +108,7 @@ async function packBundles (options: Options, bundles: Bundles) {
   }
 
   for (const bundle of bundles) {
+    const entrypointFile = bundle.entrypointFile || `${bundle.entrypoint}.js`
     await new Promise((resolve, reject) => {
       let ended = false
       const bundleFile = path.resolve(
@@ -129,8 +130,7 @@ async function packBundles (options: Options, bundles: Bundles) {
 
       for (const file of bundle.files) {
         let fileName = file
-        console.log(`file: ${file}, entrypointFile: ${bundle.entrypointFile}`)
-        if (bundle.entrypointFile === file) {
+        if (entrypointFile === file) {
           fileName = 'index.js'
         }
         const stream = fs.createReadStream(
