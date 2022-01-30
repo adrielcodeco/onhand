@@ -76,6 +76,7 @@ export class ApiGatewayStack extends cdk.NestedStack {
     }
 
     const restApiName = resourceName(this.options, 'api')
+    const logGroup = new logs.LogGroup(this, `${restApiName}-AccessLogs`)
     this.api = new apigateway.RestApi(this, restApiName, {
       restApiName,
       deployOptions: {
@@ -84,6 +85,11 @@ export class ApiGatewayStack extends cdk.NestedStack {
           stage: this.options.stage,
         },
         loggingLevel: apigateway.MethodLoggingLevel.INFO,
+        accessLogDestination: new apigateway.LogGroupLogDestination(logGroup),
+        accessLogFormat: apigateway.AccessLogFormat.custom(
+          // eslint-disable-next-line max-len
+          '{ "requestTime": "$context.requestTime", "requestId": "$context.requestId", "httpMethod": "$context.httpMethod", "path": "$context.path", "resourcePath": "$context.resourcePath", "routeKey": "$context.routeKey", "status": $context.status, "responseLatency": $context.responseLatency, "xrayTraceId": "$context.xrayTraceId", "integrationRequestId": "$context.integration.requestId", "functionResponseStatus": "$context.integration.status", "integrationLatency": "$context.integration.latency", "integrationServiceStatus": "$context.integration.integrationStatus", "authorizeResultStatus": "$context.authorize.status", "authorizerServiceStatus": "$context.authorizer.status", "authorizerLatency": "$context.authorizer.latency", "authorizerRequestId": "$context.authorizer.requestId", "authorizeError": "$context.authorize.error", "authorizerError": "$context.authorizer.error", "authenticateError": "$context.authenticate.error" }',
+        ),
         metricsEnabled: true,
         dataTraceEnabled: true,
       },
