@@ -2,7 +2,7 @@
 import * as cdk from '@aws-cdk/core'
 import * as lambda from '@aws-cdk/aws-lambda'
 import * as iam from '@aws-cdk/aws-iam'
-// import * as logs from '@aws-cdk/aws-logs'
+import * as logs from '@aws-cdk/aws-logs'
 import Container, { Service } from 'typedi'
 import { Options, resourceName } from '#/app/options'
 // eslint-disable-next-line max-len
@@ -155,10 +155,10 @@ export class FunctionsStack extends InternalNestedStack {
         environment: {
           STAGE: this.options.stage,
         },
-        // logRetention: logs.RetentionDays.ONE_WEEK,
         role: lambdaRole,
         memorySize: 256,
         reservedConcurrentExecutions: undefined,
+        logRetention: logs.RetentionDays.ONE_WEEK,
         timeout: cdk.Duration.minutes(15),
       },
     )
