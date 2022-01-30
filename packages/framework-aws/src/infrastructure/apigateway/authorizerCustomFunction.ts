@@ -134,7 +134,7 @@ export abstract class AuthorizerCustomFunction implements IAuthorizerFunction {
 
   private findWithCaseInsensitive (obj: any, key: string) {
     for (const _key of Object.keys(obj)) {
-      if (new RegExp(key, 'i').test(_key)) {
+      if (_key.toLocaleLowerCase() === key.toLocaleLowerCase()) {
         return obj[_key]
       }
     }
