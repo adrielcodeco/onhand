@@ -40,7 +40,6 @@
     "cross-fetch": "^3.0.6",
     "dynamoose": "^2.8.3",
     "inversify": "^6.0.1",
-    "inversify-binding-decorators": "^4.0.0",
     "jsonwebtoken": "^8.5.1",
     "jwk-to-pem": "^2.0.4",
     "lodash": "^4.17.21",
