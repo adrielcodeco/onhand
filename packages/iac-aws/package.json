@@ -1,6 +1,6 @@
 {
   "name": "@onhand/iac-aws",
-  "version": "2.0.15",
+  "version": "2.0.16",
   "description": "iac-aws is part of the @onhand framework",
   "author": "codeco <adrielcodeco@hotmail.com>",
   "homepage": "https://github.com/adrielcodeco/onhand/tree/main/packages/iac-aws#readme",
@@ -78,8 +78,8 @@
     "@aws-cdk/core": "^1.134.0",
     "@aws-cdk/custom-resources": "^1.134.0",
     "@aws-cdk/pipelines": "^1.134.0",
-    "@onhand/framework-aws": "^2.0.15",
-    "@onhand/openapi": "^2.0.15",
+    "@onhand/framework-aws": "^2.0.16",
+    "@onhand/openapi": "^2.0.16",
     "archiver": "^5.2.0",
     "aws-cdk": "^2.0.0",
     "cdk-assume-role-credential-plugin": "^1.4.0",
