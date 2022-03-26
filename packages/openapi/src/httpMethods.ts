@@ -12,3 +12,10 @@ export enum HttpMethods {
 export function isHttpMethod (method: any): method is HttpMethods {
   return typeof method === 'string' && method in HttpMethods
 }
+
+export function toMethod (method: string): HttpMethods {
+  if (!isHttpMethod(method)) {
+    throw new Error(`Invalid HTTP method: ${method}`)
+  }
+  return method
+}

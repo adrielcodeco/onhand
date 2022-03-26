@@ -12,10 +12,9 @@ import {
   HttpMethods,
 } from '@onhand/framework/#/infrastructure/aFunction'
 import { Unauthorized, UnprocessableEntity } from '@onhand/jsend'
-import { manageParameterMetadata } from '@onhand/openapi'
+import { manageFunctionMetadata } from '@onhand/openapi'
 import { Ctor } from '@onhand/utils'
 import { ACRule } from '@onhand/accesscontrol'
-// eslint-disable-next-line max-len
 import { CheckGrantUseCase } from '@onhand/business-aws/#/useCases/accessControl/checkGrantUseCase'
 import { AWSFunctionContainerContext } from '#/infrastructure/awsFunctionContainerContext'
 import { AWSFunctionHandleContext } from '#/infrastructure/awsFunctionHandleContext'
@@ -71,22 +70,53 @@ export abstract class ApiGatewayFunction extends AFunction {
   protected async inputAdapter (event: E): Promise<any> {
     const input: any = {}
     const InputAdapterType = this.inputAdapterType
-    const parameterMetadata = manageParameterMetadata(this).get()
-    if (parameterMetadata?.body) {
+    const parameterMetadata = manageFunctionMetadata(this).get()
+    if (parameterMetadata?.operation.requestBody) {
       Object.assign(input, JSON.parse(event.body ?? '{}'))
     }
-    if (parameterMetadata?.query) {
-      Object.assign(
-        input,
+    const queryParameters = parameterMetadata?.operation.parameters?.filter(
+      p => p && 'in' in p && p.in === 'query',
+    )
+    if (queryParameters?.length) {
+      const queryString = Object.assign(
+        {},
         event.queryStringParameters,
         event.multiValueQueryStringParameters,
       )
+      for (const query of queryParameters) {
+        if ('name' in query && query.name in queryString) {
+          input[query.name] = queryString[query.name]
+        }
+      }
     }
-    if (parameterMetadata?.path) {
-      Object.assign(input, event.pathParameters)
+    const pathParameters = parameterMetadata?.operation.parameters?.filter(
+      p => p && 'in' in p && p.in === 'path',
+    )
+    if (pathParameters?.length) {
+      const parameters: any = Object.assign({}, event.pathParameters)
+      for (const query of pathParameters) {
+        if ('name' in query && query.name in parameters) {
+          input[query.name] = parameters[query.name]
+        }
+      }
     }
-    if (parameterMetadata?.cookie) {
-      // TODO: implement cookie parameters
+    const cookieParameters = parameterMetadata?.operation.parameters?.filter(
+      p => p && 'in' in p && p.in === 'cookie',
+    )
+    if (cookieParameters?.length) {
+      const cookies: any =
+        event.headers?.cookie
+          ?.split(';')
+          ?.reduce((accumulator: any, currentValue) => {
+            const [key, value] = currentValue.split('=')
+            accumulator[key.trim()] = value
+            return accumulator
+          }, {}) ?? {}
+      for (const query of cookieParameters) {
+        if ('name' in query && query.name in cookies) {
+          input[query.name] = cookies[query.name]
+        }
+      }
     }
     const inputAdapter = new InputAdapterType()
     Object.assign(inputAdapter, input)

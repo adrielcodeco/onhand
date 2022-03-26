@@ -2,7 +2,11 @@ import { transform } from 'lodash'
 import { Options } from './options'
 
 export function getOpenAPI (options: Options): string {
-  return JSON.stringify(notUndefinedDeep(options.openApi), null, 1)
+  return JSON.stringify(
+    notUndefinedDeep(options.metadata?.toOpenApi()),
+    null,
+    1,
+  )
 }
 
 function notUndefinedDeep (obj: any) {

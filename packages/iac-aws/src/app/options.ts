@@ -1,6 +1,6 @@
 import _ from 'lodash'
 import { Config } from '#/app/config'
-import { OpenAPIV3 } from 'openapi-types'
+import { OnHandMetadata } from '@onhand/openapi'
 
 export interface Options {
   stage: string
@@ -14,7 +14,7 @@ export interface Options {
   verbose: boolean
   ignoreErrors: boolean
   localServerPort?: string
-  openApi?: OpenAPIV3.Document
+  metadata?: OnHandMetadata
   config?: Partial<Config>
 }
 

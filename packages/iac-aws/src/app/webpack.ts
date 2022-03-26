@@ -2,9 +2,6 @@ import path from 'path'
 import webpack from 'webpack'
 import rimraf from 'rimraf'
 import _ from 'lodash'
-import { OpenAPIV3 } from 'openapi-types'
-import { isHttpMethod, manageFunctionMetadata } from '@onhand/openapi'
-import { as } from '@onhand/utils'
 import { Bundles } from './bundles'
 import { Options } from './options'
 import { getSeedFiles, getConfigPath } from './seed'
@@ -147,44 +144,24 @@ async function compileApi (options: Options): Promise<Bundles> {
     }
   }
 
-  const openapi = options.openApi!
+  const metadata = options.metadata!
 
-  for (const secKey in openapi.components?.securitySchemes ?? {}) {
-    if (
-      !Object.prototype.hasOwnProperty.call(
-        openapi.components?.securitySchemes!,
-        secKey,
-      )
-    ) {
-      continue
-    }
-    const sec = openapi.components?.securitySchemes![secKey]
-    const {
-      functionFileAbsolutePath: absoluteFilePath,
-      className: functionName,
-    } = manageFunctionMetadata(sec).get()
+  for (const {
+    className: functionName,
+    functionFileAbsolutePath: absoluteFilePath,
+  } of metadata.authorizers ?? []) {
     config.entry[functionName] = absoluteFilePath
   }
 
-  for (const routePath in openapi.paths) {
-    if (!Object.prototype.hasOwnProperty.call(openapi.paths, routePath)) {
-      continue
-    }
-    const pathItemObject: OpenAPIV3.PathItemObject = openapi.paths[routePath]!
-    for (const method in pathItemObject) {
-      if (!Object.prototype.hasOwnProperty.call(pathItemObject, method)) {
-        continue
-      }
-      if (!isHttpMethod(method)) {
-        continue
-      }
-      const operation: OpenAPIV3.OperationObject = as(pathItemObject)[method]
-      const { operationId } = operation
-      const { functionFileAbsolutePath: absoluteFilePath, className } =
-        manageFunctionMetadata(operation).get()
-      const functionName = operationId ?? className
-      config.entry[functionName] = absoluteFilePath
-    }
+  for (const {
+    functionFileAbsolutePath: absoluteFilePath,
+    className,
+    functionMetadata: {
+      operation: { operationId },
+    },
+  } of metadata.handlers ?? []) {
+    const functionName = operationId ?? className
+    config.entry[functionName] = absoluteFilePath
   }
 
   const appName = projectName(options)

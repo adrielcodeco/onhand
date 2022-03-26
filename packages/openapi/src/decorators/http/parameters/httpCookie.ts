@@ -1,17 +1,39 @@
-import 'reflect-metadata'
-import { manageParameterMetadata } from '#/parameterMetadata'
+import { manageFunctionMetadata } from '#/metadata'
 
-export function HttpCookie (type?: any) {
+type HttpCookieInput = {
+  type?: any
+  description?: string
+  required?: boolean
+  deprecated?: boolean
+}
+
+const defaultInput: HttpCookieInput = {
+  required: false,
+  deprecated: false,
+}
+
+export function HttpCookie (input: HttpCookieInput = defaultInput) {
   return (target: any, propertyKey: string, index?: number) => {
+    const { type, description, required, deprecated } = input
     const propertyType =
       type || Reflect.getMetadata('design:type', target, propertyKey)
-    manageParameterMetadata(target).change(metadata => {
-      return Object.assign({}, metadata, {
-        cookie: {
-          name: `${String(target?.name || '')}CookieInput`,
-          type: JSON.stringify(propertyType),
-        },
-      })
+
+    manageFunctionMetadata(target).merge({
+      operation: {
+        parameters: [
+          {
+            name: propertyKey,
+            in: 'cookie',
+            description,
+            required,
+            deprecated,
+            schema: {
+              $ref: `#/components/schemas/${propertyType}`,
+            },
+            style: 'form',
+          },
+        ],
+      },
     })
   }
 }

@@ -1,14 +1,11 @@
 import 'reflect-metadata'
+import { manageFunctionMetadata, manageHandlerMetadata } from '@onhand/openapi'
 import { IAuthorizerFunction } from '#/infrastructure/apigateway/iAuthorizerFunction'
-
-const symbolOnhandAuthorizerMetadata = Symbol.for('onhand-authorizer-metadata')
-
-type FunctionClassType = {
-  new (...args: any[]): IAuthorizerFunction
-}
+import { Ctor } from '@onhand/utils'
 
 export function authorizerHandler (
-  FunctionClass: FunctionClassType,
+  FunctionClass: Ctor<IAuthorizerFunction>,
+  authorizerName = 'default',
 ): (
     event: any,
     context: any,
@@ -24,18 +21,17 @@ export function authorizerHandler (
     await containerContext
     return lambda.handle(event, context, handlerCallback)
   }
-  const handlerMetadata = {
-    provider: 'AWS',
-    className: FunctionClass.name,
-    openapi: {
-      type: 'http',
-      scheme: 'bearer',
-    },
-  }
-  Reflect.defineMetadata(
-    symbolOnhandAuthorizerMetadata,
-    handlerMetadata,
-    handler,
-  )
-  return handler
+  const operationMetadata = manageFunctionMetadata(FunctionClass).get()
+  handler.isHandler = true
+  handler.isAuthorizer = true
+  return manageHandlerMetadata(handler)
+    .merge({
+      className: FunctionClass.name,
+      provider: 'AWS',
+      functionMetadata: operationMetadata,
+      extra: {
+        authorizerName,
+      },
+    })
+    .end()
 }

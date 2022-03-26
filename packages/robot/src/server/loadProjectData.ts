@@ -2,7 +2,7 @@ import path from 'path'
 import glob from 'glob'
 import { Config } from '@onhand/iac-aws/#/app/config'
 import { loadConfig } from '@onhand/iac-aws/#/app/loadConfig'
-import { extractOpenAPISpecification } from '@onhand/openapi'
+import { extractOnhandMetadata } from '@onhand/openapi'
 import { extractModels } from '#/server/reflection/models'
 import { extractRepositories } from '#/server/reflection/repositories'
 import { extractServices } from '#/server/reflection/services'
@@ -19,7 +19,7 @@ export const loadProjectData = async (cwd: string) => {
   const options = loadConfig({ stage: process.env.STAGE }, configPath)
   const config: Partial<Config> = options.config ?? {}
   const openApiFilePath = path.resolve(cwd, config?.app?.openApi!)
-  const openapi = extractOpenAPISpecification(openApiFilePath)
+  const openapi = extractOnhandMetadata(openApiFilePath).toOpenApi()
   const models = await extractModels(cwd, config)
   const repositories = await extractRepositories(cwd, config)
   const services = await extractServices(cwd, config)

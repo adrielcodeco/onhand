@@ -1,17 +1,39 @@
-import 'reflect-metadata'
-import { manageParameterMetadata } from '#/parameterMetadata'
+import { manageFunctionMetadata } from '#/metadata'
 
-export function HttpHeader (type?: any) {
+type HttpHeaderInput = {
+  type?: any
+  description?: string
+  required?: boolean
+  deprecated?: boolean
+}
+
+const defaultInput: HttpHeaderInput = {
+  required: false,
+  deprecated: false,
+}
+
+export function HttpHeader (input: HttpHeaderInput = defaultInput) {
   return (target: any, propertyKey: string, index?: number) => {
+    const { type, description, required, deprecated } = input
     const propertyType =
       type || Reflect.getMetadata('design:type', target, propertyKey)
-    manageParameterMetadata(target).change(metadata => {
-      return Object.assign({}, metadata, {
-        header: {
-          name: `${String(target?.name || '')}HeaderInput`,
-          type: JSON.stringify(propertyType),
-        },
-      })
+
+    manageFunctionMetadata(target).merge({
+      operation: {
+        parameters: [
+          {
+            name: propertyKey,
+            in: 'header',
+            description,
+            required,
+            deprecated,
+            schema: {
+              $ref: `#/components/schemas/${propertyType}`,
+            },
+            style: 'simple',
+          },
+        ],
+      },
     })
   }
 }

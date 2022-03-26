@@ -1,17 +1,51 @@
-import 'reflect-metadata'
-import { manageParameterMetadata } from '#/parameterMetadata'
+import { manageFunctionMetadata } from '#/metadata'
 
-export function HttpPath (type?: any) {
+type HttpPathInput = {
+  parameterName?: string
+  type?: any
+  description?: string
+  required?: boolean
+  deprecated?: boolean
+}
+
+const defaultInput: HttpPathInput = {
+  required: true,
+  deprecated: false,
+}
+
+export function HttpPath (input: HttpPathInput | string = defaultInput) {
   return (target: any, propertyKey: string, index?: number) => {
+    const name =
+      input && typeof input === 'string'
+        ? input
+        : input &&
+          typeof input === 'object' &&
+          'parameterName' in input &&
+          input.parameterName
+          ? input.parameterName
+          : propertyKey
+    const { type, description, required, deprecated } =
+      typeof input === 'string' ? defaultInput : input
     const propertyType =
       type || Reflect.getMetadata('design:type', target, propertyKey)
-    manageParameterMetadata(target).change(metadata => {
-      return Object.assign({}, metadata, {
-        path: {
-          name: `${String(target?.name || '')}PathInput`,
-          type: JSON.stringify(propertyType),
-        },
-      })
+
+    manageFunctionMetadata(target).merge({
+      operation: {
+        parameters: [
+          {
+            name,
+            in: 'path',
+            description,
+            required,
+            deprecated,
+            schema: {
+              $ref: `#/components/schemas/${propertyType}`,
+            },
+            style: 'simple',
+            explode: true,
+          },
+        ],
+      },
     })
   }
 }

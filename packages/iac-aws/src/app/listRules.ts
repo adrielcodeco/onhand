@@ -5,7 +5,10 @@ import { Options } from '#/app/options'
 export async function listRules (options: Options) {
   const paths: Array<{ path: string, rules: any[] }> = []
 
-  const openApi = options.openApi!
+  const openApi = options.metadata?.toOpenApi()
+  if (!openApi) {
+    return
+  }
   for (const routePath in openApi.paths) {
     if (!Object.prototype.hasOwnProperty.call(openApi.paths, routePath)) {
       continue
@@ -25,13 +28,8 @@ export async function listRules (options: Options) {
       for (const sec in security) {
         const grants = Reflect.get(security, sec)
         for (const grant of grants) {
-          const [
-            effect,
-            action,
-            possession,
-            resource,
-            ...attributes
-          ] = grant.split(':')
+          const [effect, action, possession, resource, ...attributes] =
+            grant.split(':')
           path.rules.push({
             effect,
             action,

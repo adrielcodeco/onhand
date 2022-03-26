@@ -10,11 +10,7 @@ import {
 } from 'aws-lambda'
 import winston from 'winston'
 import expressWinston from 'express-winston'
-import {
-  HttpMethods,
-  isHttpMethod,
-  manageFunctionMetadata,
-} from '@onhand/openapi'
+import { HttpMethods, toMethod } from '@onhand/openapi'
 import { Options } from '#/app/options'
 import { getConfigOrDefault } from '#/app/config'
 
@@ -34,10 +30,6 @@ export async function serve (
 ) {
   console.log('starting server')
   const { localServerPort } = options
-  const openApiFilePath = getConfigOrDefault(
-    options.config,
-    c => c.app?.openApi,
-  )
   const appSrcDir = path.resolve(
     options.cwd,
     getConfigOrDefault(options.config, c => c.app?.src)!,
@@ -45,10 +37,6 @@ export async function serve (
   const envFilePath = serverOptions?.envFile
     ? path.resolve(options.cwd, serverOptions?.envFile)
     : ''
-  if (!openApiFilePath) {
-    throw new Error('OpenApi class file not found')
-  }
-  const openApi = options.openApi!
   const app = express()
   app.use(express.json())
   app.use(cors())
@@ -65,79 +53,50 @@ export async function serve (
       metaField: undefined,
     }),
   )
-  const authorizers: Array<{
-    absoluteFilePath: string
-    className: string
-    handlerName: string
-  }> = []
-  for (const secKey in openApi.components?.securitySchemes ?? {}) {
-    if (
-      !Object.prototype.hasOwnProperty.call(
-        openApi.components?.securitySchemes!,
-        secKey,
-      )
-    ) {
-      continue
-    }
-    const sec = openApi.components?.securitySchemes![secKey]
-    const {
-      functionFileAbsolutePath: absoluteFilePath,
-      className,
-      handlerName,
-    } = manageFunctionMetadata(sec).get()
-    authorizers.push({ absoluteFilePath, className, handlerName })
-  }
-  for (const routePath in openApi.paths) {
-    if (!Object.prototype.hasOwnProperty.call(openApi.paths, routePath)) {
-      continue
-    }
-    const pathItem = openApi.paths[routePath]
-    for (const method in pathItem) {
-      if (!Object.prototype.hasOwnProperty.call(pathItem, method)) {
-        continue
-      }
-      if (!isHttpMethod(method)) {
-        continue
-      }
-      const operation = pathItem[method]!
-      const { operationId, description, security } = operation
-      const authorizerName = security
-        ? ((Reflect.ownKeys(security) || [''])[0] as string)
-        : ''
-      if (authorizerName) {
-        const { absoluteFilePath, handlerName } = authorizers.find(
-          a => a.className === authorizerName,
-        )!
+  if (options.metadata) {
+    for (const handler of options.metadata.handlers) {
+      const {
+        className,
+        handlerName,
+        functionFileAbsolutePath,
+        functionMetadata: {
+          method,
+          path: routePath,
+          operation: { description, operationId, security },
+        },
+      } = handler
+      if (security?.length) {
+        const { functionFileAbsolutePath: authorizerPath, handlerName } =
+          options.metadata.authorizers.find(
+            a => (a.extra.authorizerName ?? 'default') in security[0],
+          )!
         authorizer(
           app,
-          method,
+          toMethod(method),
           routePath,
-          absoluteFilePath,
+          authorizerPath,
           handlerName,
           envFilePath,
         )
       }
-      const {
-        functionFileAbsolutePath: absoluteFilePath,
-        handlerName,
-        className,
-      } = manageFunctionMetadata(operation).get()
-      const fileExt = path.extname(absoluteFilePath)
-      const fileName = path.basename(absoluteFilePath, fileExt)
-      const fileDir = path.dirname(absoluteFilePath)
+      const functionName = operationId ?? className
+      const fileExt = path.extname(functionFileAbsolutePath)
+      const fileName = path.basename(functionFileAbsolutePath, fileExt)
+      const fileDir = path.dirname(functionFileAbsolutePath)
       const srcRelativeFilePath = path.relative(appSrcDir, fileDir)
       const handlerPath = `${srcRelativeFilePath}/${fileName}`
-      const functionName = operationId ?? className
       console.log(
         `onHand - loading lambda: ${functionName} [${handlerPath}*${handlerName}]`,
       )
-      console.log(`         ${description ?? ''}`)
+      if (description) {
+        console.log(`         ${description ?? ''}`)
+      }
       console.log(`         at [${method.toUpperCase()}] ${routePath}`)
       request(
         app,
-        method,
+        toMethod(method),
         routePath,
-        absoluteFilePath,
+        functionFileAbsolutePath,
         handlerName,
         envFilePath,
       )

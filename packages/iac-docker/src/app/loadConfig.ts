@@ -3,7 +3,7 @@ import fs from 'fs'
 import path from 'path'
 import { Options } from './options'
 import { Config, defaultConfig } from './config'
-import { extractOpenAPISpecification } from '@onhand/openapi'
+import { extractOnhandMetadata } from '@onhand/openapi'
 
 const defaultOptions: Options = {
   stage: 'dev',
@@ -72,7 +72,7 @@ export function loadConfig (
             this.cwd,
             this.config.app?.openApi,
           )
-          this._openapi = extractOpenAPISpecification(openApiFilePath)
+          this._openapi = extractOnhandMetadata(openApiFilePath).toOpenApi()
         }
         return this._openapi
       },

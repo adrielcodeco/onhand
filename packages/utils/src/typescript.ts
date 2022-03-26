@@ -1,6 +1,15 @@
 /* eslint-disable @typescript-eslint/ban-types */
 
-export function as<R = any> (obj: any): R {
+export type Primitive =
+  | string
+  | number
+  | bigint
+  | boolean
+  | symbol
+  | null
+  | undefined
+
+export function As<R, T extends R = R> (obj: T): R {
   return obj
 }
 

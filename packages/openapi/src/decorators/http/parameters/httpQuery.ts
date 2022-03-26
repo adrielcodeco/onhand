@@ -1,17 +1,40 @@
-import 'reflect-metadata'
-import { manageParameterMetadata } from '#/parameterMetadata'
+import { manageFunctionMetadata } from '#/metadata'
 
-export function HttpQuery (type?: any) {
+type HttpQueryInput = {
+  type?: any
+  description?: string
+  required?: boolean
+  deprecated?: boolean
+}
+
+const defaultInput: HttpQueryInput = {
+  required: false,
+  deprecated: false,
+}
+
+export function HttpQuery (input: HttpQueryInput = defaultInput) {
   return (target: any, propertyKey: string, index?: number) => {
+    const { type, description, required, deprecated } = input
     const propertyType =
       type || Reflect.getMetadata('design:type', target, propertyKey)
-    manageParameterMetadata(target).change(metadata => {
-      return Object.assign({}, metadata, {
-        query: {
-          name: `${String(target?.name || '')}QueryInput`,
-          type: JSON.stringify(propertyType),
-        },
-      })
+
+    manageFunctionMetadata(target).merge({
+      operation: {
+        parameters: [
+          {
+            name: propertyKey,
+            in: 'query',
+            description,
+            required,
+            deprecated,
+            schema: {
+              $ref: `#/components/schemas/${propertyType}`,
+            },
+            style: 'form',
+            explode: true,
+          },
+        ],
+      },
     })
   }
 }

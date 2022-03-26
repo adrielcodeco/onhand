@@ -27,6 +27,7 @@
     "url": "https://github.com/adrielcodeco/onhand/issues"
   },
   "dependencies": {
+    "@onhand/utils": "^2.0.14",
     "lodash": "^4.17.21",
     "openapi-types": "^10.0.0",
     "reflect-metadata": "^0.1.13"

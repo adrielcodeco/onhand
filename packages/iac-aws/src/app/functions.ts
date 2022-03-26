@@ -1,14 +1,4 @@
-import { OpenAPIV3 } from 'openapi-types'
-import {
-  isHttpMethod,
-  manageFunctionMetadata,
-  FunctionMetadata,
-} from '@onhand/openapi'
-import {
-  PoliciesMetadata,
-  Policy,
-} from '@onhand/framework-aws/#/infrastructure/apigateway/metadata/policiesMetadata'
-import { as } from '@onhand/utils'
+import { Policy } from '@onhand/framework-aws/#/infrastructure/apigateway/metadata/policiesMetadata'
 import { Options, resourceName } from './options'
 import { projectName } from '#/cdk/resources'
 // import { getReleasesBucketName } from '#/cdk/resources'
@@ -32,64 +22,46 @@ export function createFunctionsOptions (options: Options) {
   const functions: FunctionOptions[] = []
   const appName = projectName(options)
   const packageVersion = options.packageVersion ?? ''
-  const openapi = options.openApi!
-  for (const routePath in openapi.paths) {
-    if (!Object.prototype.hasOwnProperty.call(openapi.paths, routePath)) {
-      continue
-    }
-    const pathItemObject: OpenAPIV3.PathItemObject = openapi.paths[routePath]!
-    for (const method in pathItemObject) {
-      if (!Object.prototype.hasOwnProperty.call(pathItemObject, method)) {
-        continue
-      }
-      if (!isHttpMethod(method)) {
-        continue
-      }
-      const operation: OpenAPIV3.OperationObject = as(pathItemObject)[method]
-      const { operationId, description } = operation
-      const {
-        // functionFileAbsolutePath: absoluteFilePath,
-        className,
-        handlerName,
-        policies,
-      } = manageFunctionMetadata<FunctionMetadata & PoliciesMetadata>(
-        operation,
-      ).get()
-      const handler = `index.${handlerName}`
-      const operationName = operationId ?? className
-      const authorizer = operation.security
-        ? ((Reflect.ownKeys(operation.security) || [''])[0] as string)
-        : ''
-
-      functions.push({
-        policies: policies,
-        // bucketName: getReleasesBucketName(options),
-        fileKey: `${appName}-${packageVersion}/${operationName}.zip`,
-        operationName,
-        functionName: resourceName(options, operationName, false, 'kebab'),
-        handler: handler,
-        description: description ?? operationName,
-        version: options.packageVersion!,
-        path: routePath,
+  const metadata = options.metadata!
+  for (const handlerMetadata of metadata.handlers ?? []) {
+    const {
+      className,
+      handlerName,
+      functionMetadata: {
         method,
-        authorizer,
-        isAuthorizer: false,
-      })
-    }
+        path,
+        extra,
+        operation: { description, operationId, security },
+      },
+    } = handlerMetadata
+    const { policies } = extra ?? {}
+    const handler = `index.${handlerName}`
+    const operationName = operationId ?? className
+    const authorizer = security
+      ? ((Reflect.ownKeys(security) || [''])[0] as string)
+      : ''
+    functions.push({
+      policies: policies,
+      // bucketName: getReleasesBucketName(options),
+      fileKey: `${appName}-${packageVersion}/${operationName}.zip`,
+      operationName,
+      functionName: resourceName(options, operationName, false, 'kebab'),
+      handler: handler,
+      description: description ?? operationName,
+      version: options.packageVersion!,
+      path,
+      method,
+      authorizer,
+      isAuthorizer: false,
+    })
   }
-  for (const secKey in openapi.components?.securitySchemes ?? {}) {
-    if (
-      !Object.prototype.hasOwnProperty.call(
-        openapi.components?.securitySchemes!,
-        secKey,
-      )
-    ) {
-      continue
-    }
-    const sec = openapi.components?.securitySchemes![secKey]
-    const { className, handlerName, policies } = manageFunctionMetadata<
-    FunctionMetadata & PoliciesMetadata
-    >(sec).get()
+  for (const authorizerMetadata of metadata.authorizers ?? []) {
+    const {
+      className,
+      handlerName,
+      functionMetadata: { extra },
+    } = authorizerMetadata
+    const { policies } = extra ?? {}
     const handler = `index.${handlerName}`
     const operationName = className
     functions.push({

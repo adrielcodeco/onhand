@@ -1,13 +1,14 @@
-import { managePathMetadata } from '#/pathMetadata'
-
-type Constructor<T> = { new (...args: any[]): T }
+import { Ctor } from '@onhand/utils'
+import { manageFunctionMetadata } from '#/metadata/functionMetadata'
 
 export function Authenticated (name: string | null, ...permissions: string[]) {
-  return (constructor: Constructor<any>) => {
-    managePathMetadata(constructor).setAuthorized({
-      name: name ?? 'default',
-      permissions,
-    })
-    return constructor
+  return (constructor: Ctor<any>) => {
+    return manageFunctionMetadata(constructor)
+      .merge({
+        operation: {
+          security: [{ [name ?? 'default']: permissions }],
+        },
+      })
+      .end()
   }
 }

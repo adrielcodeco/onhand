@@ -1,15 +1,14 @@
 import { HttpMethods } from '#/httpMethods'
 import { Path } from '#/decorators/path'
-
-type Constructor<T> = { new (...args: any[]): T }
+import { Ctor } from '@onhand/utils'
 
 export function HttpMethod (path: string, method: HttpMethods) {
-  return (constructor: Constructor<any>) => {
+  return (constructor: Ctor<any>) => {
     const pathItem: {
       summary?: string
       description?: string
       operationId?: string
-      deprecated?: string
+      deprecated?: boolean
     } = {}
     try {
       const instance = Reflect.construct(constructor, [])
