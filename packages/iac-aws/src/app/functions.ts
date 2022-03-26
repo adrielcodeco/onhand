@@ -41,7 +41,7 @@ export function createFunctionsOptions (options: Options) {
       ? ((Reflect.ownKeys(security) || [''])[0] as string)
       : ''
     functions.push({
-      policies: policies,
+      policies: policies ?? [],
       // bucketName: getReleasesBucketName(options),
       fileKey: `${appName}-${packageVersion}/${operationName}.zip`,
       operationName,
