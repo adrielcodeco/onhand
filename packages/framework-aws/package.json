@@ -1,6 +1,6 @@
 {
   "name": "@onhand/framework-aws",
-  "version": "2.0.14",
+  "version": "2.0.15",
   "description": "framework-aws is part of the @onhand framework",
   "author": "Codeco <adrielcodeco@hotmail.com>",
   "homepage": "https://github.com/adrielcodeco/onhand/tree/main/packages/framework-aws#readme",
@@ -26,12 +26,12 @@
     "url": "https://github.com/adrielcodeco/onhand/issues"
   },
   "dependencies": {
-    "@onhand/business": "^2.0.14",
-    "@onhand/business-aws": "^2.0.14",
-    "@onhand/controller": "^2.0.14",
-    "@onhand/framework": "^2.0.14",
-    "@onhand/openapi": "^2.0.14",
-    "@onhand/utils": "^2.0.14",
+    "@onhand/business": "^2.0.15",
+    "@onhand/business-aws": "^2.0.15",
+    "@onhand/controller": "^2.0.15",
+    "@onhand/framework": "^2.0.15",
+    "@onhand/openapi": "^2.0.15",
+    "@onhand/utils": "^2.0.15",
     "accesscontrol": "^2.2.1",
     "amazon-cognito-identity-js": "^5.2.3",
     "aws-lambda": "^1.0.7",
