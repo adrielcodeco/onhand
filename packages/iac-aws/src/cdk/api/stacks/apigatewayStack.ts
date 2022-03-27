@@ -87,8 +87,28 @@ export class ApiGatewayStack extends cdk.NestedStack {
         loggingLevel: apigateway.MethodLoggingLevel.INFO,
         accessLogDestination: new apigateway.LogGroupLogDestination(logGroup),
         accessLogFormat: apigateway.AccessLogFormat.custom(
-          // eslint-disable-next-line max-len
-          '{ "requestTime": "$context.requestTime", "requestId": "$context.requestId", "httpMethod": "$context.httpMethod", "path": "$context.path", "resourcePath": "$context.resourcePath", "routeKey": "$context.routeKey", "status": $context.status, "responseLatency": $context.responseLatency, "xrayTraceId": "$context.xrayTraceId", "integrationRequestId": "$context.integration.requestId", "functionResponseStatus": "$context.integration.status", "integrationLatency": "$context.integration.latency", "integrationServiceStatus": "$context.integration.integrationStatus", "authorizeResultStatus": "$context.authorize.status", "authorizerServiceStatus": "$context.authorizer.status", "authorizerLatency": "$context.authorizer.latency", "authorizerRequestId": "$context.authorizer.requestId", "authorizeError": "$context.authorize.error", "authorizerError": "$context.authorizer.error", "authenticateError": "$context.authenticate.error" }',
+          '{' +
+            '  "requestTime": "$context.requestTime",' +
+            '  "requestId": "$context.requestId",' +
+            '  "httpMethod": "$context.httpMethod",' +
+            '  "path": "$context.path",' +
+            '  "resourcePath": "$context.resourcePath",' +
+            '  "routeKey": "$context.routeKey",' +
+            '  "status": $context.status,' +
+            '  "responseLatency": $context.responseLatency,' +
+            '  "xrayTraceId": "$context.xrayTraceId",' +
+            '  "integrationRequestId": "$context.integration.requestId",' +
+            '  "functionResponseStatus": "$context.integration.status",' +
+            '  "integrationLatency": "$context.integration.latency",' +
+            '  "integrationServiceStatus": "$context.integration.integrationStatus",' +
+            '  "authorizeResultStatus": "$context.authorize.status",' +
+            '  "authorizerServiceStatus": "$context.authorizer.status",' +
+            '  "authorizerLatency": "$context.authorizer.latency",' +
+            '  "authorizerRequestId": "$context.authorizer.requestId",' +
+            '  "authorizeError": "$context.authorize.error",' +
+            '  "authorizerError": "$context.authorizer.error",' +
+            '  "authenticateError": "$context.authenticate.error"' +
+            '}',
         ),
         metricsEnabled: true,
         dataTraceEnabled: true,
@@ -138,14 +158,14 @@ export class ApiGatewayStack extends cdk.NestedStack {
 
   private createAuthorizerFunction () {
     const authorizers = this.functions.filter(f => f.isAuthorizer)
-    for (const { operationName, functionName } of authorizers) {
+    for (const { functionName, authorizer } of authorizers) {
       const alias = this.options.stage
       const authorizerFunc = lambda.Function.fromFunctionArn(
         this,
         resourceName(this.options, functionName),
         `arn:aws:lambda:${this.region}:${this.account}:function:${functionName}:${alias}`,
       )
-      this.createAuthAuthorizers(operationName, authorizerFunc)
+      this.createAuthAuthorizers(authorizer!, authorizerFunc)
     }
   }
 
@@ -172,7 +192,7 @@ export class ApiGatewayStack extends cdk.NestedStack {
   }
 
   private createRoutes () {
-    const routes = this.functions.filter(f => f.path)
+    const routes = this.functions.filter(f => f.path && !f.isAuthorizer)
 
     for (const {
       operationName,

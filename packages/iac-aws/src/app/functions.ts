@@ -37,9 +37,11 @@ export function createFunctionsOptions (options: Options) {
     const { policies } = extra ?? {}
     const handler = `index.${handlerName}`
     const operationName = operationId ?? className
-    const authorizer = security
-      ? ((Reflect.ownKeys(security) || [''])[0] as string)
-      : ''
+    const authorizer =
+      (security ?? [])
+        .map(sec => Object.keys(sec).shift())
+        .filter(Boolean)
+        .shift() ?? ''
     functions.push({
       policies: policies ?? [],
       // bucketName: getReleasesBucketName(options),
@@ -61,7 +63,7 @@ export function createFunctionsOptions (options: Options) {
       handlerName,
       functionMetadata: { extra },
     } = authorizerMetadata
-    const { policies } = extra ?? {}
+    const { authorizerName, policies } = extra ?? {}
     const handler = `index.${handlerName}`
     const operationName = className
     functions.push({
@@ -73,6 +75,7 @@ export function createFunctionsOptions (options: Options) {
       version: options.packageVersion!,
       handler: handler,
       description: `deployed on: ${new Date().toISOString()}`,
+      authorizer: authorizerName ?? 'default',
       isAuthorizer: true,
     })
   }

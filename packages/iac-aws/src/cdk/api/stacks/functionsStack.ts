@@ -1,11 +1,9 @@
-/* eslint-disable no-new */
 import * as cdk from '@aws-cdk/core'
 import * as lambda from '@aws-cdk/aws-lambda'
 import * as iam from '@aws-cdk/aws-iam'
 import * as logs from '@aws-cdk/aws-logs'
 import Container, { Service } from 'typedi'
 import { Options, resourceName } from '#/app/options'
-// eslint-disable-next-line max-len
 import { Policy } from '@onhand/framework-aws/#/infrastructure/apigateway/metadata/policiesMetadata'
 import { FunctionOptions } from '#/app/functions'
 import { getFunctionsStackName } from '#/cdk/resources'
