@@ -33,12 +33,12 @@
     "@onhand/openapi": "^2.0.17",
     "@onhand/utils": "^2.0.17",
     "accesscontrol": "^2.2.1",
-    "amazon-cognito-identity-js": "^5.2.3",
+    "amazon-cognito-identity-js": "^5.2.8",
     "aws-lambda": "^1.0.7",
-    "aws-sdk": "^2.1042.0",
+    "aws-sdk": "^2.1101.0",
     "class-validator": "^0.13.2",
-    "cross-fetch": "^3.0.6",
-    "dynamoose": "^2.8.3",
+    "cross-fetch": "^3.1.5",
+    "dynamoose": "^2.8.5",
     "inversify": "^6.0.1",
     "jsonwebtoken": "^8.5.1",
     "jwk-to-pem": "^2.0.4",
@@ -46,7 +46,7 @@
     "node-cache": "^5.1.2",
     "pify": "^5.0.0",
     "reflect-metadata": "^0.1.13",
-    "winston": "^3.3.3"
+    "winston": "^3.6.0"
   },
   "jest": {
     "globals": {

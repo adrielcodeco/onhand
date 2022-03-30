@@ -16,7 +16,7 @@ export const generate = async ({
 }) => {
   const env = yeoman.createEnv('', { cwd, workspaceConfig })
   env.registerStub(WorkspaceGenerator, 'workspace')
-  const generator = env.create('workspace')
+  const generator = env.create('workspace', [])
   if (generate instanceof Error) {
     throw generator
   }

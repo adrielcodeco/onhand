@@ -32,14 +32,14 @@
     "@onhand/openapi": "^2.0.17",
     "aws-lambda": "^1.0.7",
     "cors": "^2.8.5",
-    "express": "^4.17.1",
+    "express": "^4.17.3",
     "express-winston": "^4.2.0",
-    "lambda-local": "^2.0.0",
+    "lambda-local": "^2.0.2",
     "lodash": "^4.17.21",
     "openapi-types": "^10.0.0",
     "reflect-metadata": "^0.1.13",
     "source-map-support": "^0.5.21",
-    "winston": "^3.3.3",
-    "yargs": "^17.3.0"
+    "winston": "^3.6.0",
+    "yargs": "^17.4.0"
   }
 }
