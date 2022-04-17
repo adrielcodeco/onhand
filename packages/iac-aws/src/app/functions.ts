@@ -56,7 +56,7 @@ export function createFunctionsOptions (options: Options) {
       method,
       authorizer,
       isAuthorizer: false,
-      memorySize: memorySize ?? 128,
+      memorySize: memorySize ?? 256,
     })
   }
   for (const authorizerMetadata of metadata.authorizers ?? []) {
@@ -79,7 +79,7 @@ export function createFunctionsOptions (options: Options) {
       description: `deployed on: ${new Date().toISOString()}`,
       authorizer: authorizerName ?? 'default',
       isAuthorizer: true,
-      memorySize: memorySize ?? 128,
+      memorySize: memorySize ?? 256,
     })
   }
   return functions
