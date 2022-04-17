@@ -1,6 +1,6 @@
 {
   "name": "@onhand/framework",
-  "version": "2.0.20",
+  "version": "2.0.21",
   "description": "framework is part of the @onhand framework",
   "author": "Codeco <adrielcodeco@hotmail.com>",
   "homepage": "https://github.com/adrielcodeco/onhand/tree/main/packages/framework#readme",
@@ -26,9 +26,9 @@
     "url": "https://github.com/adrielcodeco/onhand/issues"
   },
   "dependencies": {
-    "@onhand/accesscontrol": "^2.0.20",
-    "@onhand/business": "^2.0.20",
-    "@onhand/openapi": "^2.0.20",
+    "@onhand/accesscontrol": "^2.0.21",
+    "@onhand/business": "^2.0.21",
+    "@onhand/openapi": "^2.0.21",
     "axios": "^0.24.0",
     "class-validator": "^0.13.2",
     "cls-hooked": "^4.2.2",
