@@ -84,6 +84,7 @@
     "aws-cdk": "^1.152.0",
     "cdk-assets": "^2.20.0",
     "cdk-assume-role-credential-plugin": "^1.4.0",
+    "chokidar": "^3.5.3",
     "cli-progress": "^3.10.0",
     "cors": "^2.8.5",
     "execa": "5.0.0",
