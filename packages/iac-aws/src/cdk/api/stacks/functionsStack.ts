@@ -62,6 +62,7 @@ export class FunctionsStack extends InternalNestedStack {
         handler: 'index.handler',
         version: this.options.packageVersion ?? '',
         isAuthorizer: false,
+        memorySize: 256,
       },
       [
         { key: 'onhandProject', value: this.stackTools.project },
@@ -154,7 +155,7 @@ export class FunctionsStack extends InternalNestedStack {
           STAGE: this.options.stage,
         },
         role: lambdaRole,
-        memorySize: 256,
+        memorySize: functionOptions.memorySize,
         reservedConcurrentExecutions: undefined,
         logRetention: logs.RetentionDays.ONE_WEEK,
         timeout: cdk.Duration.minutes(15),

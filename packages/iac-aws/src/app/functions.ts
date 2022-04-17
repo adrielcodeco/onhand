@@ -16,6 +16,7 @@ export type FunctionOptions = {
   method?: string
   authorizer?: string
   isAuthorizer: boolean
+  memorySize?: number
 }
 
 export function createFunctionsOptions (options: Options) {
@@ -34,12 +35,12 @@ export function createFunctionsOptions (options: Options) {
         operation: { description, operationId, security },
       },
     } = handlerMetadata
-    const { policies } = extra ?? {}
+    const { policies, memorySize } = extra ?? {}
     const handler = `index.${handlerName}`
     const operationName = operationId ?? className
     const authorizer =
       (security ?? [])
-        .map(sec => Object.keys(sec).shift())
+        .map((sec: any) => Object.keys(sec).shift())
         .filter(Boolean)
         .shift() ?? ''
     functions.push({
@@ -55,6 +56,7 @@ export function createFunctionsOptions (options: Options) {
       method,
       authorizer,
       isAuthorizer: false,
+      memorySize: memorySize ?? 128,
     })
   }
   for (const authorizerMetadata of metadata.authorizers ?? []) {
@@ -63,7 +65,7 @@ export function createFunctionsOptions (options: Options) {
       handlerName,
       functionMetadata: { extra },
     } = authorizerMetadata
-    const { authorizerName, policies } = extra ?? {}
+    const { authorizerName, policies, memorySize } = extra ?? {}
     const handler = `index.${handlerName}`
     const operationName = className
     functions.push({
@@ -77,6 +79,7 @@ export function createFunctionsOptions (options: Options) {
       description: `deployed on: ${new Date().toISOString()}`,
       authorizer: authorizerName ?? 'default',
       isAuthorizer: true,
+      memorySize: memorySize ?? 128,
     })
   }
   return functions

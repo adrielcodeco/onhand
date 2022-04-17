@@ -32,6 +32,7 @@ export class CloudFrontSiteStack extends InternalNestedStack {
     this.domainAliases =
       this.options.config?.cloudFront?.site?.domainAliases?.filter(a => !!a)
 
+    // cloudFront only supports certificates from us-east-1
     const certificateArn = ` arn:aws:acm:us-east-1:${
       this.account
     }:certificate/${this.options.config?.cloudFront?.site?.certificateId ?? ''}`

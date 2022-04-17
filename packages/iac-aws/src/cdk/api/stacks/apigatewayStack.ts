@@ -57,6 +57,7 @@ export class ApiGatewayStack extends cdk.NestedStack {
   private createApiGateway () {
     const domainNamePart: any = {}
     if (this.options.config?.cloudFront?.api?.domainName) {
+      // apiGateway only supports certificates from us-east-1
       const certificateArn = `arn:aws:acm:us-east-1:${
         this.account
       }:certificate/${

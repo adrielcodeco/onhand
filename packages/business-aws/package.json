@@ -26,6 +26,7 @@
     "url": "https://github.com/adrielcodeco/onhand/issues"
   },
   "dependencies": {
+    "@onhand/accesscontrol": "^2.0.18",
     "@onhand/business": "^2.0.18",
     "@onhand/domain-aws": "^2.0.18",
     "inversify": "^6.0.1"

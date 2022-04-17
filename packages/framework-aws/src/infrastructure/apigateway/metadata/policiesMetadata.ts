@@ -16,17 +16,20 @@ export type Policy =
 export type PoliciesMetadata = { policies: Policy[] }
 
 export function addPolicy (FunctionClass: any, ...policies: Policy[]) {
-  manageFunctionMetadata<FunctionMetadata & PoliciesMetadata>(
+  manageFunctionMetadata<FunctionMetadata<PoliciesMetadata>>(
     FunctionClass,
   ).change(metadata => {
     if (!metadata) {
-      metadata = As<FunctionMetadata & PoliciesMetadata, any>({})
+      metadata = As<FunctionMetadata<PoliciesMetadata>, any>({ extra: {} })
     }
-    if (!metadata.policies) {
-      metadata.policies = []
+    if (!metadata.extra) {
+      metadata.extra = { policies: [] }
+    }
+    if (!metadata.extra.policies) {
+      metadata.extra.policies = []
     }
     for (const policy of policies) {
-      metadata.policies.push(policy)
+      metadata.extra.policies.push(policy)
     }
     return metadata
   })

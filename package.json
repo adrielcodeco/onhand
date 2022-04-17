@@ -1,5 +1,6 @@
 {
   "name": "onhand",
+  "version": "0.0.0",
   "private": true,
   "workspaces": [
     "packages/*"
@@ -14,7 +15,7 @@
     "format": "prettier --write \"./**/*.{ts,js,json,md}\"",
     "generate:contributors": "yarn ts-node --transpile-only ./tools/generate-contributors.ts && yarn all-contributors generate",
     "help-me": "lerna-wizard",
-    "lerna:init": "lerna bootstrap --ignore-scripts && lerna link --force-local",
+    "lerna:init": "lerna bootstrap --ignore-scripts && lerna link --force-local && yarn prepare",
     "lerna:publish:canary": "lerna publish --canary --preid next --no-git-reset --force-publish --no-verify-access --no-verify-registry --yes --loglevel=verbose",
     "lerna:publish:release": "lerna publish from-package --force-publish --yes --loglevel=verbose--skip-git --no-verify-access --no-verify-registry --exact",
     "lint": "NODE_OPTIONS=\"--max-old-space-size=5120\" eslint . --ext .js,.ts",
@@ -53,9 +54,9 @@
     "@types/archiver": "^5.3.1",
     "@types/aws-lambda": "^8.10.93",
     "@types/cli-progress": "^3.9.2",
+    "@types/colors": "^1.2.1",
     "@types/cors": "^2.8.12",
     "@types/crypto-js": "^4.1.1",
-    "@types/execa": "^2.0.0",
     "@types/express": "^4.17.13",
     "@types/express-session": "^1.17.4",
     "@types/fs-extra": "^9.0.13",
@@ -63,11 +64,9 @@
     "@types/jsonwebtoken": "^8.5.8",
     "@types/jwk-to-pem": "^2.0.1",
     "@types/lodash": "^4.14.180",
-    "@types/moment": "^2.13.0",
     "@types/morgan": "^1.9.3",
     "@types/nconf": "^0.10.2",
     "@types/node": "^17.0.23",
-    "@types/node-cache": "^4.2.5",
     "@types/pify": "^5.0.1",
     "@types/prompts": "^2.0.14",
     "@types/react": "^17.0.43",
@@ -137,6 +136,5 @@
       "pre-commit": "yarn validations",
       "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
     }
-  },
-  "version": "0.0.0"
+  }
 }

@@ -6,11 +6,11 @@ const symbolOnhandAPIFunctionMetadata = Symbol.for(
   'onhand-api-function-metadata',
 )
 
-export type FunctionMetadata = {
+export type FunctionMetadata<T = any> = {
   path: string
   method: string
   operation: OpenAPIV3.OperationObject
-  extra: any
+  extra: T
 }
 
 export function manageFunctionMetadata<M extends FunctionMetadata> (
