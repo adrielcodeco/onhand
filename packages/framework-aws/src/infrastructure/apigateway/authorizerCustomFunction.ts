@@ -8,9 +8,8 @@ import { Ctor } from '@onhand/utils'
 
 type AuthorizerCustomFunctionInput = {
   authorizationToken: string
-  scope?: string
-  deviceId?: string
   methodArn: string
+  [k: string]: string
 }
 type AuthorizerCustomFunctionOutput = {
   userIdentifier: string
@@ -22,6 +21,13 @@ export abstract class AuthorizerCustomFunction implements IAuthorizerFunction {
   Operation<AuthorizerCustomFunctionInput, AuthorizerCustomFunctionOutput>
   >
 
+  protected identitySourcesHeaders = [
+    'Authorization',
+    'scope',
+    'device-id',
+    'cookie',
+  ]
+
   constructor (
     private containerContextInitialization: AWSFunctionContainerContext,
   ) {}
@@ -29,24 +35,27 @@ export abstract class AuthorizerCustomFunction implements IAuthorizerFunction {
   protected async inputAdapter (
     event: APIGatewayRequestAuthorizerEvent,
   ): Promise<AuthorizerCustomFunctionInput> {
-    let authorizationToken = ''
-    let scope
-    let deviceId
-    if (event.headers) {
-      authorizationToken =
-        this.findWithCaseInsensitive(event.headers, 'Authorization') ?? ''
-      scope = this.findWithCaseInsensitive(event.headers, 'scope')
-      deviceId = this.findWithCaseInsensitive(event.headers, 'deviceId')
+    const input: AuthorizerCustomFunctionInput =
+      this.identitySourcesHeaders.reduce<any>(
+        (acc, header) => {
+          acc[header] = this.findWithCaseInsensitive(
+            event.headers ?? {},
+            header,
+          )
+          return acc
+        },
+        {
+          authorizationToken: '',
+          methodArn: event.methodArn,
+        },
+      )
+    if (input.authorizationToken) {
+      input.authorizationToken = input.authorizationToken.replace(
+        /Bearer\s/i,
+        '',
+      )
     }
-    if (authorizationToken) {
-      authorizationToken = authorizationToken.replace(/Bearer\s/i, '')
-    }
-    return {
-      authorizationToken,
-      scope,
-      deviceId,
-      methodArn: event.methodArn,
-    }
+    return input
   }
 
   public async init (): Promise<void> {
@@ -69,17 +78,22 @@ export abstract class AuthorizerCustomFunction implements IAuthorizerFunction {
   ) {
     assert(this.operation)
     try {
-      const input = await this.inputAdapter(event)
-      if (!input.authorizationToken) {
+      const { authorizationToken, methodArn, ...identitySources } =
+        await this.inputAdapter(event)
+      if (!authorizationToken) {
         throw new Error('Token cannot be empty!')
       }
       const operation = container.resolve<Operation>(this.operation)
-      const operationResult = await operation.run(input)
+      const operationResult = await operation.run({
+        authorizationToken,
+        methodArn,
+        ...identitySources,
+      })
       const { userIdentifier, userRole } = operationResult.data
       let resource
-      if (input.methodArn) {
+      if (methodArn) {
         const [arn, aws, executeApi, regionId, accountId, apiId, stage] =
-          input.methodArn.split(/:|\//)
+          methodArn.split(/:|\//)
         resource = `${arn}:${aws}:${executeApi}:${regionId}:${accountId}:${apiId}/${stage}/*`
       } else {
         resource = '*'
@@ -89,8 +103,7 @@ export abstract class AuthorizerCustomFunction implements IAuthorizerFunction {
         'Allow',
         resource,
         userRole,
-        input.scope,
-        input.deviceId,
+        identitySources,
       )
       handlerCallback(null, policy)
     } catch (err: any) {
@@ -105,16 +118,14 @@ export abstract class AuthorizerCustomFunction implements IAuthorizerFunction {
     effect: string,
     resource: string,
     role: string,
-    scope?: string,
-    deviceId?: string,
+    identitySources?: any,
   ) {
     const authResponse: any = {
       principalId,
       context: {
         userIdentifier: principalId,
         userRole: role,
-        userScope: scope,
-        userDeviceId: deviceId,
+        ...identitySources,
       },
     }
     if (effect && resource) {

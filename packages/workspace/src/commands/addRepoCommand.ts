@@ -35,7 +35,7 @@ export async function addRepoCommand (options: { verbose: boolean }) {
     {
       type: 'text',
       name: 'connectedTo',
-      message: 'Do you want to push it to github ?',
+      message: 'pull from ... ?',
       initial: (prev, values, prompt) => {
         switch (prev) {
           case 'branch':

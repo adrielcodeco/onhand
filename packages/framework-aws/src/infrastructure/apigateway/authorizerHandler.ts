@@ -1,7 +1,7 @@
 import 'reflect-metadata'
 import { manageFunctionMetadata, manageHandlerMetadata } from '@onhand/openapi'
 import { IAuthorizerFunction } from '#/infrastructure/apigateway/iAuthorizerFunction'
-import { Ctor } from '@onhand/utils'
+import { Ctor, As } from '@onhand/utils'
 
 export function authorizerHandler (
   FunctionClass: Ctor<IAuthorizerFunction>,
@@ -31,6 +31,7 @@ export function authorizerHandler (
       functionMetadata: operationMetadata,
       extra: {
         authorizerName,
+        identitySourcesHeaders: As<any>(lambda).identitySourcesHeaders,
       },
     })
     .end()

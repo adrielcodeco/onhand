@@ -17,6 +17,7 @@ export type FunctionOptions = {
   authorizer?: string
   isAuthorizer: boolean
   memorySize?: number
+  extra?: any
 }
 
 export function createFunctionsOptions (options: Options) {
@@ -57,6 +58,7 @@ export function createFunctionsOptions (options: Options) {
       authorizer,
       isAuthorizer: false,
       memorySize: memorySize ?? 256,
+      extra,
     })
   }
   for (const authorizerMetadata of metadata.authorizers ?? []) {
@@ -80,6 +82,7 @@ export function createFunctionsOptions (options: Options) {
       authorizer: authorizerName ?? 'default',
       isAuthorizer: true,
       memorySize: memorySize ?? 256,
+      extra,
     })
   }
   return functions

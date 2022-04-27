@@ -11,6 +11,7 @@ import Container, { Service } from 'typedi'
 import { Options, resourceName } from '#/app/options'
 import { FunctionOptions } from '#/app/functions'
 import { getApiGatewayStackName } from '#/cdk/resources'
+import _ from 'lodash'
 
 @Service()
 export class ApiGatewayStack extends cdk.NestedStack {
@@ -76,6 +77,11 @@ export class ApiGatewayStack extends cdk.NestedStack {
       }
     }
 
+    const authorizers = this.functions.filter(f => f.isAuthorizer)
+    const identitySourcesHeaders = _.concat(
+      ...authorizers.map(f => f.extra.identitySourcesHeaders as string[]),
+    )
+
     const restApiName = resourceName(this.options, 'api')
     const logGroup = new logs.LogGroup(this, `${restApiName}-AccessLogs`)
     this.api = new apigateway.RestApi(this, restApiName, {
@@ -130,8 +136,12 @@ export class ApiGatewayStack extends cdk.NestedStack {
         allowMethods:
           this.options.config?.apiGateway?.accessControlAllowMethods ??
           apigateway.Cors.ALL_METHODS,
-        allowHeaders: apigateway.Cors.DEFAULT_HEADERS.concat(
-          this.options.config?.apiGateway?.accessControlAllowHeaders ?? [],
+        allowHeaders: _.uniq(
+          _.concat(
+            apigateway.Cors.DEFAULT_HEADERS,
+            this.options.config?.apiGateway?.accessControlAllowHeaders ?? [],
+            ...identitySourcesHeaders,
+          ),
         ),
       },
     })
@@ -159,20 +169,29 @@ export class ApiGatewayStack extends cdk.NestedStack {
 
   private createAuthorizerFunction () {
     const authorizers = this.functions.filter(f => f.isAuthorizer)
-    for (const { functionName, authorizer } of authorizers) {
+    for (const {
+      functionName,
+      authorizer,
+      extra: { identitySourcesHeaders },
+    } of authorizers) {
       const alias = this.options.stage
       const authorizerFunc = lambda.Function.fromFunctionArn(
         this,
         resourceName(this.options, functionName),
         `arn:aws:lambda:${this.region}:${this.account}:function:${functionName}:${alias}`,
       )
-      this.createAuthAuthorizers(authorizer!, authorizerFunc)
+      this.createAuthAuthorizers(
+        authorizer!,
+        authorizerFunc,
+        identitySourcesHeaders ?? [],
+      )
     }
   }
 
   private createAuthAuthorizers (
     authorizer: string,
     authorizerFunction: lambda.IFunction,
+    identitySourcesHeaders: string[],
   ) {
     const authorizerName = resourceName(this.options, [
       'authorizer',
@@ -180,11 +199,9 @@ export class ApiGatewayStack extends cdk.NestedStack {
     ])
     const auth = new apigateway.RequestAuthorizer(this, authorizerName, {
       handler: authorizerFunction,
-      identitySources: [
-        apigateway.IdentitySource.header('Authorization'),
-        apigateway.IdentitySource.header('scope'),
-        apigateway.IdentitySource.header('deviceId'),
-      ],
+      identitySources: identitySourcesHeaders.map(is =>
+        apigateway.IdentitySource.header(is),
+      ),
       assumeRole: this.apiGatewayRole,
       authorizerName,
       resultsCacheTtl: cdk.Duration.seconds(300),
