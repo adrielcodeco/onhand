@@ -9,8 +9,7 @@ import { Ctor } from '@onhand/utils'
 type AuthorizerCustomFunctionInput = {
   authorizationToken: string
   methodArn: string
-  [k: string]: string
-}
+} & { [k: string]: any }
 type AuthorizerCustomFunctionOutput = {
   userIdentifier: string
   userRole: string
@@ -36,7 +35,7 @@ export abstract class AuthorizerCustomFunction implements IAuthorizerFunction {
     event: APIGatewayRequestAuthorizerEvent,
   ): Promise<AuthorizerCustomFunctionInput> {
     const input: AuthorizerCustomFunctionInput =
-      this.identitySourcesHeaders.reduce<any>(
+      this.identitySourcesHeaders.reduce<AuthorizerCustomFunctionInput>(
         (acc, header) => {
           acc[header] = this.findWithCaseInsensitive(
             event.headers ?? {},
