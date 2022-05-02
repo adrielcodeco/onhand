@@ -13,8 +13,8 @@ export type DocumentMetadata = {
   extra: any
 }
 
-export function manageDocumentMetadata<M extends DocumentMetadata> (
-  target: any,
+export function manageDocumentMetadata<M extends DocumentMetadata, T = any> (
+  target: T,
 ) {
-  return manageMetadata<M>(target, symbolOnhandAPIDocumentMetadata)
+  return manageMetadata<M, T>(target, symbolOnhandAPIDocumentMetadata)
 }

@@ -13,6 +13,8 @@ export type HandlerMetadata = {
   extra: any
 }
 
-export function manageHandlerMetadata<M extends HandlerMetadata> (target: any) {
-  return manageMetadata<M>(target, symbolOnhandAPIHandlerMetadata)
+export function manageHandlerMetadata<M extends HandlerMetadata, T = any> (
+  target: T,
+) {
+  return manageMetadata<M, T>(target, symbolOnhandAPIHandlerMetadata)
 }

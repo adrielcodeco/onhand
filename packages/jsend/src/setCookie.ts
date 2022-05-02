@@ -1,8 +1,8 @@
 import { serialize } from 'cookie'
 import { manageHttpMetadata } from './httpMetadata'
 
-export function setCookie (
-  target: any,
+export function setCookie<T> (
+  target: T,
   cookie: {
     name: string
     value: string
@@ -15,7 +15,7 @@ export function setCookie (
     sameSite?: true | false | 'lax' | 'strict' | 'none'
     secure?: boolean
   },
-) {
+): T {
   const {
     name,
     value,

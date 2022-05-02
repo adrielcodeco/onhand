@@ -13,8 +13,8 @@ export type FunctionMetadata<T = any> = {
   extra: T
 }
 
-export function manageFunctionMetadata<M extends FunctionMetadata> (
-  target: any,
+export function manageFunctionMetadata<M extends FunctionMetadata, T = any> (
+  target: T,
 ) {
-  return manageMetadata<M>(target, symbolOnhandAPIFunctionMetadata)
+  return manageMetadata<M, T>(target, symbolOnhandAPIFunctionMetadata)
 }

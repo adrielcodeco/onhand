@@ -8,6 +8,6 @@ type HttpMetadata = {
   headers?: { [name: string]: string }
 }
 
-export function manageHttpMetadata<M extends HttpMetadata> (target: any) {
-  return manageMetadata<M>(target, symbolOnhandJSendHttpMetadata)
+export function manageHttpMetadata<M extends HttpMetadata, T = any> (target: T) {
+  return manageMetadata<M, T>(target, symbolOnhandJSendHttpMetadata)
 }
