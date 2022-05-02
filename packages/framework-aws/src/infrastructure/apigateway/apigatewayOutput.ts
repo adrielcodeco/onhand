@@ -25,6 +25,9 @@ export function Output (
     logError(id, out.data)
     out.data = id
   }
+  if (metadata.headers) {
+    Object.assign(headers, metadata.headers, headers)
+  }
   return {
     statusCode: metadata?.statusCode ?? '500',
     headers,

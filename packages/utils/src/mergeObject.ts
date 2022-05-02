@@ -1,4 +1,4 @@
-import { Primitive } from '@onhand/utils'
+import { Primitive } from './typescript'
 
 export function mergeObject<T = any> (toObject: T, obj: MergeObject<T>): T {
   for (const key in obj) {

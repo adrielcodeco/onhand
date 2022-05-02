@@ -1,6 +1,6 @@
 import 'reflect-metadata'
 import { OpenAPIV3 } from 'openapi-types'
-import { manageMetadata } from '#/metadata/metadata'
+import { manageMetadata } from '@onhand/utils'
 
 const symbolOnhandAPIDocumentMetadata = Symbol.for(
   'onhand-api-document-metadata',

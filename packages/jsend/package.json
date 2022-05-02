@@ -54,5 +54,8 @@
     "coverageReporters": [
       "lcov"
     ]
+  },
+  "dependencies": {
+    "@onhand/utils": "^2.0.23"
   }
 }

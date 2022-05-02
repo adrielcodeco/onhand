@@ -1,5 +1,5 @@
 import 'reflect-metadata'
-import { manageMetadata } from '#/metadata/metadata'
+import { manageMetadata } from '@onhand/utils'
 import { FunctionMetadata } from '#/metadata/functionMetadata'
 
 const symbolOnhandAPIHandlerMetadata = Symbol.for('onhand-api-handler-metadata')
