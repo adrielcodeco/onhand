@@ -1,14 +1,7 @@
 import 'reflect-metadata'
 import { mergeObject, MergeObject } from '#/mergeObject'
-import { assert } from 'console'
 
 export function manageMetadata<M = any, T = any> (target: T, metadataKey: any) {
-  if (target) {
-    assert(
-      typeof target === 'object',
-      `target must be an object, got: ${typeof target}`,
-    )
-  }
   const getMetadata: () => M = () =>
     Reflect.getMetadata(metadataKey, target as any)
   const _ = {
