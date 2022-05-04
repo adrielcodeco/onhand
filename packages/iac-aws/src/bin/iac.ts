@@ -146,6 +146,11 @@ function main () {
           describe: '.env file to pass to lambda',
           default: '',
         })
+        yargs.option('stage', {
+          describe: 'the stage that will be served',
+          default: 'dev',
+          type: 'string',
+        })
       },
       argv => {
         (async () => {
@@ -154,6 +159,7 @@ function main () {
             watch: !!argv.watch,
             setupDB: !!argv.setupDB,
             envFile: argv.envFile as string,
+            stage: argv.stage as string,
           })
         })().catch(err => {
           console.error(err)
