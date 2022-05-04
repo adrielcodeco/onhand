@@ -140,7 +140,7 @@ export class ApiGatewayStack extends cdk.NestedStack {
           _.concat(
             apigateway.Cors.DEFAULT_HEADERS,
             this.options.config?.apiGateway?.accessControlAllowHeaders ?? [],
-            ...identitySourcesHeaders,
+            identitySourcesHeaders,
           ),
         ),
       },

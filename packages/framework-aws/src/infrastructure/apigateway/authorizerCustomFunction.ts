@@ -20,9 +20,9 @@ export abstract class AuthorizerCustomFunction implements IAuthorizerFunction {
   Operation<AuthorizerCustomFunctionInput, AuthorizerCustomFunctionOutput>
   >
 
-  protected authorizationTokenHeader = 'Authorization'
+  public authorizationTokenHeader = 'Authorization'
 
-  protected identitySourcesHeaders = [
+  public identitySourcesHeaders = [
     'Authorization',
     'scope',
     'device-id',

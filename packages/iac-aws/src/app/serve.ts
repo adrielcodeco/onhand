@@ -39,6 +39,19 @@ export async function serve (
     : ''
   const app = express()
   app.use(express.json())
+  expressWinston.requestWhitelist.push('body')
+  expressWinston.responseWhitelist.push('body')
+  app.use(
+    expressWinston.logger({
+      transports: [new winston.transports.Console()],
+      format: winston.format.combine(
+        winston.format.colorize(),
+        winston.format.json(),
+      ),
+      colorize: true,
+      metaField: undefined,
+    }),
+  )
   app.use(
     cors({
       origin: (options.config?.apiGateway?.accessControlAllowOrigin ?? [
@@ -68,7 +81,7 @@ export async function serve (
             'X-Amz-User-Agent',
           ],
           options.config?.apiGateway?.accessControlAllowHeaders ?? [],
-          ..._.concat(
+          _.concat(
             ...(options.metadata?.authorizers?.map(
               m => m.functionMetadata.extra.identitySourcesHeaders as string[],
             ) ?? []),
@@ -76,19 +89,6 @@ export async function serve (
         ),
       ),
       exposedHeaders: ['set-cookie'],
-    }),
-  )
-  expressWinston.requestWhitelist.push('body')
-  expressWinston.responseWhitelist.push('body')
-  app.use(
-    expressWinston.logger({
-      transports: [new winston.transports.Console()],
-      format: winston.format.combine(
-        winston.format.colorize(),
-        winston.format.json(),
-      ),
-      colorize: true,
-      metaField: undefined,
     }),
   )
   if (options.metadata) {
