@@ -19,7 +19,6 @@ import { CheckGrantUseCase } from '@onhand/business-aws/#/useCases/accessControl
 import { AWSFunctionContainerContext } from '#/infrastructure/awsFunctionContainerContext'
 import { AWSFunctionHandleContext } from '#/infrastructure/awsFunctionHandleContext'
 import { Output } from '#/infrastructure/apigateway/apigatewayOutput'
-import { CORS } from '#/infrastructure/apigateway/apigatewayCORS'
 import { Ownership } from '@onhand/business/#/ownership'
 import { UserContext } from '@onhand/business/#/dto/userContext'
 import { ILogger, LogToken } from '@onhand/business/#/modules/logger'
@@ -224,7 +223,7 @@ export abstract class ApiGatewayFunction extends AFunction {
       const operation = container.resolve<Operation>(this.operation)
       const result = await operation.run(input)
       const headers = {}
-      CORS(event.headers, headers)
+      // CORS(event.headers, headers)
       const output = Output(result, headers)
       this.logger.debug('output:', output)
       return output

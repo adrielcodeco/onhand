@@ -39,7 +39,45 @@ export async function serve (
     : ''
   const app = express()
   app.use(express.json())
-  app.use(cors())
+  app.use(
+    cors({
+      origin: (options.config?.apiGateway?.accessControlAllowOrigin ?? [
+        '*',
+      ])[0],
+      methods: options.config?.apiGateway?.accessControlAllowMethods ?? [
+        'OPTIONS',
+        'GET',
+        'PUT',
+        'POST',
+        'DELETE',
+        'PATCH',
+        'HEAD',
+      ],
+      credentials:
+        options.config?.apiGateway?.accessControlAllowCredentials === undefined
+          ? true
+          : options.config?.apiGateway?.accessControlAllowCredentials,
+      allowedHeaders: _.uniq(
+        _.concat(
+          [
+            'Content-Type',
+            'X-Amz-Date',
+            'Authorization',
+            'X-Api-Key',
+            'X-Amz-Security-Token',
+            'X-Amz-User-Agent',
+          ],
+          options.config?.apiGateway?.accessControlAllowHeaders ?? [],
+          ..._.concat(
+            ...(options.metadata?.authorizers?.map(
+              m => m.functionMetadata.extra.identitySourcesHeaders as string[],
+            ) ?? []),
+          ),
+        ),
+      ),
+      exposedHeaders: ['set-cookie'],
+    }),
+  )
   expressWinston.requestWhitelist.push('body')
   expressWinston.responseWhitelist.push('body')
   app.use(
