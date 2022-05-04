@@ -83,7 +83,7 @@ export async function serve (
           options.config?.apiGateway?.accessControlAllowHeaders ?? [],
           _.concat(
             ...(options.metadata?.authorizers?.map(
-              m => m.functionMetadata.extra.identitySourcesHeaders as string[],
+              m => m.extra.identitySourcesHeaders as string[],
             ) ?? []),
           ),
         ),

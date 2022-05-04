@@ -35,6 +35,7 @@ export function createFunctionsOptions (options: Options) {
         extra,
         operation: { description, operationId, security },
       },
+      extra: extraMetadata,
     } = handlerMetadata
     const { policies, memorySize } = extra ?? {}
     const handler = `index.${handlerName}`
@@ -58,7 +59,7 @@ export function createFunctionsOptions (options: Options) {
       authorizer,
       isAuthorizer: false,
       memorySize: memorySize ?? 256,
-      extra,
+      extra: Object.assign({}, extra, extraMetadata),
     })
   }
   for (const authorizerMetadata of metadata.authorizers ?? []) {
@@ -66,6 +67,7 @@ export function createFunctionsOptions (options: Options) {
       className,
       handlerName,
       functionMetadata: { extra },
+      extra: extraMetadata,
     } = authorizerMetadata
     const { authorizerName, policies, memorySize } = extra ?? {}
     const handler = `index.${handlerName}`
@@ -82,7 +84,7 @@ export function createFunctionsOptions (options: Options) {
       authorizer: authorizerName ?? 'default',
       isAuthorizer: true,
       memorySize: memorySize ?? 256,
-      extra,
+      extra: Object.assign({}, extra, extraMetadata),
     })
   }
   return functions
