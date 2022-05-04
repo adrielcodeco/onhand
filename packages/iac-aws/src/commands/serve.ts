@@ -10,9 +10,10 @@ export async function serveCommand (
     watch: boolean
     setupDB: boolean
     envFile: string
+    stage: string
   },
 ) {
-  const options = loadConfig({}, configPath)
+  const options = loadConfig({ stage: serverOptions?.stage }, configPath)
   if (serverOptions?.setupDB) {
     console.log('setupDB=true')
     await execa(
