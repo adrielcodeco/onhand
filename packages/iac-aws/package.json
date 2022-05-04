@@ -1,6 +1,6 @@
 {
   "name": "@onhand/iac-aws",
-  "version": "2.0.30",
+  "version": "2.0.31",
   "description": "iac-aws is part of the @onhand framework",
   "author": "codeco <adrielcodeco@hotmail.com>",
   "homepage": "https://github.com/adrielcodeco/onhand/tree/main/packages/iac-aws#readme",
@@ -78,8 +78,8 @@
     "@aws-cdk/core": "^1.152.0",
     "@aws-cdk/custom-resources": "^1.152.0",
     "@aws-cdk/pipelines": "^1.152.0",
-    "@onhand/framework-aws": "^2.0.30",
-    "@onhand/openapi": "^2.0.30",
+    "@onhand/framework-aws": "^2.0.31",
+    "@onhand/openapi": "^2.0.31",
     "archiver": "^5.2.0",
     "aws-cdk": "^1.152.0",
     "cdk-assets": "^2.20.0",
