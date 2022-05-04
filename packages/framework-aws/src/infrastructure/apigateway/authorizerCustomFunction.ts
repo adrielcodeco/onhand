@@ -20,6 +20,8 @@ export abstract class AuthorizerCustomFunction implements IAuthorizerFunction {
   Operation<AuthorizerCustomFunctionInput, AuthorizerCustomFunctionOutput>
   >
 
+  protected authorizationTokenHeader = 'Authorization'
+
   protected identitySourcesHeaders = [
     'Authorization',
     'scope',
@@ -48,6 +50,9 @@ export abstract class AuthorizerCustomFunction implements IAuthorizerFunction {
           methodArn: event.methodArn,
         },
       )
+    if (this.authorizationTokenHeader in input) {
+      input.authorizationToken = input[this.authorizationTokenHeader]
+    }
     if (input.authorizationToken) {
       input.authorizationToken = input.authorizationToken.replace(
         /Bearer\s/i,
