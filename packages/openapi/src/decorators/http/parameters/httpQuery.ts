@@ -1,6 +1,7 @@
 import { manageFunctionMetadata } from '#/metadata'
 
 type HttpQueryInput = {
+  parameterName?: string
   type?: any
   description?: string
   required?: boolean
@@ -12,17 +13,28 @@ const defaultInput: HttpQueryInput = {
   deprecated: false,
 }
 
-export function HttpQuery (input: HttpQueryInput = defaultInput) {
+export function HttpQuery (input: HttpQueryInput | string = defaultInput) {
   return (target: any, propertyKey: string, index?: number) => {
-    const { type, description, required, deprecated } = input
+    const { type, description, required, deprecated } =
+      typeof input === 'string' ? defaultInput : input
     const propertyType =
       type || Reflect.getMetadata('design:type', target, propertyKey)
+
+    const name =
+      input && typeof input === 'string'
+        ? input
+        : input &&
+          typeof input === 'object' &&
+          'parameterName' in input &&
+          input.parameterName
+          ? input.parameterName
+          : propertyKey
 
     manageFunctionMetadata(target).merge({
       operation: {
         parameters: [
           {
-            name: propertyKey,
+            name,
             in: 'query',
             description,
             required,

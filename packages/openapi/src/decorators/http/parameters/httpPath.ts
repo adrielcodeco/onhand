@@ -15,6 +15,11 @@ const defaultInput: HttpPathInput = {
 
 export function HttpPath (input: HttpPathInput | string = defaultInput) {
   return (target: any, propertyKey: string, index?: number) => {
+    const { type, description, required, deprecated } =
+      typeof input === 'string' ? defaultInput : input
+    const propertyType =
+      type || Reflect.getMetadata('design:type', target, propertyKey)
+
     const name =
       input && typeof input === 'string'
         ? input
@@ -24,10 +29,6 @@ export function HttpPath (input: HttpPathInput | string = defaultInput) {
           input.parameterName
           ? input.parameterName
           : propertyKey
-    const { type, description, required, deprecated } =
-      typeof input === 'string' ? defaultInput : input
-    const propertyType =
-      type || Reflect.getMetadata('design:type', target, propertyKey)
 
     manageFunctionMetadata(target).merge({
       operation: {
