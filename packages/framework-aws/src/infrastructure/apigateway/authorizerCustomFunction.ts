@@ -51,14 +51,17 @@ export abstract class AuthorizerCustomFunction implements IAuthorizerFunction {
           methodArn: event.methodArn,
         },
       )
-    if ('cookie' in input) {
+    if ('cookie' in input && input.cookie) {
       input.cookie = input.cookie
         .split(';')
         .map((cookie: string) => cookie.trim())
         .find((cookie: string) => cookie.startsWith(this.authorizationCookie))
         ?.split('=')[1]
     }
-    if (this.authorizationTokenHeader in input) {
+    if (
+      this.authorizationTokenHeader in input &&
+      input[this.authorizationTokenHeader]
+    ) {
       input.authorizationToken = input[this.authorizationTokenHeader]
     }
     if (input.authorizationToken) {

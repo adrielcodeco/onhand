@@ -39,8 +39,6 @@ export async function serve (
     : ''
   const app = express()
   app.use(express.json())
-  expressWinston.requestWhitelist.push('body')
-  expressWinston.responseWhitelist.push('body')
   app.use(
     expressWinston.logger({
       transports: [new winston.transports.Console()],
@@ -48,8 +46,21 @@ export async function serve (
         winston.format.colorize(),
         winston.format.json(),
       ),
-      colorize: true,
-      metaField: undefined,
+      meta: true,
+      metaField: 'http',
+      expressFormat: false,
+      colorize: false,
+      requestWhitelist: [
+        'url',
+        'headers',
+        'method',
+        'httpVersion',
+        'originalUrl',
+        'query',
+        'body',
+        'ip',
+      ],
+      responseWhitelist: ['body', 'statusCode', 'responseTime'],
     }),
   )
   app.use(
@@ -147,6 +158,17 @@ export async function serve (
         winston.format.colorize(),
         winston.format.json(),
       ),
+      meta: true,
+      metaField: 'http',
+      requestWhitelist: [
+        'url',
+        'headers',
+        'method',
+        'httpVersion',
+        'originalUrl',
+        'query',
+        'body',
+      ],
     }),
   )
   console.log('onHand - good, all routes have been loaded')
