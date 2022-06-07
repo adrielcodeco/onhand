@@ -23,6 +23,7 @@ import { Ownership } from '@onhand/business/#/ownership'
 import { UserContext } from '@onhand/business/#/dto/userContext'
 import { ILogger, LogToken } from '@onhand/business/#/modules/logger'
 import { inject, injectable } from 'inversify'
+import { CORS } from '#/infrastructure/apigateway/apigatewayCORS'
 
 export type AWSFunctionOptions = {
   permissions?: ACRule[]
@@ -223,7 +224,7 @@ export abstract class ApiGatewayFunction extends AFunction {
       const operation = container.resolve<Operation>(this.operation)
       const result = await operation.run(input)
       const headers = {}
-      // CORS(event.headers, headers)
+      CORS(event.headers, headers)
       const output = Output(result, headers)
       this.logger.debug('output:', output)
       return output

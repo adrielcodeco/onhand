@@ -153,6 +153,10 @@ export class FunctionsStack extends InternalNestedStack {
         },
         environment: {
           STAGE: this.options.stage,
+          ONHAND_ACCESS_CONTROL_ALLOW_CREDENTIALS: this.options.config?.cors
+            ?.accessControlAllowCredentials
+            ? 'true'
+            : 'false',
         },
         role: lambdaRole,
         memorySize: functionOptions.memorySize,
