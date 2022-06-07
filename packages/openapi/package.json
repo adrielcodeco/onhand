@@ -1,6 +1,6 @@
 {
   "name": "@onhand/openapi",
-  "version": "2.0.38",
+  "version": "2.0.39",
   "description": "openapi is part of the @onhand framework",
   "author": "codeco <adrielcodeco@hotmail.com>",
   "homepage": "https://github.com/adrielcodeco/onhand/tree/main/packages/openapi#readme",
@@ -27,7 +27,7 @@
     "url": "https://github.com/adrielcodeco/onhand/issues"
   },
   "dependencies": {
-    "@onhand/utils": "^2.0.38",
+    "@onhand/utils": "^2.0.39",
     "lodash": "^4.17.21",
     "openapi-types": "^10.0.0",
     "reflect-metadata": "^0.1.13"
