@@ -51,7 +51,7 @@ export abstract class AuthorizerCustomFunction implements IAuthorizerFunction {
           methodArn: event.methodArn,
         },
       )
-    if ('cookie' in input && input.cookie) {
+    if ('cookie' in input && input.cookie && this.authorizationCookie) {
       input.cookie = input.cookie
         .split(';')
         .map((cookie: string) => cookie.trim())
@@ -59,6 +59,7 @@ export abstract class AuthorizerCustomFunction implements IAuthorizerFunction {
         ?.split('=')[1]
     }
     if (
+      this.authorizationTokenHeader &&
       this.authorizationTokenHeader in input &&
       input[this.authorizationTokenHeader]
     ) {

@@ -58,11 +58,12 @@ export type Config = {
       }
     }
   }
-  apiGateway?: {
+  cors?: {
     accessControlAllowOrigin?: string[]
     accessControlAllowMethods?: string[]
     accessControlAllowHeaders?: string[]
     accessControlAllowCredentials?: boolean
+    accessControlExposeHeaders?: string[]
   }
 }
 

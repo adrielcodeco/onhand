@@ -65,10 +65,8 @@ export async function serve (
   )
   app.use(
     cors({
-      origin: (options.config?.apiGateway?.accessControlAllowOrigin ?? [
-        '*',
-      ])[0],
-      methods: options.config?.apiGateway?.accessControlAllowMethods ?? [
+      origin: (options.config?.cors?.accessControlAllowOrigin ?? ['*'])[0],
+      methods: options.config?.cors?.accessControlAllowMethods ?? [
         'OPTIONS',
         'GET',
         'PUT',
@@ -78,9 +76,9 @@ export async function serve (
         'HEAD',
       ],
       credentials:
-        options.config?.apiGateway?.accessControlAllowCredentials === undefined
+        options.config?.cors?.accessControlAllowCredentials === undefined
           ? true
-          : options.config?.apiGateway?.accessControlAllowCredentials,
+          : options.config?.cors?.accessControlAllowCredentials,
       allowedHeaders: _.uniq(
         _.concat(
           [
@@ -91,7 +89,7 @@ export async function serve (
             'X-Amz-Security-Token',
             'X-Amz-User-Agent',
           ],
-          options.config?.apiGateway?.accessControlAllowHeaders ?? [],
+          options.config?.cors?.accessControlAllowHeaders ?? [],
           _.concat(
             ...(options.metadata?.authorizers?.map(
               m => m.extra.identitySourcesHeaders as string[],
@@ -99,7 +97,9 @@ export async function serve (
           ),
         ),
       ),
-      exposedHeaders: ['set-cookie'],
+      exposedHeaders: options.config?.cors?.accessControlExposeHeaders ?? [
+        'set-cookie',
+      ],
     }),
   )
   if (options.metadata) {

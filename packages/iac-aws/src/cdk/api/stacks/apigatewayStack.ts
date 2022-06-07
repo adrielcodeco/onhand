@@ -126,23 +126,25 @@ export class ApiGatewayStack extends cdk.NestedStack {
       },
       defaultCorsPreflightOptions: {
         allowCredentials:
-          this.options.config?.apiGateway?.accessControlAllowCredentials ===
-          undefined
+          this.options.config?.cors?.accessControlAllowCredentials === undefined
             ? true
-            : this.options.config?.apiGateway?.accessControlAllowCredentials,
+            : this.options.config?.cors?.accessControlAllowCredentials,
         allowOrigins:
-          this.options.config?.apiGateway?.accessControlAllowOrigin ??
+          this.options.config?.cors?.accessControlAllowOrigin ??
           apigateway.Cors.ALL_ORIGINS,
         allowMethods:
-          this.options.config?.apiGateway?.accessControlAllowMethods ??
+          this.options.config?.cors?.accessControlAllowMethods ??
           apigateway.Cors.ALL_METHODS,
         allowHeaders: _.uniq(
           _.concat(
             apigateway.Cors.DEFAULT_HEADERS,
-            this.options.config?.apiGateway?.accessControlAllowHeaders ?? [],
+            this.options.config?.cors?.accessControlAllowHeaders ?? [],
             identitySourcesHeaders,
           ),
         ),
+        exposeHeaders: this.options.config?.cors?.accessControlAllowOrigin ?? [
+          'set-cookie',
+        ],
       },
     })
     Container.set('restApi', this.api)
