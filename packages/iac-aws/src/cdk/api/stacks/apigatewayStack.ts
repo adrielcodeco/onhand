@@ -142,9 +142,8 @@ export class ApiGatewayStack extends cdk.NestedStack {
             identitySourcesHeaders,
           ),
         ),
-        exposeHeaders: this.options.config?.cors?.accessControlAllowOrigin ?? [
-          'set-cookie',
-        ],
+        exposeHeaders: this.options.config?.cors
+          ?.accessControlExposeHeaders ?? ['set-cookie'],
       },
     })
     Container.set('restApi', this.api)
