@@ -63,6 +63,10 @@ export async function serve (
       responseWhitelist: ['body', 'statusCode', 'responseTime'],
     }),
   )
+  const accessControlAllowCredentials =
+    options.config?.cors?.accessControlAllowCredentials === undefined
+      ? true
+      : options.config?.cors?.accessControlAllowCredentials
   app.use(
     cors({
       origin: (options.config?.cors?.accessControlAllowOrigin ?? ['*'])[0],
@@ -75,10 +79,7 @@ export async function serve (
         'PATCH',
         'HEAD',
       ],
-      credentials:
-        options.config?.cors?.accessControlAllowCredentials === undefined
-          ? true
-          : options.config?.cors?.accessControlAllowCredentials,
+      credentials: accessControlAllowCredentials,
       allowedHeaders: _.uniq(
         _.concat(
           [
@@ -126,6 +127,7 @@ export async function serve (
           authorizerPath,
           handlerName,
           envFilePath,
+          accessControlAllowCredentials,
         )
       }
       const functionName = operationId ?? className
@@ -148,6 +150,7 @@ export async function serve (
         functionFileAbsolutePath,
         handlerName,
         envFilePath,
+        accessControlAllowCredentials,
       )
     }
   }
@@ -188,6 +191,7 @@ function authorizer (
   handlerPath: string,
   handlerName: string,
   envFilePath?: string,
+  accessControlAllowCredentials?: boolean,
 ) {
   // eslint-disable-next-line no-useless-escape
   const route = routePath.replace(/{([a-z0-1-_\.]*)}/gim, ':$1')
@@ -206,6 +210,11 @@ function authorizer (
           timeoutMs: 1000 * 60 * 10, // 10 min
           verboseLevel: 3,
           envfile: envFilePath,
+          environment: {
+            ONHAND_ACCESS_CONTROL_ALLOW_CREDENTIALS: JSON.stringify(
+              accessControlAllowCredentials ?? 'false',
+            ),
+          },
           event,
         }).catch(err => err)
         if (result === 'Unauthorized') {
@@ -229,6 +238,7 @@ function request (
   handlerPath: string,
   handlerName: string,
   envFilePath?: string,
+  accessControlAllowCredentials?: boolean,
 ) {
   // eslint-disable-next-line no-useless-escape
   const route = routePath.replace(/{([a-z0-1-_\.]*)}/gim, ':$1')
@@ -241,6 +251,11 @@ function request (
         timeoutMs: 1000 * 60 * 10, // 10 min
         verboseLevel: 3,
         envfile: envFilePath,
+        environment: {
+          ONHAND_ACCESS_CONTROL_ALLOW_CREDENTIALS: JSON.stringify(
+            accessControlAllowCredentials ?? 'false',
+          ),
+        },
         event,
       }).catch(err => err)
       // Respond to HTTP request
